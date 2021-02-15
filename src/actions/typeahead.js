@@ -24,14 +24,12 @@ export const typeaheadRequestFailed = () => ({
   type: 'TYPEAHEAD_REQUEST_FAILED',
 });
 
-export function fetchTypeaheadResults(query) {
-  // Determine whether we're querying authors or titles using the "field" param
-  const params = new URL(query).searchParams;
-  const field = params.get('field');
-  const term = params.get('value');
-  const rawDataPath = '/api/' + field + 's.json';
+export function fetchTypeaheadResults() {
+  return function (dispatch, getState) {
+    // Construct the data URL
+    const { query: term, field } = getState().typeahead;
+    const rawDataPath = '/api/' + field + 's.json';
 
-  return function (dispatch) {
     return fetch(rawDataPath)
       .then((response) => {
         if (response.status >= 400) dispatch(typeaheadRequestFailed());
