@@ -11,7 +11,7 @@ const Header = (props) => (
         <img src={brand} alt='Intertext brand logo' />
       </Link>
       <Typeahead />
-      <Navicon />
+      {/*<Navicon />*/}
     </div>
   </header>
 )
