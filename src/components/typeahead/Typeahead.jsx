@@ -12,15 +12,17 @@ import {
 
 class Typeahead extends React.Component {
   constructor(props) {
-    super(props)
-    this.handleChange = this.handleChange.bind(this)
-    this.handleKeyUp = this.handleKeyUp.bind(this)
-    this.submitSearch = this.submitSearch.bind(this)
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
+    this.submitSearch = this.submitSearch.bind(this);
   }
 
   componentWillUpdate(nextProps) {
-    if (nextProps.query !== this.props.query ||
-        nextProps.field !== this.props.field) {
+    if (
+      nextProps.query !== this.props.query ||
+      nextProps.field !== this.props.field
+    ) {
       const query = buildTypeaheadQuery(nextProps);
       this.props.fetchTypeaheadResults(query);
     }
@@ -31,59 +33,68 @@ class Typeahead extends React.Component {
     // up arrow
     if (e.keyCode === 38) {
       if (index - 1 >= 0) {
-        this.props.setTypeaheadIndex(index - 1)
+        this.props.setTypeaheadIndex(index - 1);
       }
-    // down arrow
+      // down arrow
     } else if (e.keyCode === 40) {
       if (index + 1 <= this.props.results.length) {
-        this.props.setTypeaheadIndex(index + 1)
+        this.props.setTypeaheadIndex(index + 1);
       }
-    // enter key
+      // enter key
     } else if (e.keyCode === 13) {
-      this.submitSearch()
+      this.submitSearch();
     }
   }
 
   handleChange(e) {
     if (e.keyCode === 38 || e.keyCode === 40 || e.keyCode === 13) return;
     this.props.setTypeaheadQuery(e.target.value);
+    // this.props.setTypeaheadQuery(e.target.getAttribute('data-string'));
     this.props.setTypeaheadIndex(0);
   }
 
   submitSearch() {
     // identify the search phrase requested by the user
-    const phrase = this.props.index === 0 ?
-        this.props.query
-      : this.props.results[this.props.index - 1];
-    this.props.setTypeaheadQuery(phrase)
+    const phrase =
+      this.props.index === 0
+        ? this.props.query
+        : this.props.results[this.props.index - 1];
+    this.props.setTypeaheadQuery(phrase);
     // submit the search and remove focus from the input
     this.props.fetchSearchResults();
-    document.querySelector('.typeahead input').blur()
+    document.querySelector('.typeahead input').blur();
   }
 
   render() {
     return (
-      <div className='typeahead'>
+      <div className="typeahead">
         <Select />
-        <div className='search-button' />
-        <input value={this.props.query}
-            onKeyUp={this.handleKeyUp}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur} />
+        <div className="search-button" />
+        <input
+          value={this.props.query}
+          onKeyUp={this.handleKeyUp}
+          onChange={this.handleChange}
+          onBlur={this.handleBlur}
+        />
         <Results submitSearch={this.submitSearch} />
       </div>
-    )
+    );
   }
 }
 
 const buildTypeaheadQuery = (props) => {
   // build the url to which the query will be sent
-  let url = window.location.origin + '/api/typeahead' +
-    '?field=' + props.field.toLowerCase() +
-    '&value=' + props.query;
-  if (props.type) url += '&type=' + props.type + '_' + props.field.toLowerCase();
+  let url =
+    window.location.origin +
+    '/api/typeahead' +
+    '?field=' +
+    props.field.toLowerCase() +
+    '&value=' +
+    props.query;
+  if (props.type)
+    url += '&type=' + props.type + '_' + props.field.toLowerCase();
   return url;
-}
+};
 
 Typeahead.propTypes = {
   fetchSearchResults: PropTypes.func.isRequired,
@@ -94,21 +105,21 @@ Typeahead.propTypes = {
   results: PropTypes.arrayOf(PropTypes.string),
   setTypeaheadIndex: PropTypes.func.isRequired,
   setTypeaheadQuery: PropTypes.func.isRequired,
-}
+};
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   query: state.typeahead.query,
   field: state.typeahead.field,
   index: state.typeahead.index,
   results: state.typeahead.results,
   type: state.search.type,
-})
+});
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   setTypeaheadQuery: (val) => dispatch(setTypeaheadQuery(val)),
   setTypeaheadIndex: (val) => dispatch(setTypeaheadIndex(val)),
   fetchTypeaheadResults: (query) => dispatch(fetchTypeaheadResults(query)),
-  fetchSearchResults: () => dispatch(fetchSearchResults())
-})
+  fetchSearchResults: () => dispatch(fetchSearchResults()),
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Typeahead)
+export default connect(mapStateToProps, mapDispatchToProps)(Typeahead);

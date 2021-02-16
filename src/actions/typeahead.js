@@ -1,4 +1,5 @@
-import fetch from 'isomorphic-fetch';
+import { selectTypeaheadQuery } from '../selectors/typeahead';
+import { fetchFieldFile } from '../utils/getJSONFile';
 
 export const setTypeaheadField = (field) => ({
   type: 'SET_TYPEAHEAD_FIELD',
@@ -27,14 +28,9 @@ export const typeaheadRequestFailed = () => ({
 export function fetchTypeaheadResults() {
   return function (dispatch, getState) {
     // Construct the data URL
-    const { query: term, field } = getState().typeahead;
-    const rawDataPath = '/api/' + field + 's.json';
+    const term = selectTypeaheadQuery(getState());
 
-    return fetch(rawDataPath)
-      .then((response) => {
-        if (response.status >= 400) dispatch(typeaheadRequestFailed());
-        return response.json();
-      })
+    return fetchFieldFile(getState())
       .then((dataIndex) => {
         const fullList = Object.keys(dataIndex);
         const json = fullList.filter((v) =>
