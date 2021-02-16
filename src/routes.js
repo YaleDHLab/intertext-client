@@ -8,15 +8,15 @@ import Scatterplot from './components/Scatterplot';
 
 const routes = (
   <App>
-    <div className='page-container'>
+    <div className="page-container">
       <Switch>
-        <Route exact path='/' component={Home} />
-        <Route exact path='/results' component={Results} />
-        <Route path='/waffle' component={Waffle} />
-        <Route path='/scatterplot' component={Scatterplot} />
+        <Route exact path="/" component={Home} />
+        <Route exact path="/results" component={Results} />
+        <Route path="/waffle" component={Waffle} />
+        <Route path="/scatterplot" component={Scatterplot} />
       </Switch>
     </div>
   </App>
-)
+);
 
 export { routes };

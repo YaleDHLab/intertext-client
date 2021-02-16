@@ -1,7 +1,7 @@
 export const useTypes = {
   Previous: 'PREVIOUS',
   Later: 'LATER',
-  Both: 'BOTH',
+  Both: 'BOTH'
 };
 
 export const selectUseType = (state) => {

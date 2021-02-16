@@ -6,14 +6,14 @@ import brand from '../../assets/images/intertext.png';
 
 const Header = (props) => (
   <header>
-    <div className='header-text'>
-      <Link className='brand' to='/#'>
-        <img src={brand} alt='Intertext brand logo' />
+    <div className="header-text">
+      <Link className="brand" to="/#">
+        <img src={brand} alt="Intertext brand logo" />
       </Link>
       <Typeahead />
       {/*<Navicon />*/}
     </div>
   </header>
-)
+);
 
 export default Header;

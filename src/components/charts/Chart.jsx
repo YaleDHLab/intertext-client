@@ -5,11 +5,11 @@ import ChartLib from './chart-lib';
 
 export default class Chart extends React.Component {
   constructor(props) {
-    super(props)
-    this.state = {brush: null}
-    this.create = this.create.bind(this)
-    this.update = this.update.bind(this)
-    this.destroy = this.destroy.bind(this)
+    super(props);
+    this.state = { brush: null };
+    this.create = this.create.bind(this);
+    this.update = this.update.bind(this);
+    this.destroy = this.destroy.bind(this);
   }
 
   componentDidMount() {
@@ -27,33 +27,31 @@ export default class Chart extends React.Component {
   }
 
   create(elem, props) {
-    const brushElem = ChartLib.createBase(elem, props)
-    this.update(elem, props, brushElem)
-    this.setState({brushElem: brushElem});
+    const brushElem = ChartLib.createBase(elem, props);
+    this.update(elem, props, brushElem);
+    this.setState({ brushElem: brushElem });
   }
 
   update(elem, props, brushElem) {
     let brush, domain, scales;
-    ChartLib.updateBase(elem, props)
+    ChartLib.updateBase(elem, props);
     ChartLib.getGeoms(props).map((geom) => {
-      domain = ChartLib.getDomain(geom.data, props)
-      scales = ChartLib.getScales(elem, props, domain)
-      geom.draw(elem, props, domain, scales)
+      domain = ChartLib.getDomain(geom.data, props);
+      scales = ChartLib.getScales(elem, props, domain);
+      geom.draw(elem, props, domain, scales);
       return null;
-    })
+    });
     if (props.onBrush && props.setBrush) {
-      brush = props.setBrush(brushElem, scales)
+      brush = props.setBrush(brushElem, scales);
     }
-    ChartLib.updateAxes(elem, props, scales, brush, brushElem)
-    if (props.legend) ChartLib.updateLegend(elem, props)
+    ChartLib.updateAxes(elem, props, scales, brush, brushElem);
+    if (props.legend) ChartLib.updateLegend(elem, props);
   }
 
   destroy() {}
 
   render() {
-    return (
-      <div className='chart'></div>
-    );
+    return <div className="chart"></div>;
   }
 }
 
@@ -66,7 +64,7 @@ Chart.propTypes = {
     bottom: PropTypes.number.isRequired,
     left: PropTypes.number.isRequired,
     right: PropTypes.number.isRequired,
-    top: PropTypes.number.isRequired,
+    top: PropTypes.number.isRequired
   }).isRequired,
   maxColumns: PropTypes.number,
   onBrush: PropTypes.func,
@@ -75,13 +73,15 @@ Chart.propTypes = {
   onMouseout: PropTypes.func,
   onMouseover: PropTypes.func,
   setBrush: PropTypes.func,
-  waffleData: PropTypes.arrayOf(PropTypes.shape({
-    _id: PropTypes.string,
-    column: PropTypes.number.isRequired,
-    row: PropTypes.number.isRequired,
-    similarity: PropTypes.number.isRequired,
-    xLevel: PropTypes.string.isRequired,
-  })),
+  waffleData: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string,
+      column: PropTypes.number.isRequired,
+      row: PropTypes.number.isRequired,
+      similarity: PropTypes.number.isRequired,
+      xLevel: PropTypes.string.isRequired
+    })
+  ),
   waffleKey: PropTypes.string,
   width: PropTypes.number.isRequired,
   x: PropTypes.string,
@@ -90,5 +90,5 @@ Chart.propTypes = {
   xScale: PropTypes.string,
   yScale: PropTypes.string,
   xTickFormat: PropTypes.func,
-  yLabel: PropTypes.string,
-}
+  yLabel: PropTypes.string
+};

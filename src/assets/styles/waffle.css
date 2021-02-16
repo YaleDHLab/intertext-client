@@ -2,12 +2,12 @@
   width: 100vw;
   overflow: auto;
   text-align: center;
-  background: #F8F8F8;
+  background: #f8f8f8;
 }
 
 .waffle-card-container {
   padding: 50px 50px 0;
-  background: #F8F8F8;
+  background: #f8f8f8;
   box-sizing: border-box;
   width: 1180px;
   display: inline-block;
@@ -30,19 +30,19 @@
 
 span.label {
   margin-right: 18px;
-  font-size: .9em;
+  font-size: 0.9em;
 }
 
 .waffle-button {
   display: inline-block;
   margin: 0 18px;
   cursor: pointer;
-  font-size:.9em;
+  font-size: 0.9em;
 }
 
 .waffle-button.active {
-  border-bottom: 2px solid #6DD1D1;
-  font-weight:600;
+  border-bottom: 2px solid #6dd1d1;
+  font-weight: 600;
 }
 
 .waffle-card-controls .chart-legend {
@@ -95,7 +95,7 @@ span.label {
   height: 241px;
   float: left;
   text-align: center;
-  background: #E1F4F4;
+  background: #e1f4f4;
 }
 
 .headshot {
@@ -117,7 +117,7 @@ span.label {
   margin: 10px 20px;
   border-top: 1px solid #fff;
   padding-top: 4px;
-  font-size: .9em;
+  font-size: 0.9em;
 }
 
 /**
@@ -152,7 +152,7 @@ span.label {
 }
 
 .waffle-chart g.x.axis {
-  font-size: .85em;
+  font-size: 0.85em;
 }
 
 .waffle-chart text {
@@ -164,8 +164,8 @@ span.label {
 }
 
 path.area {
-  stroke: #EFE0DB;
-  fill: #EFE0DB;
+  stroke: #efe0db;
+  fill: #efe0db;
 }
 
 /**
@@ -181,7 +181,8 @@ path.area {
 * Active results
 **/
 
-.waffle-results-left, .waffle-results-right {
+.waffle-results-left,
+.waffle-results-right {
   display: inline-block;
   float: left;
 }
@@ -200,7 +201,7 @@ path.area {
 }
 
 .waffle-card-results .result {
-  outline: 3px solid #6DD1D1;
+  outline: 3px solid #6dd1d1;
   display: inline-block;
   text-align: left;
   margin: 0;

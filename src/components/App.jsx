@@ -5,14 +5,14 @@ import Footer from './Footer';
 export default class AppWrapper extends React.Component {
   render() {
     return (
-      <div className='app-container'>
-        <div className='page-wrap'>
+      <div className="app-container">
+        <div className="page-wrap">
           <Header />
           {this.props.children}
-          <div className='push' />
+          <div className="push" />
         </div>
         <Footer />
       </div>
-    )
+    );
   }
 }

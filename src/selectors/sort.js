@@ -1,7 +1,7 @@
 export const sortProperties = {
   Author: 'source_author',
   Year: 'source_year',
-  Similarity: 'similarity',
+  Similarity: 'similarity'
 };
 
 export const selectSortProperty = (state) => {

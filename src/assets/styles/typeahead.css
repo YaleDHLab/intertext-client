@@ -28,9 +28,9 @@
 }
 
 .typeahead input:focus {
-  outline: 2px solid #6DD1D1;
-  -webkit-box-shadow: 0px 0px 5px  #6DD1D1;
-  box-shadow: 0px 0px 5px  #6DD1D1;
+  outline: 2px solid #6dd1d1;
+  -webkit-box-shadow: 0px 0px 5px #6dd1d1;
+  box-shadow: 0px 0px 5px #6dd1d1;
 }
 
 .typeahead-results {
@@ -39,11 +39,11 @@
   background: #fff;
   margin: 35px 0 0 70px;
   border-radius: 3px;
-  border: 1px solid #95989A;
+  border: 1px solid #95989a;
   z-index: 1;
   display: none;
   text-align: left;
-  font-size: .8em;
+  font-size: 0.8em;
   max-height: 164px;
   overflow: auto;
   min-width: 260px;
@@ -95,7 +95,7 @@ input:focus + .typeahead-results {
 
 .typeahead .select-container {
   position: absolute;
-  background-color: #e8e8e8;;
+  background-color: #e8e8e8;
   background-image: url(../images/icons/down-caret.png);
   background-size: 12px;
   background-repeat: no-repeat;
@@ -126,8 +126,8 @@ input:focus + .typeahead-results {
 .typeahead select {
   width: 90px;
   height: 36px;
-  font-size: .8em;
-  font-weight :600;
+  font-size: 0.8em;
+  font-weight: 600;
   color: #666666;
   padding-left: 13px;
   border-top-left-radius: 8px;

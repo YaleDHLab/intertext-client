@@ -15,7 +15,7 @@
   -moz-border-radius: 8px;
   border-radius: 8px;
   margin: 0 50px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   display: inline-block;
   border: 2px solid #ebebeb;
   position: relative;
@@ -26,7 +26,7 @@
   -webkit-appearance: none;
   position: relative;
   outline: none;
-  font-size: .8em;
+  font-size: 0.8em;
   font-weight: 600;
   color: #666666;
 }

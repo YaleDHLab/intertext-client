@@ -7,6 +7,6 @@ const naviconReducer = (state = 'closed', action) => {
     default:
       return state;
   }
-}
+};
 
 export default naviconReducer;

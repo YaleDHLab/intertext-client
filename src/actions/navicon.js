@@ -1,7 +1,7 @@
 export const open = () => ({
-  type: 'OPEN_NAVICON',
-})
+  type: 'OPEN_NAVICON'
+});
 
 export const close = () => ({
-  type: 'CLOSE_NAVICON',
-})
+  type: 'CLOSE_NAVICON'
+});

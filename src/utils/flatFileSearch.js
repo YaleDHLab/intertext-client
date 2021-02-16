@@ -2,7 +2,7 @@ import { selectSimilarity } from '../selectors/similarity';
 import { selectSortProperty, sortProperties } from '../selectors/sort';
 import {
   selectTypeaheadField,
-  selectTypeaheadQuery,
+  selectTypeaheadQuery
 } from '../selectors/typeahead';
 import { selectUseType, useTypes } from '../selectors/useType';
 import { fetchFieldFile, fetchMatchFile } from './getJSONFile';

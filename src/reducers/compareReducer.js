@@ -6,15 +6,15 @@ const compareReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         type: action.obj.type,
         file_id: action.obj.file_id,
-        segment_ids: action.obj.segment_ids,
-      })
+        segment_ids: action.obj.segment_ids
+      });
     case 'END_COMPARE':
       return {};
     case 'SET_COMPARE':
-      return Object.assign({}, action.obj)
+      return Object.assign({}, action.obj);
     default:
       return state;
   }
-}
+};
 
 export default compareReducer;

@@ -3,26 +3,26 @@ import { fetchFieldFile } from '../utils/getJSONFile';
 
 export const setTypeaheadField = (field) => ({
   type: 'SET_TYPEAHEAD_FIELD',
-  field,
+  field
 });
 
 export const setTypeaheadQuery = (query) => ({
   type: 'SET_TYPEAHEAD_QUERY',
-  query,
+  query
 });
 
 export const setTypeaheadIndex = (index) => ({
   type: 'SET_TYPEAHEAD_INDEX',
-  index,
+  index
 });
 
 export const receiveTypeaheadResults = (results) => ({
   type: 'RECEIVE_TYPEAHEAD_RESULTS',
-  results,
+  results
 });
 
 export const typeaheadRequestFailed = () => ({
-  type: 'TYPEAHEAD_REQUEST_FAILED',
+  type: 'TYPEAHEAD_REQUEST_FAILED'
 });
 
 export function fetchTypeaheadResults() {

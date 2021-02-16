@@ -8,6 +8,6 @@ const sortResultsReducer = (state = initialState, action) => {
     default:
       return state;
   }
-}
+};
 
 export default sortResultsReducer;

@@ -7,7 +7,7 @@ import { fetchSearchResults } from '../../actions/search';
 import {
   setTypeaheadQuery,
   setTypeaheadIndex,
-  fetchTypeaheadResults,
+  fetchTypeaheadResults
 } from '../../actions/typeahead';
 
 class Typeahead extends React.Component {
@@ -104,7 +104,7 @@ Typeahead.propTypes = {
   query: PropTypes.string.isRequired,
   results: PropTypes.arrayOf(PropTypes.string),
   setTypeaheadIndex: PropTypes.func.isRequired,
-  setTypeaheadQuery: PropTypes.func.isRequired,
+  setTypeaheadQuery: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -112,14 +112,14 @@ const mapStateToProps = (state) => ({
   field: state.typeahead.field,
   index: state.typeahead.index,
   results: state.typeahead.results,
-  type: state.search.type,
+  type: state.search.type
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setTypeaheadQuery: (val) => dispatch(setTypeaheadQuery(val)),
   setTypeaheadIndex: (val) => dispatch(setTypeaheadIndex(val)),
   fetchTypeaheadResults: (query) => dispatch(fetchTypeaheadResults(query)),
-  fetchSearchResults: () => dispatch(fetchSearchResults()),
+  fetchSearchResults: () => dispatch(fetchSearchResults())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Typeahead);

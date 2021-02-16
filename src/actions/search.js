@@ -7,13 +7,13 @@ import { setDisplayed, setSimilarity } from './similarity-slider';
 import {
   setTypeaheadField,
   setTypeaheadQuery,
-  setTypeaheadIndex,
+  setTypeaheadIndex
 } from './typeahead';
 import { flatFileSearch } from '../utils/flatFileSearch';
 
 export const receiveSearchResults = (results) => ({
   type: 'RECEIVE_SEARCH_RESULTS',
-  results,
+  results
 });
 
 export const receiveEmptyResults = () =>
@@ -21,19 +21,19 @@ export const receiveEmptyResults = () =>
     docs: [],
     total: 0,
     limit: 1000,
-    offset: 0,
+    offset: 0
   });
 
 export const searchRequestFailed = () => ({
-  type: 'SEARCH_REQUEST_FAILED',
+  type: 'SEARCH_REQUEST_FAILED'
 });
 
 export const displayMoreResults = () => ({
-  type: 'DISPLAY_MORE_RESULTS',
+  type: 'DISPLAY_MORE_RESULTS'
 });
 
 export const resetMaxDisplayed = () => ({
-  type: 'RESET_MAX_DISPLAYED',
+  type: 'RESET_MAX_DISPLAYED'
 });
 
 export const fetchSearchResults = () => {
@@ -61,7 +61,7 @@ export const fetchSearchResults = () => {
               docs,
               total,
               limit,
-              offset,
+              offset
             };
 
             dispatch(receiveSearchResults(ret));
@@ -141,7 +141,7 @@ export const loadSearchFromUrl = (str) => {
       .map((arg) => {
         const split = arg.split('=');
         _state = Object.assign({}, _state, {
-          [split[0]]: JSON.parse(decodeURIComponent(split[1])),
+          [split[0]]: JSON.parse(decodeURIComponent(split[1]))
         });
         return null;
       });
