@@ -187,6 +187,32 @@ const getHref = (result, type) => {
         result[type + '_file_path'];
 };
 
+export const ResultProps = PropTypes.shape({
+  _id: PropTypes.string,
+  similarity: PropTypes.number.isRequired,
+  source_author: PropTypes.string.isRequired,
+  source_file_id: PropTypes.number.isRequired,
+  source_filename: PropTypes.string.isRequired,
+  source_match: PropTypes.string.isRequired,
+  source_postmatch: PropTypes.string.isRequired,
+  source_prematch: PropTypes.string.isRequired,
+  source_segment_ids: PropTypes.arrayOf(PropTypes.number.isRequired),
+  source_title: PropTypes.string.isRequired,
+  source_url: PropTypes.string,
+  source_year: PropTypes.number.isRequired,
+  target_author: PropTypes.string.isRequired,
+  target_file_id: PropTypes.number.isRequired,
+  target_file_path: PropTypes.string.isRequired,
+  target_filename: PropTypes.string.isRequired,
+  target_match: PropTypes.string.isRequired,
+  target_postmatch: PropTypes.string.isRequired,
+  target_prematch: PropTypes.string.isRequired,
+  target_segment_ids: PropTypes.arrayOf(PropTypes.number.isRequired),
+  target_title: PropTypes.string.isRequired,
+  target_url: PropTypes.string,
+  target_year: PropTypes.number.isRequired
+})
+
 Result.propTypes = {
   compare: PropTypes.shape({
     file_id: PropTypes.string,
@@ -198,31 +224,7 @@ Result.propTypes = {
     target: PropTypes.arrayOf(PropTypes.string)
   }),
   height: PropTypes.number.isRequired,
-  result: PropTypes.shape({
-    _id: PropTypes.string,
-    similarity: PropTypes.number.isRequired,
-    source_author: PropTypes.string.isRequired,
-    source_file_id: PropTypes.number.isRequired,
-    source_filename: PropTypes.string.isRequired,
-    source_match: PropTypes.string.isRequired,
-    source_postmatch: PropTypes.string.isRequired,
-    source_prematch: PropTypes.string.isRequired,
-    source_segment_ids: PropTypes.arrayOf(PropTypes.number.isRequired),
-    source_title: PropTypes.string.isRequired,
-    source_url: PropTypes.string,
-    source_year: PropTypes.string.isRequired,
-    target_author: PropTypes.string.isRequired,
-    target_file_id: PropTypes.number.isRequired,
-    target_file_path: PropTypes.string.isRequired,
-    target_filename: PropTypes.string.isRequired,
-    target_match: PropTypes.string.isRequired,
-    target_postmatch: PropTypes.string.isRequired,
-    target_prematch: PropTypes.string.isRequired,
-    target_segment_ids: PropTypes.arrayOf(PropTypes.number.isRequired),
-    target_title: PropTypes.string.isRequired,
-    target_url: PropTypes.string,
-    target_year: PropTypes.string.isRequired
-  }),
+  result: ResultProps,
   toggleFavorite: PropTypes.func.isRequired,
   toggleCompare: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,

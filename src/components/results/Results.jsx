@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Filters from '../filters/Filters';
-import Result from './Result';
+import Result, { ResultProps } from './Result';
 import Loader from '../Loader';
 import { loadSearchFromUrl, displayMoreResults } from '../../actions/search';
 
@@ -87,33 +87,7 @@ Results.propTypes = {
   loadSearchFromUrl: PropTypes.func.isRequired,
   location: PropTypes.object,
   match: PropTypes.object,
-  results: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string,
-      similarity: PropTypes.number.isRequired,
-      source_author: PropTypes.string.isRequired,
-      source_file_id: PropTypes.number.isRequired,
-      source_filename: PropTypes.string.isRequired,
-      source_match: PropTypes.string.isRequired,
-      source_postmatch: PropTypes.string.isRequired,
-      source_prematch: PropTypes.string.isRequired,
-      source_segment_ids: PropTypes.arrayOf(PropTypes.number.isRequired),
-      source_title: PropTypes.string.isRequired,
-      source_url: PropTypes.string,
-      source_year: PropTypes.string.isRequired,
-      target_author: PropTypes.string.isRequired,
-      target_file_id: PropTypes.number.isRequired,
-      target_file_path: PropTypes.string.isRequired,
-      target_filename: PropTypes.string.isRequired,
-      target_match: PropTypes.string.isRequired,
-      target_postmatch: PropTypes.string.isRequired,
-      target_prematch: PropTypes.string.isRequired,
-      target_segment_ids: PropTypes.arrayOf(PropTypes.number.isRequired),
-      target_title: PropTypes.string.isRequired,
-      target_url: PropTypes.string,
-      target_year: PropTypes.string.isRequired
-    })
-  )
+  results: PropTypes.arrayOf(ResultProps)
 };
 
 const mapStateToProps = (state) => ({
