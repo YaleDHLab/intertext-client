@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Chart from './charts/Chart';
 import Legend from './charts/Legend';
 import Loader from './Loader';
-import Result from './results/Result';
+import Result, { ResultProps } from './results/Result';
 import headshot from '../assets/images/authors/default-headshot.jpg';
 import { colorScale } from './charts/colors';
 import { getResultHeights } from './results/Results';
@@ -57,32 +57,7 @@ class Waffle extends React.Component {
                 />
                 <div className="headshot-label">{this.props.author}</div>
               </div>
-              <div className="waffle-chart hide-y-axis">
-                {this.props.data.length > 0 ? (
-                  <Chart
-                    waffleData={this.props.data}
-                    width={this.props.width}
-                    height={236}
-                    margin={{ top: 0, right: 80, bottom: 75, left: 0 }}
-                    color={colorCell}
-                    colorKey={'similarity'}
-                    columnCounts={this.props.columnCounts}
-                    maxColumn={this.props.maxColumn}
-                    x={this.props.feature}
-                    xLabel={''}
-                    xScale={'ordinal'}
-                    xDomain={this.props.xDomain}
-                    xTickFormat={(d) => d}
-                    xLabelRotate={20}
-                    yLabel={''}
-                    yDomain={[1, 20]}
-                    waffleKey={'_id'}
-                    onClick={this.props.getActive}
-                  />
-                ) : (
-                  <Loader />
-                )}
-              </div>
+              <WafflePlot />
             </div>
           </div>
           {this.props.active ? <WaffleResults {...this.props} /> : <span />}
@@ -92,7 +67,6 @@ class Waffle extends React.Component {
   }
 }
 
-const colorCell = (d) => colorScale(Number(Math.round(d + 'e2') + 'e-2'));
 
 const Button = (props) => {
   return (
@@ -137,11 +111,9 @@ const WaffleResults = (props) => {
 };
 
 const getImage = (image) => {
-  if (image) {
-    return image.substring(0, 4) === 'src/' ? image.substring(3) : image;
-  } else {
-    return headshot;
-  }
+  return image
+    ? image.substring(0, 4) === 'src/' ? image.substring(3) : image
+    : headshot;
 };
 
 const options = [
@@ -150,80 +122,112 @@ const options = [
   { feature: 'year', label: 'Year' }
 ];
 
+/**
+* Plot
+**/
+
+const StatelessWafflePlot = props => {
+  return (
+    <div className="waffle-chart hide-y-axis">
+      {props.data.length > 0 ? (
+        <Chart
+          height={236}
+          margin={{ top: 0, right: 80, bottom: 75, left: 0 }}
+          xLabel={''}
+          yLabel={''}
+          xScale={'ordinal'}
+          xTickFormat={(d) => d}
+          xLabelRotate={20}
+          yDomain={[1, 20]}
+          waffleKey={'_id'}
+          colorKey={'similarity'}
+          color={colorCell}
+          waffleData={props.data}
+          width={props.width}
+          columnCounts={props.columnCounts}
+          maxColumn={props.maxColumn}
+          x={props.feature}
+          xDomain={props.xDomain}
+          onClick={props.getActive}
+        />
+      ) : (
+        <Loader />
+      )}
+    </div>
+  )
+}
+
+let mapStateToProps = state => ({
+  data: state.waffle.data,
+  width: state.waffle.width,
+  xDomain: state.waffle.xDomain,
+  columnCounts: state.waffle.columnCounts,
+  maxColumn: state.waffle.maxColumn,
+})
+
+let mapDispatchToProps = dispatch => ({
+  getActive: (d, i) => dispatch(getWaffleActive(d, i))
+})
+
+const WafflePlot = connect(mapStateToProps, mapDispatchToProps)(StatelessWafflePlot)
+
+const colorCell = (d) => colorScale(Number(Math.round(d + 'e2') + 'e-2'));
+
+/**
+* Plot
+**/
+
+const WaffleDataProps = PropTypes.shape({
+  _id: PropTypes.string.isRequired,
+  column: PropTypes.number.isRequired,
+  row: PropTypes.number.isRequired,
+  similarity: PropTypes.number.isRequired,
+  xLevel: PropTypes.string.isRequired,
+})
+
+WafflePlot.propTypes = {
+  columnCounts: PropTypes.object.isRequired,
+  data: PropTypes.arrayOf(WaffleDataProps).isRequired,
+  maxColumn: PropTypes.number,
+  width: PropTypes.number.isRequired,
+  xDomain: PropTypes.arrayOf(PropTypes.string).isRequired,
+  getActive: PropTypes.func.isRequired,
+}
+
+/**
+* Container
+**/
+
 Waffle.propTypes = {
-  active: PropTypes.shape({
-    _id: PropTypes.string,
-    similarity: PropTypes.number.isRequired,
-    source_author: PropTypes.string.isRequired,
-    source_file_id: PropTypes.number.isRequired,
-    source_filename: PropTypes.string.isRequired,
-    source_match: PropTypes.string.isRequired,
-    source_postmatch: PropTypes.string.isRequired,
-    source_prematch: PropTypes.string.isRequired,
-    source_segment_ids: PropTypes.arrayOf(PropTypes.number.isRequired),
-    source_title: PropTypes.string.isRequired,
-    source_url: PropTypes.string,
-    source_year: PropTypes.string.isRequired,
-    target_author: PropTypes.string.isRequired,
-    target_file_id: PropTypes.number.isRequired,
-    target_file_path: PropTypes.string.isRequired,
-    target_filename: PropTypes.string.isRequired,
-    target_match: PropTypes.string.isRequired,
-    target_postmatch: PropTypes.string.isRequired,
-    target_prematch: PropTypes.string.isRequired,
-    target_segment_ids: PropTypes.arrayOf(PropTypes.number.isRequired),
-    target_title: PropTypes.string.isRequired,
-    target_url: PropTypes.string,
-    target_year: PropTypes.string.isRequired
-  }),
+  active: ResultProps,
   author: PropTypes.string.isRequired,
   closeWaffle: PropTypes.func.isRequired,
-  columnCounts: PropTypes.object.isRequired,
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      column: PropTypes.number.isRequired,
-      row: PropTypes.number.isRequired,
-      similarity: PropTypes.number.isRequired,
-      xLevel: PropTypes.isRequired
-    })
-  ).isRequired,
+  data: PropTypes.arrayOf(WaffleDataProps).isRequired,
   feature: PropTypes.string.isRequired,
-  getActive: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired
   }),
   image: PropTypes.string,
-  levelMargin: PropTypes.number,
   location: PropTypes.object,
   match: PropTypes.object,
-  maxColumn: PropTypes.number,
   setFeature: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  width: PropTypes.number.isRequired,
-  xDomain: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
-const mapStateToProps = (state) => ({
+mapStateToProps = (state) => ({
   type: state.waffle.type,
   feature: state.waffle.feature,
   author: state.waffle.author,
   title: state.waffle.title,
   image: state.waffle.image,
   data: state.waffle.data,
-  columnCounts: state.waffle.columnCounts,
-  maxColumn: state.waffle.maxColumn,
-  width: state.waffle.width,
-  xDomain: state.waffle.xDomain,
-  levelMargin: state.waffle.levelMargin,
   active: state.waffle.active
 });
 
-const mapDispatchToProps = (dispatch) => ({
+mapDispatchToProps = (dispatch) => ({
   closeWaffle: () => dispatch(hideWaffle()),
   setFeature: (feature) => dispatch(setWaffleFeature(feature)),
-  getActive: (d, i) => dispatch(getWaffleActive(d, i))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Waffle);

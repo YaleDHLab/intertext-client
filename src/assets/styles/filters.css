@@ -41,9 +41,6 @@
   text-align: left;
   font-size: 0.8em;
   display: inline-block;
-  position: absolute;
-  left: 0;
-  top: 20px;
 }
 
 .results-count span {

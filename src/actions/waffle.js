@@ -35,7 +35,7 @@ export const hideWaffle = () => {
 export const setWaffleFeature = (feature) => {
   return (dispatch) => {
     dispatch({ type: 'SET_WAFFLE_FEATURE', feature: feature });
-    dispatch(requestWaffleData());
+    dispatch(plotWaffle());
   };
 };
 
@@ -49,8 +49,8 @@ export const visualize = (obj) => {
   return (dispatch, getState) => {
     dispatch(setWaffleVisualized(obj));
     dispatch(requestWaffleImage());
-    dispatch(requestWaffleData());
     dispatch(saveWaffleInUrl());
+    dispatch(plotWaffle());
   };
 };
 
@@ -86,54 +86,20 @@ export const requestWaffleImage = () => {
   };
 };
 
-export const requestWaffleData = () => {
-  return (dispatch, getState) => {
-    return fetch(getWaffleUrl(getState))
-      .then((response) =>
-        response.json().then((json) => ({ status: response.status, json }))
-      )
-      .then(
-        ({ status, json }) => {
-          if (status >= 400) dispatch(waffleRequestFailed());
-          else dispatch(receiveWaffleData(json.docs || []));
-        },
-        (err) => {
-          dispatch(waffleRequestFailed());
-        }
-      );
-  };
-};
-
 export const requestWaffleActiveData = (d) => {
-  return (dispatch) => {
-    if (!d._id) {
-      console.warn('waffle request missing _id');
-      return;
-    }
-    const url = window.location.origin + '/api/matches?_id=' + d._id;
-    return fetch(url)
-      .then((response) =>
-        response.json().then((json) => ({ status: response.status, json }))
-      )
-      .then(
-        ({ status, json }) => {
-          if (status >= 400) dispatch(waffleRequestFailed());
-          else dispatch(setActiveWaffle(json.docs[0] || {}));
-        },
-        (err) => {
-          dispatch(waffleRequestFailed());
-        }
-      );
-  };
+  return (dispatch, getState) => {
+    const result = getState().search.allResults.filter(r => r._id === d._id)[0];
+    dispatch(setActiveWaffle(Object.assign({}, result)));
+  }
 };
 
-export const receiveWaffleData = (docs) => {
-  const size = 10; // h, w of each waffle cell
-  const levelMargin = 10; // margin between levels
-  const margin = { top: 0, right: 80, bottom: 90, left: 0 };
+export const plotWaffle = () => {
   return (dispatch, getState) => {
     const _state = getState();
-    const data = getCellData(_state, docs);
+    const size = 10; // h, w of each waffle cell
+    const levelMargin = 10; // margin between levels
+    const margin = { top: 0, right: 80, bottom: 90, left: 0 };
+    const data = getCellData(_state);
     const cols = data.cols;
     // find the level with the max column count
     const maxCol = keys(cols).reduce((a, b) => (cols[a] > cols[b] ? a : b));
@@ -153,16 +119,16 @@ export const receiveWaffleData = (docs) => {
         levelMargin: levelMargin
       })
     );
-  };
+  }
 };
 
-const getCellData = (_state, _data) => {
+const getCellData = (_state) => {
   const rows = 10; // waffles per col
   const key = getKey(_state.waffle.feature, _state.waffle.type);
   let counts = {},
     cols = {},
     data = [];
-  _data.map((d, i) => {
+  _state.search.allResults.map((d, i) => {
     // level of passage in `feature` factor
     let level = getLevel(d, key, _state.waffle.feature);
     // set the 0-based count of the times each level occurs
@@ -177,9 +143,9 @@ const getCellData = (_state, _data) => {
     data.push({
       row: row,
       column: col,
-      xLevel: level,
+      xLevel: level.toString(),
       similarity: d.similarity,
-      _id: d._id
+      _id: d._id,
     });
     return null;
   });
@@ -187,18 +153,6 @@ const getCellData = (_state, _data) => {
 };
 
 const keys = (obj) => Object.keys(obj);
-
-const getWaffleUrl = (getState) => {
-  const waffle = getState().waffle;
-  return (
-    window.location.origin +
-    '/api/matches?' +
-    waffle.type +
-    '_file_id=' +
-    waffle.file_id +
-    '&limit=500'
-  );
-};
 
 const getKey = (feature, type) => {
   const otherType = type === 'source' ? 'target' : 'source';

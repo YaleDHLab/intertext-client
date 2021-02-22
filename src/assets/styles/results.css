@@ -155,12 +155,17 @@
   font-size: 0.9em;
   margin-top: 5px;
   color: #666666;
-  max-width: calc(100% - 115px);
+  width: 450px;
   overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
   line-height: 1.2em;
   font-family: 'Open Sans';
   font-style: italic;
+}
+
+.waffle-chart-card .result-title {
+  width: 100%;
 }
 
 .result.target .result-title {
