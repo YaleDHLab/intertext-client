@@ -25,7 +25,7 @@ export function flatFileSearch(state) {
     // throw an error if the term isn't a key
     let matches;
     try {
-      matches = json[searchTerm].map((matchID) => fetchMatchFile(matchID));
+      matches = (json[searchTerm] || []).map((matchID) => fetchMatchFile(matchID));
     } catch (e) {
       console.error('error:', e);
       throw new Error(

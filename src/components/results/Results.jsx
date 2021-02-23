@@ -29,7 +29,9 @@ const Results = props => {
       <Filters />
       <div className="result-pair-container">{results && results.length
         ? <ResultPairs results={results} />
-        : <Loader />
+        : results
+          ? <span>Sorry, no results could be found</span>
+          : <Loader />
       }</div>
     </div>
   )
