@@ -1,4 +1,3 @@
-// import fetch from 'isomorphic-fetch';
 import { history } from '../store';
 import { setSort } from './sort-results';
 import { setUseTypes } from './use-types';
@@ -45,13 +44,8 @@ export const fetchSearchResults = () => {
     // Reset the typeahead index given new results
     dispatch(setTypeaheadIndex(0));
     // Generate the query url
-    // const query = getSearchUrl(getState());
     return (
       flatFileSearch(getState())
-        // return loadMatchesFile(getState())
-        // .then((response) =>
-        //   response.json().then((json) => ({ status: response.status, json }))
-        // )
         .then(
           (docs) => {
             const limit = 1000; // Where is this in state?
