@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Select from './Select';
 import Results from './Results';
 import PropTypes from 'prop-types';
@@ -10,91 +10,76 @@ import {
   fetchTypeaheadResults
 } from '../../actions/typeahead';
 
-class Typeahead extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleKeyUp = this.handleKeyUp.bind(this);
-    this.submitSearch = this.submitSearch.bind(this);
-  }
+const Typeahead = props => {
+  const { field, query, type, fetchTypeaheadResults } = {...props}
 
-  componentWillUpdate(nextProps) {
-    if (
-      nextProps.query !== this.props.query ||
-      nextProps.field !== this.props.field
-    ) {
-      const query = buildTypeaheadQuery(nextProps);
-      this.props.fetchTypeaheadResults(query);
-    }
-  }
+  useEffect(() => {
+    fetchTypeaheadResults(buildTypeaheadQuery(field, query, type))
+  }, [query, field, type, fetchTypeaheadResults])
 
-  handleKeyUp(e) {
-    var index = this.props.index;
+  const buildTypeaheadQuery = (field, query, type) => {
+    // build the url to which the query will be sent
+    let url =
+      window.location.origin +
+      '/api/typeahead' +
+      '?field=' +
+      field.toLowerCase() +
+      '&value=' +
+      query;
+    if (type)
+      url += '&type=' + type + '_' + field.toLowerCase();
+    return url;
+  };
+
+  const handleKeyUp = (e) => {
+    var index = props.index;
     // up arrow
     if (e.keyCode === 38) {
       if (index - 1 >= 0) {
-        this.props.setTypeaheadIndex(index - 1);
+        props.setTypeaheadIndex(index - 1);
       }
       // down arrow
     } else if (e.keyCode === 40) {
-      if (index + 1 <= this.props.results.length) {
-        this.props.setTypeaheadIndex(index + 1);
+      if (index + 1 <= props.results.length) {
+        props.setTypeaheadIndex(index + 1);
       }
       // enter key
     } else if (e.keyCode === 13) {
-      this.submitSearch();
+      submitSearch();
     }
   }
 
-  handleChange(e) {
+  const handleChange = (e) => {
     if (e.keyCode === 38 || e.keyCode === 40 || e.keyCode === 13) return;
-    this.props.setTypeaheadQuery(e.target.value);
-    // this.props.setTypeaheadQuery(e.target.getAttribute('data-string'));
-    this.props.setTypeaheadIndex(0);
+    props.setTypeaheadQuery(e.target.value);
+    props.setTypeaheadIndex(0);
   }
 
-  submitSearch() {
+  const submitSearch = () => {
     // identify the search phrase requested by the user
     const phrase =
-      this.props.index === 0
-        ? this.props.query
-        : this.props.results[this.props.index - 1];
-    this.props.setTypeaheadQuery(phrase);
+      props.index === 0
+        ? props.query
+        : props.results[props.index - 1];
+    props.setTypeaheadQuery(phrase);
     // submit the search and remove focus from the input
-    this.props.fetchSearchResults();
+    props.fetchSearchResults();
     document.querySelector('.typeahead input').blur();
   }
 
-  render() {
-    return (
-      <div className="typeahead">
-        <Select />
-        <div className="search-button" />
-        <input
-          value={this.props.query}
-          onKeyUp={this.handleKeyUp}
-          onChange={this.handleChange}
-          onBlur={this.handleBlur}
-        />
-        <Results submitSearch={this.submitSearch} />
-      </div>
-    );
-  }
+  return(
+    <div className="typeahead">
+      <Select />
+      <div className="search-button" />
+      <input
+        value={props.query}
+        onKeyUp={handleKeyUp}
+        onChange={handleChange}
+      />
+      <Results submitSearch={submitSearch} />
+    </div>
+  )
 }
-
-const buildTypeaheadQuery = (props) => {
-  // build the url to which the query will be sent
-  let url =
-    window.location.origin +
-    '/api/typeahead' +
-    '?field=' +
-    props.field.toLowerCase() +
-    '&value=' +
-    props.query;
-  if (props.type)
-    url += '&type=' + props.type + '_' + props.field.toLowerCase();
-  return url;
-};
 
 Typeahead.propTypes = {
   fetchSearchResults: PropTypes.func.isRequired,
