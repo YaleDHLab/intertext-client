@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Filters from '../filters/Filters';
@@ -6,30 +6,41 @@ import Result, { ResultProps } from './Result';
 import Loader from '../Loader';
 import { loadSearchFromUrl, displayMoreResults } from '../../actions/search';
 
-class Results extends React.Component {
-  constructor(props) {
-    super(props);
-    this.renderContent = this.renderContent.bind(this);
-  }
+const Results = props => {
+  const { results, loadSearchFromUrl, displayMoreResults } = {...props}
 
-  componentWillMount() {
-    window.addEventListener('scroll', () => onScroll(this.props));
-  }
+  useEffect(() => {
+    const onScroll = () => {
+      const elem = document.querySelector('.result-pair-container');
+      if (elem && window.scrollY / elem.clientHeight > 0.75) {
+        displayMoreResults();
+      }
+    };
 
-  // bootstrap search state in url (if any) when app mounts
-  componentDidMount() {
-    this.props.loadSearchFromUrl(window.location.search);
-  }
+    window.addEventListener('scroll', onScroll);
+    loadSearchFromUrl(window.location.search);
+    return () => {
+      window.addEventListener('scroll', onScroll);
+    }
+  }, [loadSearchFromUrl, displayMoreResults])
 
-  componentWillUnmount() {
-    window.removeEventListener('scroll', () => onScroll(this.props));
-  }
+  return (
+    <div className="results">
+      <Filters />
+      <div className="result-pair-container">{results && results.length
+        ? <ResultPairs results={results} />
+        : <Loader />
+      }</div>
+    </div>
+  )
+}
 
-  renderContent() {
-    // display returned results
-    if (this.props.results && this.props.results.length) {
-      const heights = getResultHeights(this.props.results);
-      return this.props.results.map((result, idx) => (
+const ResultPairs = props => {
+  const results = props.results;
+  const heights = getResultHeights(results);
+  return (
+    <React.Fragment>
+      {results.map((result, idx) => (
         <div className="result-pair" key={idx}>
           <Result result={result} type="source" height={heights[idx]} />
           <div className="similarity-circle">
@@ -39,24 +50,9 @@ class Results extends React.Component {
           </div>
           <Result result={result} type="target" height={heights[idx]} />
         </div>
-      ));
-      // no results were found
-    } else if (this.props.results) {
-      return <span>Sorry, no results could be found</span>;
-      // waiting for results
-    } else {
-      return <Loader />;
-    }
-  }
-
-  render() {
-    return (
-      <div className="results">
-        <Filters />
-        <div className="result-pair-container">{this.renderContent()}</div>
-      </div>
-    );
-  }
+      ))}
+    </React.Fragment>
+  )
 }
 
 // compute the heights of each result pair
@@ -71,13 +67,6 @@ export const getResultHeights = (results) => {
     return arr;
   }, []);
   return heights;
-};
-
-const onScroll = (props) => {
-  const elem = document.querySelector('.result-pair-container');
-  if (elem && window.scrollY / elem.clientHeight > 0.75) {
-    props.displayMoreResults();
-  }
 };
 
 Results.propTypes = {
@@ -96,7 +85,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   loadSearchFromUrl: (obj) => dispatch(loadSearchFromUrl(obj)),
-  displayMoreResults: () => dispatch(displayMoreResults())
+  displayMoreResults: () => dispatch(displayMoreResults()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Results);
