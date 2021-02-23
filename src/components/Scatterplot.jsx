@@ -306,10 +306,10 @@ Scatterplot.propTypes = {
   statistic: PropTypes.string.isRequired,
   toggleJitter: PropTypes.func.isRequired,
   tooltip: PropTypes.shape({
-    name: PropTypes.string,
-    title: PropTypes.string,
-    x: PropTypes.number,
-    y: PropTypes.number
+    name: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    x: PropTypes.isRequired,
+    y: PropTypes.isRequired,
   }),
   unit: PropTypes.string.isRequired,
   use: PropTypes.string.isRequired,
