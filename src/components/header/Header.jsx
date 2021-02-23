@@ -1,5 +1,4 @@
 import React from 'react';
-import Navicon from './Navicon';
 import Typeahead from '../typeahead/Typeahead';
 import { Link } from 'react-router-dom';
 import brand from '../../assets/images/intertext.png';
@@ -11,7 +10,6 @@ const Header = (props) => (
         <img src={brand} alt="Intertext brand logo" />
       </Link>
       <Typeahead />
-      {/*<Navicon />*/}
     </div>
   </header>
 );
