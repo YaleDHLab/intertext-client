@@ -24,7 +24,9 @@ header {
   display: inline-block;
   vertical-align: middle;
   position: relative;
-  top: 31px;
+  top: 25px;
+  padding: 10px;
+  box-sizing: content-box;
 }
 
 .brand img {

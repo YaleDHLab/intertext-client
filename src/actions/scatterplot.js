@@ -30,7 +30,8 @@ export const setTooltip = (obj) => ({
 
 export const setDomains = (domains) => {
   return (dispatch, getState) => {
-    dispatch(fetchScatterplotResults({ domains: domains }));
+    dispatch({type: 'SET_DOMAINS', domains: domains });
+    dispatch(fetchScatterplotResults());
   };
 };
 
@@ -49,7 +50,8 @@ export const setUnit = (unit) => {
 
 export const setStatistic = (stat) => {
   return (dispatch) => {
-    dispatch(fetchScatterplotResults({ statistic: stat }));
+    dispatch({ type: 'SET_STATISTIC', statistic: stat })
+    dispatch(fetchScatterplotResults());
   };
 };
 
@@ -60,18 +62,18 @@ export const setUse = (use) => {
   };
 };
 
-export const fetchScatterplotResults = (options) => {
-  options = options || {};
+export const fetchScatterplotResults = () => {
   return (dispatch, getState) => {
-    const _state = getState().scatterplot;
-    return fetch(getScatterplotUrl(_state, options))
+    dispatch({type: 'FETCH_SCATTERPLOT_RESULTS'});
+    const url = dispatch(getScatterplotUrl());
+    return fetch(url)
       .then((response) =>
         response.json().then((json) => ({ status: response.status, json }))
       )
       .then(
         ({ status, json }) => {
           if (status >= 400) dispatch(scatterplotRequestFailed());
-          else dispatch(parseResults(json.docs, options));
+          else dispatch(parseResults(json));
         },
         (err) => {
           dispatch(scatterplotRequestFailed());
@@ -80,42 +82,24 @@ export const fetchScatterplotResults = (options) => {
   };
 };
 
-const getScatterplotUrl = (state, options) => {
-  const use = getUse(state.use);
-  const unit = getUnit(state.unit);
-  let url = window.location.origin + '/api/scatterplot';
-  url += '?limit=500';
-  url += '&type=' + use;
-  url += '&unit=' + unit;
-  if (options.statistic) {
-    url += '&statistic=' + options.statistic;
-  } else {
-    url += '&statistic=' + state.statistic;
+const getScatterplotUrl = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const use = getUse(state.scatterplot.use);
+    const unit = getUnit(state.scatterplot.unit);
+    const stat = state.scatterplot.statistic;
+    const url = `${window.location.origin}/api/scatterplots/${use}-${unit}-${stat}.json`;
+    return url;
   }
-  if (options.domains && options.domains.x) {
-    url += '&min_similarity=' + options.domains.x[0];
-    url += '&max_similarity=' + options.domains.x[1];
-  }
-  if (options.domains && options.domains.y) {
-    url += '&min_' + use + '_year=' + Math.floor(options.domains.y[0]);
-    url += '&max_' + use + '_year=' + Math.floor(options.domains.y[1]);
-  }
-  return url;
-};
+}
 
 const getUse = (use) => (use === 'earlier' ? 'target' : 'source');
 
 const getUnit = (unit) => {
-  switch (unit) {
-    case 'passage':
-      return 'segment_ids';
-    case 'author':
-      return 'author';
-    case 'book':
-      return 'file_id';
-    default:
-      return 'segment_ids';
-  }
+  if (unit === 'passage') return 'segment_ids';
+  if (unit === 'author') return 'author';
+  if (unit === 'book') return 'file_id';
+  return 'segment_ids';
 };
 
 // set the full and displayed domains
@@ -128,7 +112,8 @@ const getDomains = (data, _state) => {
 
 const parseResults = (data, options) => {
   return (dispatch, getState) => {
-    const domains = getDomains(data, getState().scatterplot);
+    const state = getState();
+    const domains = getDomains(data, state.scatterplot);
     for (let i = 0; i < 20; i++) {
       try {
         data[i].label = i + 1;
@@ -138,11 +123,12 @@ const parseResults = (data, options) => {
       data: data,
       xDomain: domains.x,
       yDomain: domains.y,
-      zoomed: options.domains ? true : false
+      zoomed: false
     };
-    if (options.statistic) {
-      args.statistic = options.statistic;
-    }
     dispatch(receiveResults(args));
   };
+};
+
+export const getUnitFromUrl = () => {
+  return window.location.search.substring(1).split('=')[1];
 };

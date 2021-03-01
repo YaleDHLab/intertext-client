@@ -8,7 +8,7 @@ const initialState = {
   y: 'target_year', // attribute displayed on y axis
   zoomed: false,
   jitter: false,
-  tooltip: { name: '', title: '', x: '', y: '' },
+  tooltip: { title: '', author: '', x: '', y: '' },
   err: false
 };
 
@@ -45,7 +45,7 @@ const scatterplotReducer = (state = initialState, action) => {
         jitter: !state.jitter
       });
 
-    case 'SET_DISPLAYED_DOMAINS':
+    case 'SET_DOMAINS':
       return Object.assign({}, state, {
         xDomain: action.obj.x,
         yDomain: action.obj.y,

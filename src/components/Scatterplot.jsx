@@ -31,10 +31,6 @@ class Scatterplot extends React.Component {
     this.setBrush = this.setBrush.bind(this);
   }
 
-  componentWillMount() {
-    this.props.setUnit(getUnitFromUrl());
-  }
-
   pointStroke(d) {
     return '#fff';
   }
@@ -71,8 +67,8 @@ class Scatterplot extends React.Component {
     this.props.setTooltip({
       x: null,
       y: null,
-      title: null,
-      author: null,
+      title: '',
+      author: '',
       year: null
     });
   }
@@ -275,15 +271,11 @@ const getRowText = (props) => {
   }
 };
 
-const getUnitFromUrl = () => {
-  return window.location.search.substring(1).split('=')[1];
-};
-
 Scatterplot.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       author: PropTypes.string.isRequired,
-      key: PropTypes.string.isRequired,
+      key: PropTypes.isRequired,
       label: PropTypes.number,
       match: PropTypes.string.isRequired,
       similarity: PropTypes.number.isRequired,
@@ -306,7 +298,7 @@ Scatterplot.propTypes = {
   statistic: PropTypes.string.isRequired,
   toggleJitter: PropTypes.func.isRequired,
   tooltip: PropTypes.shape({
-    name: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     x: PropTypes.isRequired,
     y: PropTypes.isRequired,
