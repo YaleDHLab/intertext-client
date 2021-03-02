@@ -42,6 +42,10 @@ export const fetchFieldFile = (state) => {
   });
 };
 
-export const fetchMatchFile = (textID) => {
-  return fetchJSONFile('/api/matches/' + String(textID) + '.json');
+export const fetchMatchFile = (textID) =>
+  fetchJSONFile('/api/matches/' + String(textID) + '.json');
+
+export const fetchScatterplotFile = (props) => {
+  const { use, unit, stat } = props;
+  return fetchJSONFile(`/api/scatterplots/${use}-${unit}-${stat}.json`);
 };

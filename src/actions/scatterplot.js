@@ -1,5 +1,5 @@
-import fetch from 'isomorphic-fetch';
 import * as d3 from 'd3';
+import { fetchScatterplotFile } from '../utils/getJSONFile';
 
 export const toggleJitter = () => ({
   type: 'TOGGLE_JITTER'
@@ -30,7 +30,7 @@ export const setTooltip = (obj) => ({
 
 export const setDomains = (domains) => {
   return (dispatch, getState) => {
-    dispatch({type: 'SET_DOMAINS', domains: domains });
+    dispatch({ type: 'SET_DOMAINS', domains: domains });
     dispatch(fetchScatterplotResults());
   };
 };
@@ -50,7 +50,7 @@ export const setUnit = (unit) => {
 
 export const setStatistic = (stat) => {
   return (dispatch) => {
-    dispatch({ type: 'SET_STATISTIC', statistic: stat })
+    dispatch({ type: 'SET_STATISTIC', statistic: stat });
     dispatch(fetchScatterplotResults());
   };
 };
@@ -64,34 +64,51 @@ export const setUse = (use) => {
 
 export const fetchScatterplotResults = () => {
   return (dispatch, getState) => {
-    dispatch({type: 'FETCH_SCATTERPLOT_RESULTS'});
-    const url = dispatch(getScatterplotUrl());
-    return fetch(url)
-      .then((response) =>
-        response.json().then((json) => ({ status: response.status, json }))
-      )
-      .then(
-        ({ status, json }) => {
-          if (status >= 400) dispatch(scatterplotRequestFailed());
-          else dispatch(parseResults(json));
-        },
-        (err) => {
-          dispatch(scatterplotRequestFailed());
-        }
-      );
+    dispatch({ type: 'FETCH_SCATTERPLOT_RESULTS' });
+    fetchScatterplotFile(getScatterplotProps(getState()))
+      .then((json) => {
+        const state = getState();
+        const yDomain = state.scatterplot.yDomains;
+        const xDomain = state.scatterplot.xDomain;
+
+        const filteredResults = json.filter((item) => {
+          // if there's an xdomain, filter on it
+          if (yDomain && yDomain.length === 2) {
+            const [minYear, maxYear] = d3.extent(yDomain);
+            const itemYear = item.target_year;
+            if (itemYear < minYear || itemYear > maxYear) {
+              return false;
+            }
+          }
+
+          // if theres a ydomain filter on it
+          if (xDomain.length === 2) {
+            const [minX, maxX] = d3.extent(xDomain);
+            const itemSimiliarty = item.similarity;
+            if (itemSimiliarty < minX || itemSimiliarty > maxX) {
+              return false;
+            }
+          }
+
+          return true;
+        });
+
+        console.log('filteredResults', filteredResults);
+        dispatch(parseResults(filteredResults));
+      })
+      .catch((err) => {
+        dispatch(scatterplotRequestFailed());
+      });
   };
 };
 
-const getScatterplotUrl = () => {
-  return (dispatch, getState) => {
-    const state = getState();
-    const use = getUse(state.scatterplot.use);
-    const unit = getUnit(state.scatterplot.unit);
-    const stat = state.scatterplot.statistic;
-    const url = `${window.location.origin}/api/scatterplots/${use}-${unit}-${stat}.json`;
-    return url;
-  }
-}
+const getScatterplotProps = (state) => {
+  return {
+    use: getUse(state.scatterplot.use),
+    unit: getUnit(state.scatterplot.unit),
+    stat: state.scatterplot.statistic
+  };
+};
 
 const getUse = (use) => (use === 'earlier' ? 'target' : 'source');
 

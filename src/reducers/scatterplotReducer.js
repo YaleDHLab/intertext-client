@@ -47,8 +47,8 @@ const scatterplotReducer = (state = initialState, action) => {
 
     case 'SET_DOMAINS':
       return Object.assign({}, state, {
-        xDomain: action.obj.x,
-        yDomain: action.obj.y,
+        xDomain: action.domains.x,
+        yDomains: action.domains.y,
         zoomed: true
       });
 
@@ -65,6 +65,7 @@ const scatterplotReducer = (state = initialState, action) => {
       });
 
     case 'RECEIVE_SCATTERPLOT_RESULTS':
+      console.log('RECEIVE_SCATTERPLOT_RESULTS', action.obj);
       return Object.assign({}, state, {
         data: action.obj.data,
         xDomain: action.obj.xDomain,
