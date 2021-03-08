@@ -17,15 +17,17 @@ import { fetchFieldFile, fetchMatchFile } from './getJSONFile';
  *
  * Returns: Promise<Array<Doc Object>>
  */
-export function flatFileSearch(state) {
+export function flatFileKeySearch(state) {
   const field = selectTypeaheadField(state);
   const searchTerm = selectTypeaheadQuery(state);
 
   return fetchFieldFile(state).then((json) => {
-    // throw an error if the term isn't a key
+    // throw an error if the term isn't a key or empty
     let matches;
     try {
-      matches = (json[searchTerm] || []).map((matchID) => fetchMatchFile(matchID));
+      matches = (json[searchTerm] || []).map((matchID) =>
+        fetchMatchFile(matchID)
+      );
     } catch (e) {
       console.error('error:', e);
       throw new Error(
