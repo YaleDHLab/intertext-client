@@ -6,7 +6,7 @@ import brand from '../../assets/images/intertext.png';
 const Header = (props) => (
   <header>
     <div className="header-text">
-      <Link className="brand" to="/#">
+      <Link className="brand" to="/insights">
         <img src={brand} alt="Intertext brand logo" />
       </Link>
       <Typeahead />
