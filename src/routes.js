@@ -10,13 +10,13 @@ const routes = (
   <App>
     <div className="page-container">
       <Switch>
-        <Route exact path="/">
-          <Redirect to='results?store=true&query=""&sort="similarity"&similarity=[50,100]&displayed=[50,100]&field="Author"&useTypes={"previous":true,"later":true}&compare={}' />
-        </Route>
         <Route exact path="/insights" component={Home} />
         <Route exact path="/results" component={Results} />
         <Route path="/waffle" component={Waffle} />
         <Route path="/scatterplot" component={Scatterplot} />
+        <Route exact path="/">
+          <Redirect to='/results?store=true&query=""&sort="similarity"&similarity=[50,100]&displayed=[50,100]&field="Author"&useTypes={"previous":true,"later":true}&compare={}' />
+        </Route>
       </Switch>
     </div>
   </App>

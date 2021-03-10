@@ -1,8 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { setUnit } from '../actions/scatterplot';
+import { Link } from 'react-router-dom';
 
 const Home = (props) => {
+
+  const onClick = (e, val) => {
+    setUnit(val);
+  }
+
   const { setUnit } = { ...props };
   return (
     <div className="home">
@@ -16,30 +22,30 @@ const Home = (props) => {
         </div>
       </div>
       <div className="home-blocks">
-        <a
-          href="/scatterplot?unit=author"
+        <Link
+          to="/scatterplot?unit=author"
           className="home-block"
-          onClick={setUnit.bind('author')}
+          onClick={(e) => onClick(e, 'author')}
         >
           <div className="home-image popular-authors" />
           <div>Popular Authors</div>
-        </a>
-        <a
-          href="/scatterplot?unit=book"
+        </Link>
+        <Link
+          to="/scatterplot?unit=book"
           className="home-block"
-          onClick={setUnit.bind('book')}
+          onClick={(e) => onClick(e, 'book')}
         >
           <div className="home-image popular-books" />
           <div>Popular Texts</div>
-        </a>
-        <a
-          href="/scatterplot?unit=passage"
+        </Link>
+        <Link
+          to="/scatterplot?unit=passage"
           className="home-block"
-          onClick={setUnit.bind('passage')}
+          onClick={(e) => onClick(e, 'passage')}
         >
           <div className="home-image popular-passages" />
           <div>Popular Passages</div>
-        </a>
+        </Link>
       </div>
       <div className="clear-both" />
     </div>

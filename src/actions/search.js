@@ -121,12 +121,13 @@ export const saveSearchInUrl = () => {
   };
 };
 
-export const loadSearchFromUrl = (str) => {
+export const loadSearchFromUrl = () => {
   return (dispatch, getState) => {
-    if (!str) return; // str should be window.location.search
-    if (str.includes('unit=')) return; // skip scatterlot urls
+    const search = window.location.hash.split('#/')[1];
+    if (!search) return; // str should be window.location.search
+    if (search.includes('unit=')) return; // skip scatterlot urls
     let _state = getState();
-    str
+    search
       .substring(1)
       .split('&')
       .map((arg) => {

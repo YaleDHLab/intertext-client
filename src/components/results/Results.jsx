@@ -18,7 +18,7 @@ const Results = props => {
     };
 
     window.addEventListener('scroll', onScroll);
-    loadSearchFromUrl(window.location.search);
+    loadSearchFromUrl();
     return () => {
       window.addEventListener('scroll', onScroll);
     }

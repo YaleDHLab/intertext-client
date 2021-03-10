@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from 'redux';
 import { routerMiddleware, connectRouter } from 'connected-react-router';
-import { createBrowserHistory } from 'history';
+import { createHashHistory } from 'history';
 import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import { rootReducer } from './reducers/index';
@@ -8,7 +8,7 @@ import { loadFavorites } from './actions/favorite';
 import { setUnit, getUnitFromUrl } from './actions/scatterplot';
 import freeze from 'redux-freeze';
 
-const history = createBrowserHistory();
+const history = createHashHistory();
 const loggerMiddleware = createLogger();
 
 let middlewares = [thunkMiddleware, routerMiddleware(history)];
