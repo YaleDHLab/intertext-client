@@ -5,16 +5,17 @@
 }
 
 *:focus {
-  outline: 2px solid #6DD1D1;
-  -webkit-box-shadow: 0px 0px 5px  #6DD1D1;
-  box-shadow: 0px 0px 5px  #6DD1D1;
+  outline: 2px solid #6dd1d1;
+  -webkit-box-shadow: 0px 0px 5px #6dd1d1;
+  box-shadow: 0px 0px 5px #6dd1d1;
 }
 
 /**
 * Containers
 **/
 
-body, html {
+body,
+html {
   height: 100%;
   width: 100%;
   margin: 0;
@@ -35,7 +36,7 @@ body {
   padding: 90px 0 90px;
   text-align: center;
   overflow: hidden;
-  background: #F8F8F8;
+  background: #f8f8f8;
   height: 100%;
   box-sizing: border-box;
 }

@@ -3,7 +3,7 @@
 **/
 
 .filters-container {
-  background: #F8f8f8;
+  background: #f8f8f8;
   width: 100%;
   text-align: center;
   box-sizing: border-box;
@@ -27,7 +27,7 @@
 
 .filter-label {
   font-weight: 600;
-  font-size: .8em;
+  font-size: 0.8em;
   color: #666666;
   display: inline-block;
   margin-right: 14px;
@@ -39,11 +39,9 @@
 
 .results-count {
   text-align: left;
-  font-size:.8em;
+  font-size: 0.8em;
   display: inline-block;
-  position: absolute;
-  left: 0;
-  top: 20px;
+  width: 250px;
 }
 
 .results-count span {

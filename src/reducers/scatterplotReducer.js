@@ -8,74 +8,75 @@ const initialState = {
   y: 'target_year', // attribute displayed on y axis
   zoomed: false,
   jitter: false,
-  tooltip: {name: '', title: '', x: '', y: ''},
+  tooltip: { title: '', author: '', x: '', y: '' },
   err: false
-}
+};
 
 const scatterplotReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_UNIT':
       return Object.assign({}, state, {
-        unit: action.unit,
-      })
+        unit: action.unit
+      });
 
     case 'SET_USE':
       return Object.assign({}, state, {
         use: action.use,
-        y: action.use === 'earlier' ? 'target_year' : 'source_year',
-      })
+        y: action.use === 'earlier' ? 'target_year' : 'source_year'
+      });
 
     case 'SET_STATISTIC':
       return Object.assign({}, state, {
         statistic: action.stat
-      })
+      });
 
     case 'SET_Y':
       return Object.assign({}, state, {
-        y: action.y,
-      })
+        y: action.y
+      });
 
     case 'SET_TOOLTIP':
       return Object.assign({}, state, {
-        tooltip: action.obj,
-      })
+        tooltip: action.obj
+      });
 
     case 'TOGGLE_JITTER':
       return Object.assign({}, state, {
-        jitter: !state.jitter,
-      })
+        jitter: !state.jitter
+      });
 
-    case 'SET_DISPLAYED_DOMAINS':
+    case 'SET_DOMAINS':
       return Object.assign({}, state, {
-        xDomain: action.obj.x,
-        yDomain: action.obj.y,
-        zoomed: true,
-      })
+        xDomain: action.domains.x,
+        yDomains: action.domains.y,
+        zoomed: true
+      });
 
     case 'REMOVE_ZOOM':
       return Object.assign({}, state, {
         xDomain: [],
         yDomain: [],
-        zoomed: false,
-      })
+        zoomed: false
+      });
 
     case 'SCATTERPLOT_REQUEST_FAILED':
       return Object.assign({}, state, {
-        err: true,
-      })
+        err: true
+      });
 
     case 'RECEIVE_SCATTERPLOT_RESULTS':
+      console.log('RECEIVE_SCATTERPLOT_RESULTS', action.obj);
       return Object.assign({}, state, {
         data: action.obj.data,
         xDomain: action.obj.xDomain,
         yDomain: action.obj.yDomain,
         zoomed: action.obj.zoomed,
-        statistic: action.obj.statistic || state.statistic,
-      })
+        statistic: action.obj.statistic || state.statistic
+      });
 
     default:
       return state;
   }
-}
+};
 
 export default scatterplotReducer;

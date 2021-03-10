@@ -16,7 +16,7 @@
 
 .scatterplot select {
   height: 30px;
-  font-size: .9em;
+  font-size: 0.9em;
   margin: 0 10px;
   background: #fff;
   border-color: #dddddd;
@@ -30,7 +30,7 @@
 .jitter {
   display: inline-block;
   margin: 0 15px;
-  font-size: .825em;
+  font-size: 0.825em;
 }
 
 /**
@@ -130,11 +130,11 @@ hr {
 }
 
 .reset-button {
-  transition: opacity .5s;
+  transition: opacity 0.5s;
   opacity: 0;
-  font-size: .9em;
+  font-size: 0.9em;
   padding: 8px 16px;
-  background: #6DD1D1;
+  background: #6dd1d1;
   display: inline-block;
   color: #fff;
   cursor: pointer;

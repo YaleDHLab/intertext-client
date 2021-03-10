@@ -5,16 +5,19 @@ class Footer extends React.Component {
   render() {
     return (
       <footer>
-        <div className='footer-text'>
-          <img className='yale-mark' src={mark} alt='Yale University Watermark' />
+        <div className="footer-text">
+          <img
+            className="yale-mark"
+            src={mark}
+            alt="Yale University Watermark"
+          />
         </div>
-        <div className='footer-text'>
-          <div className='experiment'>An experiment of the Yale DHLab</div>
+        <div className="footer-text">
+          <div className="experiment">An experiment of the Yale DHLab</div>
         </div>
       </footer>
-    )
+    );
   }
 }
-
 
 export default Footer;

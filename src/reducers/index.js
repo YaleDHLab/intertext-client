@@ -20,5 +20,5 @@ export const rootReducer = combineReducers({
   typeahead: typeaheadReducer,
   similarity: similarityReducer,
   scatterplot: scatterplotReducer,
-  sort: sortResultsReducer,
+  sort: sortResultsReducer
 });

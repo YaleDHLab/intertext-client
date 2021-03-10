@@ -7,17 +7,17 @@ import SimilaritySlider from './SimilaritySlider';
 class Filters extends React.Component {
   render() {
     return (
-      <div className='filters-container'>
-        <div className='filters'>
+      <div className="filters-container">
+        <div className="filters">
           <ResultCount />
-          <div className='filter-fields'>
+          <div className="filter-fields">
             <UseTypes />
             <SimilaritySlider />
             <SortResults />
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 

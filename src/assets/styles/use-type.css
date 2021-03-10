@@ -5,19 +5,19 @@
 .use-type {
   display: inline-block;
   border-radius: 8px;
-  border: 2px solid #EBEBEB;
+  border: 2px solid #ebebeb;
   margin: 12px 50px;
-  background: #EBEBEB;
+  background: #ebebeb;
 }
 
 .use {
   display: inline-block;
-  font-size: .8em;
+  font-size: 0.8em;
   font-weight: 600;
   padding: 5px 12px;
   border-radius: 8px;
   cursor: pointer;
-  opacity: .3;
+  opacity: 0.3;
 }
 
 .use.active {
@@ -31,7 +31,7 @@
 }
 
 .use:nth-child(1) {
-  border-right: 2px solid #EBEBEB;
+  border-right: 2px solid #ebebeb;
 }
 
 .use:nth-child(1).active {

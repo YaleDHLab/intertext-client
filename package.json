@@ -9,9 +9,10 @@
     "babel-polyfill": "^6.26.0",
     "connected-react-router": "^4.2.3",
     "d3": "^4.12.2",
+    "fs-extra": "^9.1.0",
     "isomorphic-fetch": "^3.0.0",
     "lodash": "^4.17.20",
-    "rc-slider": "^9.7.1",
+    "rc-slider": "^8.5.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^5.0.6",
@@ -21,6 +22,7 @@
     "redux-freeze": "^0.1.7",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
+    "unzipper": "^0.10.11",
     "web-vitals": "^1.0.1"
   },
   "resolutions": {
@@ -32,7 +34,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prettify": "prettier --write src",
+    "build:demo": "npm run build && node scripts/fetch-sample-data.js"
   },
   "eslintConfig": {
     "extends": [
@@ -51,5 +55,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "prettier": "^2.2.1"
   }
 }
