@@ -4,10 +4,9 @@ import { setUnit } from '../actions/scatterplot';
 import { Link } from 'react-router-dom';
 
 const Home = (props) => {
-
   const onClick = (e, val) => {
     setUnit(val);
-  }
+  };
 
   const { setUnit } = { ...props };
   return (

@@ -88,9 +88,11 @@ export const requestWaffleImage = () => {
 
 export const requestWaffleActiveData = (d) => {
   return (dispatch, getState) => {
-    const result = getState().search.allResults.filter(r => r._id === d._id)[0];
+    const result = getState().search.allResults.filter(
+      (r) => r._id === d._id
+    )[0];
     dispatch(setActiveWaffle(Object.assign({}, result)));
-  }
+  };
 };
 
 export const plotWaffle = () => {
@@ -119,7 +121,7 @@ export const plotWaffle = () => {
         levelMargin: levelMargin
       })
     );
-  }
+  };
 };
 
 const getCellData = (_state) => {
@@ -145,7 +147,7 @@ const getCellData = (_state) => {
       column: col,
       xLevel: level.toString(),
       similarity: d.similarity,
-      _id: d._id,
+      _id: d._id
     });
     return null;
   });

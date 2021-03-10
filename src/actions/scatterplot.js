@@ -147,5 +147,5 @@ const parseResults = (data, options) => {
 };
 
 export const getUnitFromUrl = () => {
-  return window.location.href.split('/#')[1].substring(1).split('=')[1]
+  return window.location.href.split('/#')[1].substring(1).split('=')[1];
 };

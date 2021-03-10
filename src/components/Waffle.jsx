@@ -67,7 +67,6 @@ class Waffle extends React.Component {
   }
 }
 
-
 const Button = (props) => {
   return (
     <div
@@ -112,7 +111,9 @@ const WaffleResults = (props) => {
 
 const getImage = (image) => {
   return image
-    ? image.substring(0, 4) === 'src/' ? image.substring(3) : image
+    ? image.substring(0, 4) === 'src/'
+      ? image.substring(3)
+      : image
     : headshot;
 };
 
@@ -123,10 +124,10 @@ const options = [
 ];
 
 /**
-* Plot
-**/
+ * Plot
+ **/
 
-const StatelessWafflePlot = props => {
+const StatelessWafflePlot = (props) => {
   return (
     <div className="waffle-chart hide-y-axis">
       {props.data.length > 0 ? (
@@ -154,36 +155,39 @@ const StatelessWafflePlot = props => {
         <Loader />
       )}
     </div>
-  )
-}
+  );
+};
 
-let mapStateToProps = state => ({
+let mapStateToProps = (state) => ({
   data: state.waffle.data,
   width: state.waffle.width,
   xDomain: state.waffle.xDomain,
   columnCounts: state.waffle.columnCounts,
-  maxColumn: state.waffle.maxColumn,
-})
+  maxColumn: state.waffle.maxColumn
+});
 
-let mapDispatchToProps = dispatch => ({
+let mapDispatchToProps = (dispatch) => ({
   getActive: (d, i) => dispatch(getWaffleActive(d, i))
-})
+});
 
-const WafflePlot = connect(mapStateToProps, mapDispatchToProps)(StatelessWafflePlot)
+const WafflePlot = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(StatelessWafflePlot);
 
 const colorCell = (d) => colorScale(Number(Math.round(d + 'e2') + 'e-2'));
 
 /**
-* Plot
-**/
+ * Plot
+ **/
 
 const WaffleDataProps = PropTypes.shape({
   _id: PropTypes.string.isRequired,
   column: PropTypes.number.isRequired,
   row: PropTypes.number.isRequired,
   similarity: PropTypes.number.isRequired,
-  xLevel: PropTypes.string.isRequired,
-})
+  xLevel: PropTypes.string.isRequired
+});
 
 WafflePlot.propTypes = {
   columnCounts: PropTypes.object.isRequired,
@@ -191,12 +195,12 @@ WafflePlot.propTypes = {
   maxColumn: PropTypes.number,
   width: PropTypes.number.isRequired,
   xDomain: PropTypes.arrayOf(PropTypes.string).isRequired,
-  getActive: PropTypes.func.isRequired,
-}
+  getActive: PropTypes.func.isRequired
+};
 
 /**
-* Container
-**/
+ * Container
+ **/
 
 Waffle.propTypes = {
   active: ResultProps,
@@ -212,7 +216,7 @@ Waffle.propTypes = {
   match: PropTypes.object,
   setFeature: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired
 };
 
 mapStateToProps = (state) => ({
@@ -227,7 +231,7 @@ mapStateToProps = (state) => ({
 
 mapDispatchToProps = (dispatch) => ({
   closeWaffle: () => dispatch(hideWaffle()),
-  setFeature: (feature) => dispatch(setWaffleFeature(feature)),
+  setFeature: (feature) => dispatch(setWaffleFeature(feature))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Waffle);
