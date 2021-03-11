@@ -301,7 +301,7 @@ Scatterplot.propTypes = {
     author: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     x: PropTypes.isRequired,
-    y: PropTypes.isRequired,
+    y: PropTypes.isRequired
   }),
   unit: PropTypes.string.isRequired,
   use: PropTypes.string.isRequired,

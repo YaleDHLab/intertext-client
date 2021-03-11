@@ -211,7 +211,7 @@ export const ResultProps = PropTypes.shape({
   target_title: PropTypes.string.isRequired,
   target_url: PropTypes.string,
   target_year: PropTypes.number.isRequired
-})
+});
 
 Result.propTypes = {
   compare: PropTypes.shape({

@@ -6,8 +6,8 @@ import Result, { ResultProps } from './Result';
 import Loader from '../Loader';
 import { loadSearchFromUrl, displayMoreResults } from '../../actions/search';
 
-const Results = props => {
-  const { results, loadSearchFromUrl, displayMoreResults } = {...props}
+const Results = (props) => {
+  const { results, loadSearchFromUrl, displayMoreResults } = { ...props };
 
   useEffect(() => {
     const onScroll = () => {
@@ -18,26 +18,29 @@ const Results = props => {
     };
 
     window.addEventListener('scroll', onScroll);
-    loadSearchFromUrl(window.location.search);
+    loadSearchFromUrl();
     return () => {
       window.addEventListener('scroll', onScroll);
-    }
-  }, [loadSearchFromUrl, displayMoreResults])
+    };
+  }, [loadSearchFromUrl, displayMoreResults]);
 
   return (
     <div className="results">
       <Filters />
-      <div className="result-pair-container">{results && results.length
-        ? <ResultPairs results={results} />
-        : results
-          ? <span>Sorry, no results could be found</span>
-          : <Loader />
-      }</div>
+      <div className="result-pair-container">
+        {results && results.length ? (
+          <ResultPairs results={results} />
+        ) : results ? (
+          <span>Sorry, no results could be found</span>
+        ) : (
+          <Loader />
+        )}
+      </div>
     </div>
-  )
-}
+  );
+};
 
-const ResultPairs = props => {
+const ResultPairs = (props) => {
   const results = props.results;
   const heights = getResultHeights(results);
   return (
@@ -54,8 +57,8 @@ const ResultPairs = props => {
         </div>
       ))}
     </React.Fragment>
-  )
-}
+  );
+};
 
 // compute the heights of each result pair
 export const getResultHeights = (results) => {
@@ -87,7 +90,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   loadSearchFromUrl: (obj) => dispatch(loadSearchFromUrl(obj)),
-  displayMoreResults: () => dispatch(displayMoreResults()),
+  displayMoreResults: () => dispatch(displayMoreResults())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Results);

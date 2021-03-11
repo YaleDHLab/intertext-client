@@ -10,12 +10,12 @@ import {
   fetchTypeaheadResults
 } from '../../actions/typeahead';
 
-const Typeahead = props => {
-  const { field, query, type, fetchTypeaheadResults } = {...props}
+const Typeahead = (props) => {
+  const { field, query, type, fetchTypeaheadResults } = { ...props };
 
   useEffect(() => {
-    fetchTypeaheadResults(buildTypeaheadQuery(field, query, type))
-  }, [query, field, type, fetchTypeaheadResults])
+    fetchTypeaheadResults(buildTypeaheadQuery(field, query, type));
+  }, [query, field, type, fetchTypeaheadResults]);
 
   const buildTypeaheadQuery = (field, query, type) => {
     // build the url to which the query will be sent
@@ -26,8 +26,7 @@ const Typeahead = props => {
       field.toLowerCase() +
       '&value=' +
       query;
-    if (type)
-      url += '&type=' + type + '_' + field.toLowerCase();
+    if (type) url += '&type=' + type + '_' + field.toLowerCase();
     return url;
   };
 
@@ -47,27 +46,25 @@ const Typeahead = props => {
     } else if (e.keyCode === 13) {
       submitSearch();
     }
-  }
+  };
 
   const handleChange = (e) => {
     if (e.keyCode === 38 || e.keyCode === 40 || e.keyCode === 13) return;
     props.setTypeaheadQuery(e.target.value);
     props.setTypeaheadIndex(0);
-  }
+  };
 
   const submitSearch = () => {
     // identify the search phrase requested by the user
     const phrase =
-      props.index === 0
-        ? props.query
-        : props.results[props.index - 1];
+      props.index === 0 ? props.query : props.results[props.index - 1];
     props.setTypeaheadQuery(phrase);
     // submit the search and remove focus from the input
     props.fetchSearchResults();
     document.querySelector('.typeahead input').blur();
-  }
+  };
 
-  return(
+  return (
     <div className="typeahead">
       <Select />
       <div className="search-button" />
@@ -78,8 +75,8 @@ const Typeahead = props => {
       />
       <Results submitSearch={submitSearch} />
     </div>
-  )
-}
+  );
+};
 
 Typeahead.propTypes = {
   fetchSearchResults: PropTypes.func.isRequired,
