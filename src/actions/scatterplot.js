@@ -80,7 +80,6 @@ export const fetchScatterplotResults = () => {
               return false;
             }
           }
-
           // if theres a ydomain filter on it
           if (xDomain.length === 2) {
             const [minX, maxX] = d3.extent(xDomain);
@@ -89,11 +88,8 @@ export const fetchScatterplotResults = () => {
               return false;
             }
           }
-
           return true;
         });
-
-        console.log('filteredResults', filteredResults);
         dispatch(parseResults(filteredResults));
       })
       .catch((err) => {
