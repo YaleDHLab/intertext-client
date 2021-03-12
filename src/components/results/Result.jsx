@@ -68,7 +68,7 @@ class Result extends React.Component {
     const type = this.props.type;
     const segment_ids = sort(result[type + '_segment_ids']).join('.');
     return compare.type === type &&
-      compare.file_id === result[type + '_file_id'].toString() &&
+      compare.file_id === result[type + '_file_id'] &&
       compare.segment_ids === segment_ids
       ? 'compare active'
       : 'compare';
@@ -215,7 +215,7 @@ export const ResultProps = PropTypes.shape({
 
 Result.propTypes = {
   compare: PropTypes.shape({
-    file_id: PropTypes.string,
+    file_id: PropTypes.number,
     segment_ids: PropTypes.string,
     type: PropTypes.string
   }),

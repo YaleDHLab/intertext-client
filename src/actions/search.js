@@ -1,7 +1,7 @@
 import { history } from '../store';
 import { setSort } from './sort-results';
 import { setUseTypes } from './use-types';
-import { setCompare } from './compare';
+import { setCompare, filterResultsWithCompare } from './compare';
 import { setDisplayed, setSimilarity } from './similarity-slider';
 import {
   setTypeaheadField,
@@ -10,29 +10,12 @@ import {
 } from './typeahead';
 import { flatFileStringSearch as flatFileSearch } from '../utils/flatFileStringSearch';
 
-export const receiveSearchResults = (results) => ({
-  type: 'RECEIVE_SEARCH_RESULTS',
-  results
-});
-
-export const receiveEmptyResults = () =>
-  receiveSearchResults({
-    docs: [],
-    total: 0,
-    limit: 1000,
-    offset: 0
-  });
-
-export const searchRequestFailed = () => ({
-  type: 'SEARCH_REQUEST_FAILED'
-});
-
 export const displayMoreResults = () => ({
-  type: 'DISPLAY_MORE_RESULTS'
+  type: 'DISPLAY_MORE_SEARCH_RESULTS'
 });
 
 export const resetMaxDisplayed = () => ({
-  type: 'RESET_MAX_DISPLAYED'
+  type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS'
 });
 
 export const fetchSearchResults = () => {
@@ -46,21 +29,18 @@ export const fetchSearchResults = () => {
     // Generate the query url
     return flatFileSearch(getState()).then(
       (docs) => {
-        const limit = 1000; // Where is this in state?
-        const total = docs.length;
-        const offset = 0; // Where is this in state?
-        const ret = {
-          docs,
-          total,
-          limit,
-          offset
-        };
-
-        dispatch(receiveSearchResults(ret));
+        dispatch({
+          type: 'SET_ALL_SEARCH_RESULTS',
+          docs: dispatch(filterResultsWithCompare(docs)),
+          err: false,
+        })
       },
       (err) => {
-        dispatch(receiveEmptyResults());
-        dispatch(searchRequestFailed());
+        dispatch({
+          type: 'SET_ALL_SEARCH_RESULTS',
+          docs: [],
+          err: true,
+        })
       }
     );
   };
@@ -92,8 +72,6 @@ export const getSearchUrl = (state) => {
     url += '&sort=' + state.sort;
   }
   if (
-    state.compare.file_id &&
-    state.compare.segment_ids &&
     state.compare.type
   ) {
     url += '&' + state.compare.type + '_file_id=' + state.compare.file_id;
@@ -106,15 +84,15 @@ export const getSearchUrl = (state) => {
 
 export const saveSearchInUrl = () => {
   return (dispatch, getState) => {
-    const _state = getState();
+    const state = getState();
     let hash = 'results?store=true';
-    hash += '&query=' + JSON.stringify(_state.typeahead.query);
-    hash += '&sort=' + JSON.stringify(_state.sort);
-    hash += '&similarity=' + JSON.stringify(_state.similarity.similarity);
-    hash += '&displayed=' + JSON.stringify(_state.similarity.displayed);
-    hash += '&field=' + JSON.stringify(_state.typeahead.field);
-    hash += '&useTypes=' + JSON.stringify(_state.useTypes);
-    hash += '&compare=' + JSON.stringify(_state.compare);
+    hash += '&query=' + JSON.stringify(state.typeahead.query);
+    hash += '&sort=' + JSON.stringify(state.sort);
+    hash += '&similarity=' + JSON.stringify(state.similarity.similarity);
+    hash += '&displayed=' + JSON.stringify(state.similarity.displayed);
+    hash += '&field=' + JSON.stringify(state.typeahead.field);
+    hash += '&useTypes=' + JSON.stringify(state.useTypes);
+    hash += '&compare=' + JSON.stringify(state.compare);
     try {
       history.push(hash);
     } catch (err) {}
@@ -126,24 +104,24 @@ export const loadSearchFromUrl = () => {
     const search = window.location.hash.split('#/')[1];
     if (!search) return; // str should be window.location.search
     if (search.includes('unit=')) return; // skip scatterlot urls
-    let _state = getState();
+    let state = getState();
     search
       .substring(1)
       .split('&')
       .map((arg) => {
         const split = arg.split('=');
-        _state = Object.assign({}, _state, {
+        state = Object.assign({}, state, {
           [split[0]]: JSON.parse(decodeURIComponent(split[1]))
         });
         return null;
       });
-    dispatch(setSort(_state.sort));
-    dispatch(setDisplayed(_state.displayed));
-    dispatch(setSimilarity(_state.similarity));
-    dispatch(setUseTypes(_state.useTypes));
-    dispatch(setTypeaheadField(_state.field));
-    dispatch(setTypeaheadQuery(_state.query));
-    dispatch(setCompare(_state.compare));
+    dispatch(setSort(state.sort));
+    dispatch(setDisplayed(state.displayed));
+    dispatch(setSimilarity(state.similarity));
+    dispatch(setUseTypes(state.useTypes));
+    dispatch(setTypeaheadField(state.field));
+    dispatch(setTypeaheadQuery(state.query));
+    dispatch(setCompare(state.compare));
     dispatch(fetchSearchResults());
   };
 };

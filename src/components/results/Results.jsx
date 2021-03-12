@@ -20,7 +20,7 @@ const Results = (props) => {
     window.addEventListener('scroll', onScroll);
     loadSearchFromUrl();
     return () => {
-      window.addEventListener('scroll', onScroll);
+      window.removeEventListener('scroll', onScroll);
     };
   }, [loadSearchFromUrl, displayMoreResults]);
 
@@ -81,16 +81,16 @@ Results.propTypes = {
   loadSearchFromUrl: PropTypes.func.isRequired,
   location: PropTypes.object,
   match: PropTypes.object,
-  results: PropTypes.arrayOf(ResultProps)
+  results: PropTypes.arrayOf(ResultProps),
 };
 
 const mapStateToProps = (state) => ({
-  results: state.search.results
+  results: state.search.results,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   loadSearchFromUrl: (obj) => dispatch(loadSearchFromUrl(obj)),
-  displayMoreResults: () => dispatch(displayMoreResults())
+  displayMoreResults: () => dispatch(displayMoreResults()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Results);
