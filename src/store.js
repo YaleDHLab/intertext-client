@@ -26,6 +26,7 @@ let middleware = applyMiddleware(...middlewares);
 const store = createStore(connectRouter(history)(rootReducer), middleware);
 
 store.dispatch(loadFavorites());
-if (window.location.href.includes('scatterplot')) store.dispatch(setUnit(getUnitFromUrl()));
+if (window.location.href.includes('scatterplot'))
+  store.dispatch(setUnit(getUnitFromUrl()));
 
 export { store, history };

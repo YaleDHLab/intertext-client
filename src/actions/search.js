@@ -32,15 +32,15 @@ export const fetchSearchResults = () => {
         dispatch({
           type: 'SET_ALL_SEARCH_RESULTS',
           docs: dispatch(filterResultsWithCompare(docs)),
-          err: false,
-        })
+          err: false
+        });
       },
       (err) => {
         dispatch({
           type: 'SET_ALL_SEARCH_RESULTS',
           docs: [],
-          err: true,
-        })
+          err: true
+        });
       }
     );
   };
@@ -71,9 +71,7 @@ export const getSearchUrl = (state) => {
   if (state.sort && state.sort !== 'Sort By') {
     url += '&sort=' + state.sort;
   }
-  if (
-    state.compare.type
-  ) {
+  if (state.compare.type) {
     url += '&' + state.compare.type + '_file_id=' + state.compare.file_id;
     url +=
       '&' + state.compare.type + '_segment_ids=' + state.compare.segment_ids;
