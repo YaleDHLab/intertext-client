@@ -67,7 +67,7 @@ export const processMatchLists = (state, matchLists) => {
             .includes(searchTerm.trim().toLowerCase());
     })
     .sort((a, b) => {
-      return sortAttribute === sortProperties.Author
+      return sortAttribute === sortProperties.Similarity
         ? b[sortAttribute] - a[sortAttribute]
         : a[sortAttribute] - b[sortAttribute];
     });
