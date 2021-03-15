@@ -131,29 +131,31 @@ const getCellData = (state) => {
     cols = {},
     data = [];
   // filter to just the results that match the requested plot
-  state.search.allResults.filter(i => {
-    return i[state.waffle.type + '_file_id'] === state.waffle.file_id;
-  }).map((d, i) => {
-    // level of passage in `feature` factor
-    let level = getLevel(d, key, state.waffle.feature);
-    // set the 0-based count of the times each level occurs
-    counts[level] = counts[level] > -1 ? counts[level] + 1 : 0;
-    // set the 0-based column index where this cell belongs
-    let col = Math.floor(counts[level] / rows);
-    // set the 0-based row index where this cell belongs
-    let row = counts[level] % rows;
-    // set the 1-based count of columns for this level
-    cols[level] = cols[level] ? Math.max(cols[level], col + 1) : 1;
-    // add this observation to the outgoing data
-    data.push({
-      row: row,
-      column: col,
-      xLevel: level.toString(),
-      similarity: d.similarity,
-      _id: d._id
+  state.search.allResults
+    .filter((i) => {
+      return i[state.waffle.type + '_file_id'] === state.waffle.file_id;
+    })
+    .map((d, i) => {
+      // level of passage in `feature` factor
+      let level = getLevel(d, key, state.waffle.feature);
+      // set the 0-based count of the times each level occurs
+      counts[level] = counts[level] > -1 ? counts[level] + 1 : 0;
+      // set the 0-based column index where this cell belongs
+      let col = Math.floor(counts[level] / rows);
+      // set the 0-based row index where this cell belongs
+      let row = counts[level] % rows;
+      // set the 1-based count of columns for this level
+      cols[level] = cols[level] ? Math.max(cols[level], col + 1) : 1;
+      // add this observation to the outgoing data
+      data.push({
+        row: row,
+        column: col,
+        xLevel: level.toString(),
+        similarity: d.similarity,
+        _id: d._id
+      });
+      return null;
     });
-    return null;
-  });
   return { cells: data, cols: cols };
 };
 
