@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { toggleFavorite, sort } from '../../actions/favorite';
 import { toggleCompare } from '../../actions/compare';
 import { visualize } from '../../actions/waffle';
@@ -134,10 +135,10 @@ class Result extends React.Component {
               <FavoriteIcon />
               Favorite
             </div>
-            <div onClick={this.visualize} className="visualize">
+            <Link to={'waffle'} onClick={this.visualize} className="visualize">
               <VisualizeIcon />
               Visualize
-            </div>
+            </Link>
           </div>
         </div>
       </div>

@@ -26,7 +26,7 @@ const waffleReducer = (state = initialState, action) => {
         feature: action.feature
       });
 
-    case 'WAFFLE_REQUEST_FAILED':
+    case 'WAFFLE_IMAGE_REQUEST_FAILED':
       return Object.assign({}, state, {
         err: true
       });
@@ -45,7 +45,7 @@ const waffleReducer = (state = initialState, action) => {
         active: null
       });
 
-    case 'SET_PROCESSED_DATA':
+    case 'SET_WAFFLE_DATA':
       return Object.assign({}, state, {
         data: action.obj.data,
         xDomain: action.obj.xDomain,

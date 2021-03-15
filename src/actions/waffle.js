@@ -7,8 +7,8 @@ export const setWaffleVisualized = (obj) => ({
   obj: obj
 });
 
-export const setProcessedData = (obj) => ({
-  type: 'SET_PROCESSED_DATA',
+export const setWaffleData = (obj) => ({
+  type: 'SET_WAFFLE_DATA',
   obj: obj
 });
 
@@ -17,8 +17,8 @@ export const setActiveWaffle = (obj) => ({
   obj: obj
 });
 
-export const waffleRequestFailed = () => ({
-  type: 'WAFFLE_REQUEST_FAILED'
+export const waffleImageRequestFailed = () => ({
+  type: 'WAFFLE_IMAGE_REQUEST_FAILED'
 });
 
 export const receiveWaffleImage = (url) => ({
@@ -49,8 +49,8 @@ export const visualize = (obj) => {
   return (dispatch, getState) => {
     dispatch(setWaffleVisualized(obj));
     dispatch(requestWaffleImage());
-    dispatch(saveWaffleInUrl());
     dispatch(plotWaffle());
+    dispatch(saveWaffleInUrl());
   };
 };
 
@@ -63,16 +63,16 @@ export const saveWaffleInUrl = () => {
 
 export const requestWaffleImage = () => {
   return (dispatch, getState) => {
-    const _state = getState();
+    const state = getState();
     const url =
-      window.location.origin + '/api/metadata?file_id=' + _state.waffle.file_id;
+      window.location.origin + '/api/metadata?file_id=' + state.waffle.file_id;
     return fetch(url)
       .then((response) =>
         response.json().then((json) => ({ status: response.status, json }))
       )
       .then(
         ({ status, json }) => {
-          if (status >= 400) dispatch(waffleRequestFailed());
+          if (status >= 400) dispatch(waffleImageRequestFailed());
           else {
             const metadata = json.docs[0].metadata;
             const imageUrl = metadata ? metadata.image : '';
@@ -80,7 +80,7 @@ export const requestWaffleImage = () => {
           }
         },
         (err) => {
-          dispatch(waffleRequestFailed());
+          dispatch(waffleImageRequestFailed());
         }
       );
   };
@@ -97,11 +97,11 @@ export const requestWaffleActiveData = (d) => {
 
 export const plotWaffle = () => {
   return (dispatch, getState) => {
-    const _state = getState();
+    const state = getState();
     const size = 10; // h, w of each waffle cell
     const levelMargin = 10; // margin between levels
     const margin = { top: 0, right: 80, bottom: 90, left: 0 };
-    const data = getCellData(_state);
+    const data = getCellData(state);
     const cols = data.cols;
     // find the level with the max column count
     const maxCol = keys(cols).reduce((a, b) => (cols[a] > cols[b] ? a : b));
@@ -111,10 +111,10 @@ export const plotWaffle = () => {
     let width = xDomain.length * (cols[maxCol] * size + levelMargin);
     width += margin.right + margin.left;
     dispatch(
-      setProcessedData({
+      setWaffleData({
         data: data.cells,
         xDomain: xDomain,
-        feature: _state.waffle.feature,
+        feature: state.waffle.feature,
         width: width,
         columnCounts: cols,
         maxColumn: cols[maxCol],
@@ -124,15 +124,18 @@ export const plotWaffle = () => {
   };
 };
 
-const getCellData = (_state) => {
+const getCellData = (state) => {
   const rows = 10; // waffles per col
-  const key = getKey(_state.waffle.feature, _state.waffle.type);
+  const key = getKey(state.waffle.feature, state.waffle.type);
   let counts = {},
     cols = {},
     data = [];
-  _state.search.allResults.map((d, i) => {
+  // filter to just the results that match the requested plot
+  state.search.allResults.filter(i => {
+    return i[state.waffle.type + '_file_id'] === state.waffle.file_id;
+  }).map((d, i) => {
     // level of passage in `feature` factor
-    let level = getLevel(d, key, _state.waffle.feature);
+    let level = getLevel(d, key, state.waffle.feature);
     // set the 0-based count of the times each level occurs
     counts[level] = counts[level] > -1 ? counts[level] + 1 : 0;
     // set the 0-based column index where this cell belongs
