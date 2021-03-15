@@ -31,15 +31,13 @@ export const fetchTitlesFile = () => {
 
 export const fetchFieldFile = (state) => {
   const field = selectTypeaheadField(state);
-
-  if (field === typeaheadFieldTypes.Author) {
-    return fetchAuthorsFile();
-  } else if (field === typeaheadFieldTypes.Title) {
-    return fetchTitlesFile();
-  }
-  return Promise((resolve, reject) => {
-    reject();
-  });
+  return field === typeaheadFieldTypes.Author
+    ? fetchAuthorsFile()
+    : field === typeaheadFieldTypes.Title
+      ? fetchTitlesFile()
+      : Promise((resolve, reject) => {
+          reject();
+        })
 };
 
 export const fetchMatchFile = (textID) =>
