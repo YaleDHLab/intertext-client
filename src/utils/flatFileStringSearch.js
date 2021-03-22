@@ -5,7 +5,8 @@ import {
   selectTypeaheadQuery
 } from '../selectors/typeahead';
 import { selectUseType, useTypes } from '../selectors/useType';
-import { fetchFieldFile, fetchMatchFile } from './getJSONFile';
+import { fetchFieldFile, fetchMatchFile } from './fetchJSONFile';
+import { uniqBy } from 'lodash';
 
 /**
  * Performs a search based on flat files
@@ -18,83 +19,56 @@ import { fetchFieldFile, fetchMatchFile } from './getJSONFile';
  * Returns: Promise<Array<Doc Object>>
  */
 export function flatFileStringSearch(state) {
-  const field = selectTypeaheadField(state);
   const searchTerm = selectTypeaheadQuery(state);
-
   return fetchFieldFile(state).then((json) => {
     // throw an error if the term isn't a key or empty
-
-    let matchIDs = [];
-    Object.keys(json)
-      .filter((k) => {
-        if (
+    const matches = Object.keys(json)
+      // filter to those keys that match the user query
+      .filter(
+        (k) =>
           searchTerm.trim().length < 1 ||
           k.toLowerCase().includes(searchTerm.toLowerCase())
-        ) {
-          return true;
-        }
-        return false;
-      })
-      .forEach((k) => {
-        matchIDs = matchIDs.concat(json[k]);
-      });
-
-    const matches = matchIDs.map((matchID) => fetchMatchFile(matchID));
-
-    return Promise.all(matches).then((matchLists) => {
-      // Merge all the docs together
-      let docs = [].concat.apply([], matchLists);
-
-      // filter based on similarity slider
-      const [minSimilarity, maxSimilarity] = selectSimilarity(state);
-      docs = docs.filter(
-        (doc) =>
-          doc.similarity * 100 >= minSimilarity &&
-          doc.similarity * 100 <= maxSimilarity
-      );
-
-      // filter based on previous or later use
-      const useType = selectUseType(state);
-      docs = docs.filter((doc) => {
-        if (useType === useTypes.Both) {
-          // Don't filter if both types allowed
-          return true;
-        }
-
-        // Determine what property of doc to string match against
-        const suffix = '_' + field.toLowerCase();
-        let useTypeField;
-        if (useType === useTypes.Previous) {
-          useTypeField = 'source' + suffix;
-        } else if (useType === useTypes.Later) {
-          useTypeField = 'target' + suffix;
-        }
-
-        return doc[useTypeField]
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase());
-      });
-
-      // Sort docs by sort attribute
-      const sortAttribute = selectSortProperty(state);
-
-      switch (sortAttribute) {
-        case sortProperties.Author:
-          docs.sort((a, b) => a[sortAttribute] - b[sortAttribute]);
-          break;
-        case sortProperties.Year:
-          docs.sort((a, b) => {
-            return a[sortAttribute] - b[sortAttribute];
-          });
-          break;
-        case sortProperties.Similarity:
-          docs.sort((a, b) => b[sortAttribute] - a[sortAttribute]);
-          break;
-        default:
-          break;
-      }
-
-      return docs;
-    });
+      )
+      // get the match id values assigned to each key
+      .map((k) => json[k])
+      // flatten [[match_id, match_id], []] to 1D array [match_id, match_id]
+      .flat()
+      // fetch each match file
+      .map(fetchMatchFile);
+    return Promise.all(matches).then((matchLists) =>
+      processMatchLists(state, matchLists)
+    );
   });
 }
+
+export const processMatchLists = (state, matchLists) => {
+  const field = selectTypeaheadField(state);
+  const useType = selectUseType(state);
+  const searchTerm = selectTypeaheadQuery(state);
+  const sortAttribute = selectSortProperty(state);
+  const [minSimilarity, maxSimilarity] = selectSimilarity(state);
+
+  // deduplicate matches (each match list contains matches where the author/title is source and target)
+  let docs = uniqBy([].concat.apply([], matchLists), (d) => d._id);
+
+  // filter based on similarity slider
+  return docs
+    .filter(
+      (d) =>
+        d.similarity * 100 >= minSimilarity &&
+        d.similarity * 100 <= maxSimilarity
+    )
+    .filter((d) => {
+      const prefix = useType === useTypes.Previous ? 'source_' : 'target_';
+      return useType === useTypes.Both
+        ? true
+        : d[prefix + field.toLowerCase()]
+            .toLowerCase()
+            .includes(searchTerm.trim().toLowerCase());
+    })
+    .sort((a, b) => {
+      return sortAttribute === sortProperties.Similarity
+        ? b[sortAttribute] - a[sortAttribute]
+        : a[sortAttribute] - b[sortAttribute];
+    });
+};

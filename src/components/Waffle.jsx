@@ -158,6 +158,8 @@ const StatelessWafflePlot = (props) => {
   );
 };
 
+const colorCell = (d) => colorScale(Number(Math.round(d + 'e2') + 'e-2'));
+
 let mapStateToProps = (state) => ({
   data: state.waffle.data,
   width: state.waffle.width,
@@ -175,8 +177,6 @@ const WafflePlot = connect(
   mapDispatchToProps
 )(StatelessWafflePlot);
 
-const colorCell = (d) => colorScale(Number(Math.round(d + 'e2') + 'e-2'));
-
 /**
  * Plot
  **/
@@ -189,7 +189,7 @@ const WaffleDataProps = PropTypes.shape({
   xLevel: PropTypes.string.isRequired
 });
 
-WafflePlot.propTypes = {
+StatelessWafflePlot.propTypes = {
   columnCounts: PropTypes.object.isRequired,
   data: PropTypes.arrayOf(WaffleDataProps).isRequired,
   maxColumn: PropTypes.number,

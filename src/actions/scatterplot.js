@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { fetchScatterplotFile } from '../utils/getJSONFile';
+import { fetchScatterplotFile } from '../utils/fetchJSONFile';
 
 export const toggleJitter = () => ({
   type: 'TOGGLE_JITTER'

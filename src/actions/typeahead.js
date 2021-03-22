@@ -1,5 +1,5 @@
 import { selectTypeaheadQuery } from '../selectors/typeahead';
-import { fetchFieldFile } from '../utils/getJSONFile';
+import { fetchFieldFile } from '../utils/fetchJSONFile';
 
 export const setTypeaheadField = (field) => ({
   type: 'SET_TYPEAHEAD_FIELD',

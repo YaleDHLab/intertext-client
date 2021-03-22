@@ -8,7 +8,7 @@ import {
   setTypeaheadQuery,
   setTypeaheadIndex
 } from './typeahead';
-import { flatFileStringSearch as flatFileSearch } from '../utils/flatFileStringSearch';
+import { flatFileStringSearch } from '../utils/flatFileStringSearch';
 
 export const displayMoreResults = () => ({
   type: 'DISPLAY_MORE_SEARCH_RESULTS'
@@ -27,7 +27,7 @@ export const fetchSearchResults = () => {
     // Reset the typeahead index given new results
     dispatch(setTypeaheadIndex(0));
     // Generate the query url
-    return flatFileSearch(getState()).then(
+    return flatFileStringSearch(getState()).then(
       (docs) => {
         dispatch({
           type: 'SET_ALL_SEARCH_RESULTS',
@@ -36,6 +36,7 @@ export const fetchSearchResults = () => {
         });
       },
       (err) => {
+        console.warn(err);
         dispatch({
           type: 'SET_ALL_SEARCH_RESULTS',
           docs: [],
