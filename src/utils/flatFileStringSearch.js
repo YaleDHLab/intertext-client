@@ -18,11 +18,11 @@ import { uniqBy } from 'lodash';
  *
  * Returns: Promise<Array<Doc Object>>
  */
-export function flatFileStringSearch(state) {
+export async function flatFileStringSearch(state) {
   const searchTerm = selectTypeaheadQuery(state);
-  return fetchFieldFile(state).then((json) => {
+  return fetchFieldFile(state).then(async (json) => {
     // throw an error if the term isn't a key or empty
-    const matches = Object.keys(json)
+    const filePaths = Object.keys(json)
       // filter to those keys that match the user query
       .filter(
         (k) =>
@@ -33,11 +33,14 @@ export function flatFileStringSearch(state) {
       .map((k) => json[k])
       // flatten [[match_id, match_id], []] to 1D array [match_id, match_id]
       .flat()
-      // fetch each match file
-      .map(fetchMatchFile);
-    return Promise.all(matches).then((matchLists) =>
-      processMatchLists(state, matchLists)
-    );
+    // request the file paths in batches
+    let matches = [],
+        batchSize = 8;
+    while (matches.length < filePaths.length) {
+      // fetch a certain number of files per batch
+      matches = matches.concat(await Promise.all(filePaths.slice(matches.length, matches.length+batchSize).map(fetchMatchFile)));
+    }
+    return processMatchLists(state, matches.flat());
   });
 }
 
@@ -49,7 +52,7 @@ export const processMatchLists = (state, matchLists) => {
   const [minSimilarity, maxSimilarity] = selectSimilarity(state);
 
   // deduplicate matches (each match list contains matches where the author/title is source and target)
-  let docs = uniqBy([].concat.apply([], matchLists), (d) => d._id);
+  let docs = uniqBy(matchLists, (d) => d._id);
 
   // filter based on similarity slider
   return docs
