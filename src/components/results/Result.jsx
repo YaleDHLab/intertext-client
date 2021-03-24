@@ -200,7 +200,7 @@ export const ResultProps = PropTypes.shape({
   source_segment_ids: PropTypes.arrayOf(PropTypes.number.isRequired),
   source_title: PropTypes.string.isRequired,
   source_url: PropTypes.string,
-  source_year: PropTypes.number.isRequired,
+  source_year: PropTypes.string.isRequired,
   target_author: PropTypes.string.isRequired,
   target_file_id: PropTypes.number.isRequired,
   target_file_path: PropTypes.string.isRequired,
@@ -211,7 +211,7 @@ export const ResultProps = PropTypes.shape({
   target_segment_ids: PropTypes.arrayOf(PropTypes.number.isRequired),
   target_title: PropTypes.string.isRequired,
   target_url: PropTypes.string,
-  target_year: PropTypes.number.isRequired
+  target_year: PropTypes.string.isRequired
 });
 
 Result.propTypes = {
