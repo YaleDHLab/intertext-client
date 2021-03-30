@@ -18,6 +18,7 @@ import { uniqBy } from 'lodash';
  *
  * Returns: Promise<Array<Doc Object>>
  */
+
 export async function flatFileStringSearch(state) {
   const searchTerm = selectTypeaheadQuery(state);
   return fetchFieldFile(state).then(async (json) => {
@@ -58,8 +59,8 @@ export const processMatchLists = (state, matchLists) => {
   return docs
     .filter(
       (d) =>
-        d.similarity * 100 >= minSimilarity &&
-        d.similarity * 100 <= maxSimilarity
+        d.similarity >= minSimilarity &&
+        d.similarity <= maxSimilarity
     )
     .filter((d) => {
       const prefix = useType === useTypes.Previous ? 'source_' : 'target_';
