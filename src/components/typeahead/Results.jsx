@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchSearchResults } from '../../actions/search';
+import {
+  fetchMoreSearchResults,
+  fetchSearchResults
+} from '../../actions/search';
 import { setTypeaheadQuery } from '../../actions/typeahead';
 
 class Results extends React.Component {
@@ -9,6 +12,10 @@ class Results extends React.Component {
     super(props);
     this.handleMousedown = this.handleMousedown.bind(this);
     this.handleMouseup = this.handleMouseup.bind(this);
+  }
+
+  componentDidUpdate() {
+    this.props.fetchMoreSearchResults();
   }
 
   componentDidMount() {
@@ -97,12 +104,14 @@ Result.propTypes = {
 const mapStateToProps = (state) => ({
   results: state.typeahead.results,
   query: state.typeahead.query,
-  index: state.typeahead.index
+  index: state.typeahead.index,
+  maxDisplayed: state.search.maxDisplayed // I don't see this used elsehwere so I'll use it here.
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setTypeaheadQuery: (val) => dispatch(setTypeaheadQuery(val)),
-  fetchSearchResults: () => dispatch(fetchSearchResults())
+  fetchSearchResults: () => dispatch(fetchSearchResults()),
+  fetchMoreSearchResults: () => dispatch(fetchMoreSearchResults())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Results);

@@ -5,17 +5,20 @@ import Filters from '../filters/Filters';
 import Result, { ResultProps } from './Result';
 import Loader from '../Loader';
 import { loadSearchFromUrl, displayMoreResults } from '../../actions/search';
+import { throttle } from 'lodash';
 
 const Results = (props) => {
-  const { results, loadSearchFromUrl, displayMoreResults } = { ...props };
+  const { results, loadSearchFromUrl, displayMoreResults } = {
+    ...props
+  };
 
   useEffect(() => {
-    const onScroll = () => {
+    const onScroll = throttle(() => {
       const elem = document.querySelector('.result-pair-container');
       if (elem && window.scrollY / elem.clientHeight > 0.75) {
         displayMoreResults();
       }
-    };
+    }, 1000);
 
     window.addEventListener('scroll', onScroll);
     loadSearchFromUrl();
@@ -50,7 +53,7 @@ const ResultPairs = (props) => {
           <Result result={result} type="source" height={heights[idx]} />
           <div className="similarity-circle">
             <div className="similarity">
-              {Math.round(result.similarity * 100) + '%'}
+              {Math.round(result.similarity) + '%'}
             </div>
           </div>
           <Result result={result} type="target" height={heights[idx]} />
@@ -85,7 +88,9 @@ Results.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  results: state.search.results
+  results: state.search.results,
+  sortOrderIndex: state.sort.orderIndex,
+  page: state.pagination.page
 });
 
 const mapDispatchToProps = (dispatch) => ({

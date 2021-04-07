@@ -9,6 +9,7 @@ import typeaheadReducer from './typeaheadReducer';
 import similarityReducer from './similarityReducer';
 import scatterplotReducer from './scatterplotReducer';
 import sortResultsReducer from './sortResultsReducer';
+import paginationReducer from './paginationReducer';
 
 export const rootReducer = combineReducers({
   waffle: waffleReducer,
@@ -20,5 +21,6 @@ export const rootReducer = combineReducers({
   typeahead: typeaheadReducer,
   similarity: similarityReducer,
   scatterplot: scatterplotReducer,
-  sort: sortResultsReducer
+  sort: sortResultsReducer,
+  pagination: paginationReducer
 });
