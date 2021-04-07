@@ -12,11 +12,13 @@
  *
  */
 
+import { store } from '../store';
 import { selectSimilarity } from '../selectors/similarity';
 import { selectSortOrder } from '../selectors/sort';
 import { selectFieldFile, selectTypeaheadQuery } from '../selectors/typeahead';
 import { selectUseType, useTypes } from '../selectors/useType';
 import { fetchMatchFile } from './fetchJSONFile';
+import { addCacheRecord } from '../actions/cache';
 
 /**
  * Get a sorted list of match references
@@ -89,13 +91,20 @@ export async function flatFileStringSearch(state) {
   const maxDisplayed = state.search.maxDisplayed;
 
   // Helper to fetch match file from memory or network
-  let cache = {};
+  // let cache = {};
   const getMatchFile = async (matchFileID) => {
-    if (!(matchFileID in cache)) {
-      cache[matchFileID] = await fetchMatchFile(matchFileID);
-    }
+    const cacheKey = `matches/${matchFileID}.json`;
 
-    return cache[matchFileID];
+    const state = store.getState();
+
+    // TODO - Abstract this interaction with state
+    if (!(cacheKey in state.cache)) {
+      const obj = await fetchMatchFile(matchFileID);
+      store.dispatch(addCacheRecord(cacheKey, obj));
+      return obj;
+    } else {
+      return state.cache[cacheKey];
+    }
   };
 
   const getMatch = async (matchFileID, matchIndex) => {
