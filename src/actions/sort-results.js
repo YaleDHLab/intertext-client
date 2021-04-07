@@ -6,10 +6,15 @@ const _setSort = (field) => ({
   field: field
 });
 
-const setSortOrderIndex = (orderIndex) => ({
-  type: 'SET_SORT_ORDER_INDEX',
-  orderIndex: orderIndex
-});
+const setSortOrderIndex = (orderIndex) => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: 'SET_SORT_ORDER_INDEX',
+      orderIndex: orderIndex
+    });
+    dispatch(fetchSearchResults());
+  };
+};
 
 export const setSort = (field) => {
   return (dispatch, getState) => {

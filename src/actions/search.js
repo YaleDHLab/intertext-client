@@ -9,11 +9,16 @@ import {
   setTypeaheadIndex
 } from './typeahead';
 import { flatFileStringSearch } from '../utils/flatFileStringSearch';
-import { resetPagination } from './pagination';
 
 export const displayMoreResults = () => {
-  return {
-    type: 'DISPLAY_MORE_SEARCH_RESULTS'
+  return (dispatch, getState) => {
+    const state = getState();
+    if (state.search.maxDisplayed >= state.search.resultsMeta.totalResults) {
+      return;
+    }
+    return dispatch({
+      type: 'DISPLAY_MORE_SEARCH_RESULTS'
+    });
   };
 };
 
@@ -53,7 +58,6 @@ export const fetchMoreSearchResults = () => {
 export const fetchSearchResults = () => {
   return (dispatch, getState) => {
     // Reset the max number of displayed results
-    dispatch(resetPagination());
     dispatch(resetMaxDisplayed());
     // Save the user's search in the url
     dispatch(saveSearchInUrl());
@@ -145,6 +149,7 @@ export const loadSearchFromUrl = () => {
     dispatch(setTypeaheadField(state.field));
     dispatch(setTypeaheadQuery(state.query));
     dispatch(setCompare(state.compare));
-    dispatch(fetchSearchResults());
+    // Commenting this out because search results should only update
+    // dispatch(fetchSearchResults());
   };
 };

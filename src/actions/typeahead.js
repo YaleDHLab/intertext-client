@@ -1,5 +1,6 @@
 import { selectTypeaheadQuery } from '../selectors/typeahead';
 import { fetchFieldFile } from '../utils/fetchJSONFile';
+import { fetchSearchResults } from './search';
 
 export const setTypeaheadField = (field) => ({
   type: 'SET_TYPEAHEAD_FIELD',
@@ -25,10 +26,15 @@ export const typeaheadRequestFailed = () => ({
   type: 'TYPEAHEAD_REQUEST_FAILED'
 });
 
-export const receiveFieldFile = (file) => ({
-  type: 'RECEIVE_FIELD_FILE',
-  fieldFile: file
-});
+export const receiveFieldFile = (file) => {
+  return function (dispatch, getState) {
+    dispatch({
+      type: 'RECEIVE_FIELD_FILE',
+      fieldFile: file
+    });
+    dispatch(fetchSearchResults());
+  };
+};
 
 export function fetchTypeaheadResults() {
   return function (dispatch, getState) {

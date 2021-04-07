@@ -21,7 +21,7 @@ const searchReducer = (state = initialState, action) => {
 
     case 'SET_ALL_SEARCH_RESULTS':
       return Object.assign({}, state, {
-        results: action.docs.slice(0, state.maxDisplayed),
+        results: action.docs,
         allResults: action.docs,
         err: action.err
       });

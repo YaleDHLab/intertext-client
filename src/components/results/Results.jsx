@@ -88,9 +88,7 @@ Results.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  results: state.search.results,
-  sortOrderIndex: state.sort.orderIndex,
-  page: state.pagination.page
+  results: state.search.results
 });
 
 const mapDispatchToProps = (dispatch) => ({

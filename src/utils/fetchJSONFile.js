@@ -45,25 +45,6 @@ export const fetchFieldFile = (state) => {
       });
 };
 
-export const fetchMatchesFromFile = (textID, matchList, state) => {
-  const searchTerm = state.typeahead.query;
-  const searchField = state.typeahead.field;
-
-  return fetchMatchFile(textID).then((json) => {
-    return json
-      .filter((val, i, arr) => {
-        return matchList.includes(i);
-      })
-      .filter((m) => {
-        console.log(
-          `Filtering individual match ${searchField} ${searchTerm}:`,
-          m
-        );
-        return true;
-      });
-  });
-};
-
 export const fetchMatchFile = (textID) =>
   fetchJSONFile('/api/matches/' + String(textID) + '.json');
 

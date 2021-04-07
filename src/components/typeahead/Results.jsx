@@ -36,7 +36,6 @@ class Results extends React.Component {
 
   handleMouseup(e) {
     if (!e.target.className.includes('typeahead-result')) return;
-    // this.props.setTypeaheadQuery(e.target.innerText);
     this.props.setTypeaheadQuery(e.target.getAttribute('data-value'));
     this.props.fetchSearchResults();
     document.querySelector('.typeahead input').blur();

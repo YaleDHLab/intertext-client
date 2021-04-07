@@ -2,18 +2,16 @@
  * Get results based on filters, search and sort state
  *
  * In order to prevent loading all match files in an
- * unrestricted search case, we introduce a pagination
- * to the redux store and use it here.
+ * unrestricted search case, we precompute which match
+ * files fit the search params and load them until we
+ * have enough.
  *
- * Get a list of match IDs:
- *  - get sort order
- *  - filter by typeahead and earlier/later usage
- *  - filter by similarity
+ * TODO - This logic will be rewritten when our data
+ * structure is migrated to avoid duplicate issues
+ * in the sorted indices.
  *
- * Load matches from match files until we have enough
  */
 
-import uniq from 'lodash.uniq';
 import { selectSimilarity } from '../selectors/similarity';
 import { selectSortOrder } from '../selectors/sort';
 import { selectFieldFile, selectTypeaheadQuery } from '../selectors/typeahead';
@@ -68,20 +66,17 @@ async function getSortedMatchList(state) {
       filterUseType === useTypes.Previous &&
       useType === 1
     ) {
-      console.log('useCase mismatch a', item, filterUseType, useType);
       return false;
     } else if (
       searchTerm.length > 0 &&
       filterUseType === useTypes.Later &&
       useType === 0
     ) {
-      console.log('useCase mismatch b', item, filterUseType, useType);
       return false;
     }
 
     // Drop if simlarity is out of range
     if (minSim > similarity || maxSim < similarity) {
-      console.log('similarity mismatch', minSim, maxSim, similarity);
       return false;
     }
     return true;
@@ -91,13 +86,7 @@ async function getSortedMatchList(state) {
 export async function flatFileStringSearch(state) {
   const orderedIndex = await getSortedMatchList(state);
 
-  // const matchesPerPage = selectMatchesPerPage(state);
-  // const pageNumber = selectPageNumber(state);
-  const maxDisplayed = Math.min(
-    state.search.maxDisplayed,
-    state.search.resultsMeta.totalResults
-  );
-  // let currentIndex = -1;
+  const maxDisplayed = state.search.maxDisplayed;
 
   // Helper to fetch match file from memory or network
   let cache = {};
@@ -115,18 +104,6 @@ export async function flatFileStringSearch(state) {
   };
 
   // Determine which match files to load
-  let matchCount = 0;
-  const matchFilesToLoad = uniq(orderedIndex.map((x) => x.split('.')[0]));
-  console.log('Match files to load: ', matchFilesToLoad);
-  const matchesPerFile = {};
-  matchFilesToLoad.forEach((matchFileID) => {
-    matchesPerFile[matchFileID] = orderedIndex.filter(
-      (x) => x.split('.')[0] === matchFileID
-    ).length;
-    matchCount += matchesPerFile[matchFileID];
-  });
-  console.log('Matches per file', matchesPerFile);
-  console.log('Match count from files:', matchCount);
 
   // Build results in this array
   let results = [];
@@ -147,12 +124,6 @@ export async function flatFileStringSearch(state) {
     if (resultIDs.includes(match._id)) {
       continue;
     }
-
-    // if currentIndex is not high enough, then don't add this item
-    // currentIndex += 1;
-    // if (currentIndex < pageNumber * matchesPerPage) {
-    //   continue;
-    // }
 
     // if we make it this far, append the match
     results.push(match);
