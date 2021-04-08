@@ -51,13 +51,15 @@ function getSortedMatchList() {
         if (!matchFileIDs.includes(matchFileID)) {
           return false;
         }
-        // Drop if this match isn't the selected source/target match type
+        // Skip this match if there's a search and the match isn't the selected source/target type
         if (
+          searchTerm.length.length &&
           filterUseType === useTypes.Previous &&
           !isPrevious
         ) {
           return false;
         } else if (
+          searchTerm.length.length &&
           filterUseType === useTypes.Later &&
           isPrevious
         ) {
@@ -78,10 +80,6 @@ export function flatFileStringSearch() {
   return (dispatch, getState) => {
     const state = getState();
     const filteredOrderedIndex = dispatch(getSortedMatchList(state));
-
-
-    console.log(filteredOrderedIndex)
-
     const orderedIndex = filteredOrderedIndex.slice(0, state.search.maxDisplayed);
     // find the unique match file ids from which we need to extract matches
     const matchFileIDs = uniq(orderedIndex.map(d => d[0]));
