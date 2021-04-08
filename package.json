@@ -36,7 +36,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prettify": "prettier --write src",
-    "build:demo": "npm run build && node scripts/fetch-sample-data.js",
+    "fetch-sample-data": "node scripts/fetch-sample-data.js",
+    "build:demo": "npm run build && npm run fetch-sample-data",
     "upload": "npm run build && rm -rf build/api && zip client.zip -r build && aws s3 cp client.zip s3://lab-apps/intertext-builds/intertext-client-${INTERTEXT_CLIENT_VERSION:=0.0.1a}.zip --acl public-read --profile yale-admin && rm client.zip"
   },
   "eslintConfig": {

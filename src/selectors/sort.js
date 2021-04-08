@@ -4,8 +4,12 @@ export const sortProperties = {
   Similarity: 'similarity'
 };
 
+export const selectSortOrder = (state) => {
+  return state.sort.orderIndex;
+};
+
 export const selectSortProperty = (state) => {
-  const sortString = state.sort;
+  const sortString = state.sort.field;
   switch (sortString) {
     case 'author':
       return sortProperties.Author;

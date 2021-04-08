@@ -189,7 +189,7 @@ const getHref = (result, type) => {
 };
 
 export const ResultProps = PropTypes.shape({
-  _id: PropTypes.string,
+  _id: PropTypes.number,
   similarity: PropTypes.number.isRequired,
   source_author: PropTypes.string.isRequired,
   source_file_id: PropTypes.number.isRequired,

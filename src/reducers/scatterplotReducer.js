@@ -65,7 +65,6 @@ const scatterplotReducer = (state = initialState, action) => {
       });
 
     case 'RECEIVE_SCATTERPLOT_RESULTS':
-      console.log('RECEIVE_SCATTERPLOT_RESULTS', action.obj);
       return Object.assign({}, state, {
         data: action.obj.data,
         xDomain: action.obj.xDomain,

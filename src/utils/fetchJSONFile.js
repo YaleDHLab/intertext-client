@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import { sortProperties } from '../selectors/sort';
 import {
   selectTypeaheadField,
   typeaheadFieldTypes
@@ -11,14 +12,18 @@ import {
  * @param {string} url
  */
 const fetchJSONFile = (url) => {
-  return fetch(url).then((response) => {
-    if (response.status !== 200) {
-      throw new Error(
-        'Fetch failed (Status = ' + response.status + '): ' + url
-      );
-    }
-    return response.json();
-  });
+  return fetch(url)
+    .then((response) => {
+      if (response.status !== 200) {
+        throw new Error(
+          'Fetch failed (Status = ' + response.status + '): ' + url
+        );
+      }
+      return response.json();
+    })
+    .then((obj) => {
+      return obj;
+    });
 };
 
 export const fetchAuthorsFile = () => {
@@ -46,4 +51,28 @@ export const fetchMatchFile = (textID) =>
 export const fetchScatterplotFile = (props) => {
   const { use, unit, stat } = props;
   return fetchJSONFile(`/api/scatterplots/${use}-${unit}-${stat}.json`);
+};
+
+export const fetchSortOrder = (field) => {
+  let sortPropertyString;
+  switch (field) {
+    case 'author':
+    case sortProperties.Author:
+      sortPropertyString = 'author';
+      break;
+    case 'year':
+    case sortProperties.Year:
+      sortPropertyString = 'year';
+      break;
+    case 'similarity':
+    case sortProperties.Similarity:
+      sortPropertyString = 'similarity';
+      break;
+    default:
+      console.warn(`Unsupported sort order: ${field}`);
+      break;
+  }
+
+  console.log('Fetching sort order array', sortPropertyString);
+  return fetchJSONFile(`/api/indices/match-ids-by-${sortPropertyString}.json`);
 };
