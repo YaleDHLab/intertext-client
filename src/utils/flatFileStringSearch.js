@@ -29,6 +29,9 @@ function getSortedMatchList() {
     const [minSim, maxSim] = selectSimilarity(state);
     const filterUseType = selectUseType(state);
 
+    // avoid race conditions
+    if (!sortIndex) return [];
+
     // get a list of match files based on the current typeahead query
     const matchFileIDs = uniq(Object.keys(fieldIndex)
       // filter to just those keys that match the typeahead query
@@ -43,36 +46,37 @@ function getSortedMatchList() {
     // filter the sorted list of matches to only include matches that are
     // in the file matchFileIDs array, are the appropriate useType, fall
     // within the specified similarity range, and are unique
-    return uniqBy(sortIndex, d => d[1])
-      .filter((item) => {
-        const [matchFileID, , , isPrevious, similarity] = item;
+    const filteredSortIndex = sortIndex.filter((item) => {
+      const [matchFileID, , , isPrevious, similarity] = item;
 
-        // Drop if it's not in one of the author's match files
-        if (!matchFileIDs.includes(matchFileID)) {
-          return false;
-        }
-        // Skip this match if there's a search and the match isn't the selected source/target type
-        if (
-          searchTerm.length.length &&
-          filterUseType === useTypes.Previous &&
-          !isPrevious
-        ) {
-          return false;
-        } else if (
-          searchTerm.length.length &&
-          filterUseType === useTypes.Later &&
-          isPrevious
-        ) {
-          return false;
-        }
+      // Drop if it's not in one of the author's match files
+      if (!matchFileIDs.includes(matchFileID)) {
+        return false;
+      }
+      // Skip this match if there's a search and the match isn't the selected source/target type
+      if (
+        searchTerm.length.length &&
+        filterUseType === useTypes.Previous &&
+        !isPrevious
+      ) {
+        return false;
+      } else if (
+        searchTerm.length.length &&
+        filterUseType === useTypes.Later &&
+        isPrevious
+      ) {
+        return false;
+      }
 
-        // Drop if simlarity is out of range
-        if (minSim > similarity || maxSim < similarity) {
-          return false;
-        }
+      // Drop if simlarity is out of range
+      if (minSim > similarity || maxSim < similarity) {
+        return false;
+      }
 
-        return true;
-      });
+      return true;
+    });
+
+    return uniqBy(filteredSortIndex, d => d[1]);
   }
 }
 

@@ -148,7 +148,5 @@ export const loadSearchFromUrl = () => {
     dispatch(setTypeaheadField(state.field));
     dispatch(setTypeaheadQuery(state.query));
     dispatch(setCompare(state.compare));
-    // Commenting this out because search results should only update
-    // dispatch(fetchSearchResults());
   };
 };
