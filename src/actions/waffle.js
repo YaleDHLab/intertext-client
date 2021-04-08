@@ -1,5 +1,4 @@
 import { history } from '../store';
-import fetch from 'isomorphic-fetch';
 import { fetchSearchResults } from './search';
 
 export const setWaffleVisualized = (obj) => ({
@@ -48,7 +47,6 @@ export const getWaffleActive = (d, i) => {
 export const visualize = (obj) => {
   return (dispatch, getState) => {
     dispatch(setWaffleVisualized(obj));
-    dispatch(requestWaffleImage());
     dispatch(plotWaffle());
     dispatch(saveWaffleInUrl());
   };
@@ -58,31 +56,6 @@ export const saveWaffleInUrl = () => {
   // TODO: Store waffle state in url params
   return (dispatch) => {
     history.push('waffle');
-  };
-};
-
-export const requestWaffleImage = () => {
-  return (dispatch, getState) => {
-    const state = getState();
-    const url =
-      window.location.origin + '/api/metadata?file_id=' + state.waffle.file_id;
-    return fetch(url)
-      .then((response) =>
-        response.json().then((json) => ({ status: response.status, json }))
-      )
-      .then(
-        ({ status, json }) => {
-          if (status >= 400) dispatch(waffleImageRequestFailed());
-          else {
-            const metadata = json.docs[0].metadata;
-            const imageUrl = metadata ? metadata.image : '';
-            dispatch(receiveWaffleImage(imageUrl));
-          }
-        },
-        (err) => {
-          dispatch(waffleImageRequestFailed());
-        }
-      );
   };
 };
 

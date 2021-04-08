@@ -3,11 +3,17 @@ const initialState = {
   query: '',
   results: [],
   index: 0,
-  err: null
+  err: null,
+  fieldFile: {}
 };
 
 const typeaheadReducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'RECEIVE_FIELD_FILE':
+      return Object.assign({}, state, {
+        fieldFile: action.fieldFile
+      });
+
     case 'SET_TYPEAHEAD_FIELD':
       return Object.assign({}, state, {
         field: action.field

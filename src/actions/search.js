@@ -10,25 +10,33 @@ import {
 } from './typeahead';
 import { flatFileStringSearch } from '../utils/flatFileStringSearch';
 
-export const displayMoreResults = () => ({
-  type: 'DISPLAY_MORE_SEARCH_RESULTS'
-});
+export const displayMoreResults = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    if (state.search.maxDisplayed >= state.search.resultsMeta.totalResults) {
+      return;
+    }
+    return dispatch({
+      type: 'DISPLAY_MORE_SEARCH_RESULTS'
+    });
+  };
+};
 
 export const resetMaxDisplayed = () => ({
   type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS'
 });
 
-export const fetchSearchResults = () => {
+export const fetchMoreSearchResults = () => {
   return (dispatch, getState) => {
-    // Reset the max number of displayed results
-    dispatch(resetMaxDisplayed());
-    // Save the user's search in the url
-    dispatch(saveSearchInUrl());
-    // Reset the typeahead index given new results
-    dispatch(setTypeaheadIndex(0));
-    // Generate the query url
     return flatFileStringSearch(getState()).then(
-      (docs) => {
+      ({ count, docs }) => {
+        if (!docs) {
+          return;
+        }
+        dispatch({
+          type: 'SET_ALL_SEARCH_RESULTS_META',
+          totalResults: count
+        });
         dispatch({
           type: 'SET_ALL_SEARCH_RESULTS',
           docs: dispatch(filterResultsWithCompare(docs)),
@@ -44,6 +52,19 @@ export const fetchSearchResults = () => {
         });
       }
     );
+  };
+};
+
+export const fetchSearchResults = () => {
+  return (dispatch, getState) => {
+    // Reset the max number of displayed results
+    dispatch(resetMaxDisplayed());
+    // Save the user's search in the url
+    dispatch(saveSearchInUrl());
+    // Reset the typeahead index given new results
+    dispatch(setTypeaheadIndex(0));
+
+    dispatch(fetchMoreSearchResults());
   };
 };
 
@@ -69,8 +90,8 @@ export const getSearchUrl = (state) => {
     url += '&min_similarity=' + state.similarity.similarity[0];
     url += '&max_similarity=' + state.similarity.similarity[1];
   }
-  if (state.sort && state.sort !== 'Sort By') {
-    url += '&sort=' + state.sort;
+  if (state.sort.field && state.sort.field !== 'Sort By') {
+    url += '&sort=' + state.sort.field;
   }
   if (state.compare.type) {
     url += '&' + state.compare.type + '_file_id=' + state.compare.file_id;
@@ -86,7 +107,7 @@ export const saveSearchInUrl = () => {
     const state = getState();
     let hash = 'results?store=true';
     hash += '&query=' + JSON.stringify(state.typeahead.query);
-    hash += '&sort=' + JSON.stringify(state.sort);
+    hash += '&sort=' + JSON.stringify(state.sort.field);
     hash += '&similarity=' + JSON.stringify(state.similarity.similarity);
     hash += '&displayed=' + JSON.stringify(state.similarity.displayed);
     hash += '&field=' + JSON.stringify(state.typeahead.field);
@@ -114,13 +135,21 @@ export const loadSearchFromUrl = () => {
         });
         return null;
       });
-    dispatch(setSort(state.sort));
+    // correct the sort serialization now that it's an object
+    // instead of just a string
+    if (typeof state.sort === 'string') {
+      state.sort = {
+        field: state.sort
+      };
+    }
+    dispatch(setSort(state.sort.field));
     dispatch(setDisplayed(state.displayed));
     dispatch(setSimilarity(state.similarity));
     dispatch(setUseTypes(state.useTypes));
     dispatch(setTypeaheadField(state.field));
     dispatch(setTypeaheadQuery(state.query));
     dispatch(setCompare(state.compare));
-    dispatch(fetchSearchResults());
+    // Commenting this out because search results should only update
+    // dispatch(fetchSearchResults());
   };
 };

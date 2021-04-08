@@ -21,7 +21,7 @@ ResultCount.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  totalResults: state.search.allResults ? state.search.allResults.length : 0
+  totalResults: state.search.resultsMeta.totalResults
 });
 
 export default connect(mapStateToProps)(ResultCount);
