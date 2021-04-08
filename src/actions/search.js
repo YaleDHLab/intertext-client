@@ -106,7 +106,6 @@ export const saveSearchInUrl = () => {
     const state = getState();
     let hash = 'results?store=true';
     hash += '&query=' + JSON.stringify(state.typeahead.query);
-    hash += '&sort=' + JSON.stringify(state.sort.field);
     hash += '&similarity=' + JSON.stringify(state.similarity.similarity);
     hash += '&displayed=' + JSON.stringify(state.similarity.displayed);
     hash += '&field=' + JSON.stringify(state.typeahead.field);
@@ -122,7 +121,7 @@ export const loadSearchFromUrl = () => {
   return (dispatch, getState) => {
     const search = window.location.hash.split('#/')[1];
     if (!search) return; // str should be window.location.search
-    if (search.includes('unit=')) return; // skip scatterlot urls
+    if (search.includes('unit=')) return; // skip scatterplot urls
     let state = getState();
     search
       .substring(1)
@@ -134,13 +133,6 @@ export const loadSearchFromUrl = () => {
         });
         return null;
       });
-    // correct the sort serialization now that it's an object
-    // instead of just a string
-    if (typeof state.sort === 'string') {
-      state.sort = {
-        field: state.sort
-      };
-    }
     dispatch(setSort(state.sort.field));
     dispatch(setDisplayed(state.displayed));
     dispatch(setSimilarity(state.similarity));

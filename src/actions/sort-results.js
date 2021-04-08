@@ -11,7 +11,7 @@ const setSortOrderIndex = (orderIndex) => {
   };
 };
 
-export const setSort = (field) => {
+export const setSort = (field, search) => {
   return (dispatch, getState) => {
     fetchSortOrder(field)
       .then((orderIndex) => {
@@ -20,7 +20,7 @@ export const setSort = (field) => {
           field: field
         });
         dispatch(setSortOrderIndex(orderIndex));
-        dispatch(fetchSearchResults());
+        if (search) dispatch(fetchSearchResults());
       })
       .catch((e) => {
         console.warn('Could not fetch sort order: ' + e);
@@ -30,7 +30,6 @@ export const setSort = (field) => {
 
 export const setSortAndSearch = (field) => {
   return (dispatch) => {
-    dispatch(setSort(field));
-    dispatch(fetchSearchResults());
-  };
-};
+    dispatch(setSort(field, true));
+  }
+}
