@@ -125,6 +125,8 @@ export const loadSearchFromUrl = () => {
     if (search.includes('unit=')) return; // skip scatterplot urls
     let state = getState();
 
+    let sort = state.sort.field;
+
     search
       .substring(1)
       .split('&')
@@ -132,12 +134,15 @@ export const loadSearchFromUrl = () => {
         const split = arg.split('=');
         const k = split[0];
         const val = JSON.parse(decodeURIComponent(split[1]));
+        if (k === 'sort') {
+          sort = val;
+        }
         state = Object.assign({}, state, {
           [k]: val
         });
       });
 
-    dispatch(setSort(state.sort.field));
+    dispatch(setSort(sort));
     dispatch(setDisplayed(state.displayed));
     dispatch(setSimilarity(state.similarity));
     dispatch(setUseTypes(state.useTypes));
