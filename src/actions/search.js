@@ -104,13 +104,12 @@ export const getSearchUrl = (state) => {
 export const saveSearchInUrl = () => {
   return (dispatch, getState) => {
     const state = getState();
-    let hash = 'results?store=true';
+    let hash = 'results?';
     hash += '&query=' + JSON.stringify(state.typeahead.query);
-    hash += '&similarity=' + JSON.stringify(state.similarity.similarity);
-    hash += '&displayed=' + JSON.stringify(state.similarity.displayed);
-    hash += '&field=' + JSON.stringify(state.typeahead.field);
+    hash += '&similarity=' + JSON.stringify(state.similarity);
     hash += '&useTypes=' + JSON.stringify(state.useTypes);
     hash += '&compare=' + JSON.stringify(state.compare);
+    hash += '&sort=' + JSON.stringify(state.sort);
     try {
       history.push(hash);
     } catch (err) {}
@@ -119,13 +118,14 @@ export const saveSearchInUrl = () => {
 
 export const loadSearchFromUrl = () => {
   return (dispatch, getState) => {
-    const search = window.location.hash.split('#/')[1];
-    if (!search) return; // str should be window.location.search
+    let search = window.location.hash.split('#/')[1];
+    if (!search || !search.includes('?')) return; // str should be window.location.search
     if (search.includes('unit=')) return; // skip scatterplot urls
     let state = getState();
     search
-      .substring(1)
+      .split('?')[1]
       .split('&')
+      .filter(arg => arg)
       .map((arg) => {
         const split = arg.split('=');
         state = Object.assign({}, state, {
@@ -133,11 +133,11 @@ export const loadSearchFromUrl = () => {
         });
         return null;
       });
+    // the url is already long enough!
     dispatch(setSort(state.sort.field));
-    dispatch(setDisplayed(state.displayed));
-    dispatch(setSimilarity(state.similarity));
+    dispatch(setDisplayed(state.similarity.displayed));
+    dispatch(setSimilarity(state.similarity.similarity));
     dispatch(setUseTypes(state.useTypes));
-    dispatch(setTypeaheadField(state.field));
     dispatch(setTypeaheadQuery(state.query));
     dispatch(setCompare(state.compare));
   };

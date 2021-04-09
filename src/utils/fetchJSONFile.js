@@ -72,7 +72,5 @@ export const fetchSortOrder = (field) => {
       console.warn(`Unsupported sort order: ${field}`);
       break;
   }
-
-  console.log('Fetching sort order array', sortPropertyString);
   return fetchJSONFile(`/api/indices/match-ids-by-${sortPropertyString}.json`);
 };
