@@ -3,11 +3,7 @@ import { setSort } from './sort-results';
 import { setUseTypes } from './use-types';
 import { setCompare, filterResultsWithCompare } from './compare';
 import { setDisplayed, setSimilarity } from './similarity-slider';
-import {
-  setTypeaheadField,
-  setTypeaheadQuery,
-  setTypeaheadIndex
-} from './typeahead';
+import { setTypeaheadQuery, setTypeaheadIndex } from './typeahead';
 import { flatFileStringSearch } from '../utils/flatFileStringSearch';
 
 export const displayMoreResults = () => {
@@ -104,12 +100,12 @@ export const getSearchUrl = (state) => {
 export const saveSearchInUrl = () => {
   return (dispatch, getState) => {
     const state = getState();
-    let hash = 'results?store=true';
+    let hash = 'results?';
     hash += '&query=' + JSON.stringify(state.typeahead.query);
     hash += '&sort=' + JSON.stringify(state.sort.field);
-    hash += '&similarity=' + JSON.stringify(state.similarity.similarity);
     hash += '&displayed=' + JSON.stringify(state.similarity.displayed);
     hash += '&field=' + JSON.stringify(state.typeahead.field);
+    hash += '&similarity=' + JSON.stringify(state.similarity);
     hash += '&useTypes=' + JSON.stringify(state.useTypes);
     hash += '&compare=' + JSON.stringify(state.compare);
     try {
@@ -120,16 +116,17 @@ export const saveSearchInUrl = () => {
 
 export const loadSearchFromUrl = () => {
   return (dispatch, getState) => {
-    const search = window.location.hash.split('#/')[1];
-    if (!search) return; // str should be window.location.search
+    let search = window.location.hash.split('#/')[1];
+    if (!search || !search.includes('?')) return; // str should be window.location.search
     if (search.includes('unit=')) return; // skip scatterplot urls
     let state = getState();
 
     let sort = state.sort.field;
 
     search
-      .substring(1)
+      .split('?')[1]
       .split('&')
+      .filter((arg) => arg)
       .forEach((arg) => {
         const split = arg.split('=');
         const k = split[0];
@@ -141,12 +138,11 @@ export const loadSearchFromUrl = () => {
           [k]: val
         });
       });
-
+    // the url is already long enough!
     dispatch(setSort(sort));
-    dispatch(setDisplayed(state.displayed));
-    dispatch(setSimilarity(state.similarity));
+    dispatch(setDisplayed(state.similarity.displayed));
+    dispatch(setSimilarity(state.similarity.similarity));
     dispatch(setUseTypes(state.useTypes));
-    dispatch(setTypeaheadField(state.field));
     dispatch(setTypeaheadQuery(state.query));
     dispatch(setCompare(state.compare));
   };

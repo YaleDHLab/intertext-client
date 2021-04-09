@@ -76,7 +76,5 @@ export const fetchSortOrder = (field) => {
       sortPropertyString = 'similarity';
       break;
   }
-
-  console.log('Fetching sort order array', sortPropertyString);
   return fetchJSONFile(`/api/indices/match-ids-by-${sortPropertyString}.json`);
 };

@@ -76,7 +76,6 @@ function getSortedMatchList(state) {
     return true;
   });
 
-  // Filter by match ID
   return uniqBy(filteredSortIndex, (d) => d[1]);
 }
 
