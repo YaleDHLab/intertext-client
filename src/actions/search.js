@@ -125,7 +125,7 @@ export const loadSearchFromUrl = () => {
     search
       .split('?')[1]
       .split('&')
-      .filter(arg => arg)
+      .filter((arg) => arg)
       .map((arg) => {
         const split = arg.split('=');
         state = Object.assign({}, state, {
