@@ -83,7 +83,7 @@ function getSortedMatchList() {
 export function flatFileStringSearch() {
   return (dispatch, getState) => {
     const state = getState();
-    const filteredOrderedIndex = dispatch(getSortedMatchList(state));
+    const filteredOrderedIndex = dispatch(getSortedMatchList());
     const orderedIndex = filteredOrderedIndex.slice(0, state.search.maxDisplayed);
     // find the unique match file ids from which we need to extract matches
     const matchFileIDs = uniq(orderedIndex.map(d => d[0]));
