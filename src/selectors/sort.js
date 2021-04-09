@@ -17,10 +17,8 @@ export const selectSortProperty = (state) => {
       return sortProperties.Year;
     case 'similarity':
       return sortProperties.Similarity;
-    case 'Sort By':
-      return sortProperties.Author;
     default:
       console.warn('Invalid sort property string: ' + sortString);
-      return sortProperties.Author;
+      return sortProperties.Similarity;
   }
 };
