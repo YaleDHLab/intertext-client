@@ -31,5 +31,5 @@ export const setSort = (field, search) => {
 export const setSortAndSearch = (field) => {
   return (dispatch) => {
     dispatch(setSort(field, true));
-  }
-}
+  };
+};

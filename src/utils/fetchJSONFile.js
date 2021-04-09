@@ -55,7 +55,7 @@ export const fetchScatterplotFile = (props) => {
 
 export const fetchSortOrder = (field) => {
   let sortPropertyString;
-  switch (field) {
+  switch (field.toLowerCase().trim()) {
     case 'author':
     case sortProperties.Author:
       sortPropertyString = 'author';
@@ -69,7 +69,11 @@ export const fetchSortOrder = (field) => {
       sortPropertyString = 'similarity';
       break;
     default:
-      console.warn(`Unsupported sort order: ${field}`);
+      console.warn(
+        `Unsupported sort order: ${field}. Defaulting to similarity`
+      );
+      // default to author
+      sortPropertyString = 'similarity';
       break;
   }
 
