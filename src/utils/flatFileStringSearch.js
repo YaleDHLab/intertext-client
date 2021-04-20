@@ -9,7 +9,7 @@
  */
 
 import { selectSimilarity } from '../selectors/similarity';
-import { selectSortOrder } from '../selectors/sort';
+import { selectSortOrder, selectSortProperty } from '../selectors/sort';
 import { selectFieldFile, selectTypeaheadQuery } from '../selectors/typeahead';
 import { selectUseType, useTypes } from '../selectors/useType';
 import { fetchMatchFile } from './fetchJSONFile';
@@ -26,6 +26,7 @@ function getSortedMatchList(state) {
   const sortIndex = selectSortOrder(state);
   const [minSim, maxSim] = selectSimilarity(state);
   const filterUseType = selectUseType(state);
+  const sortBy = selectSortProperty(state);
 
   // avoid race conditions
   if (!sortIndex) return [];
@@ -46,7 +47,7 @@ function getSortedMatchList(state) {
   // filter the sorted list of matches to only include matches that are
   // in the file matchFileIDs array, are the appropriate useType, fall
   // within the specified similarity range, and are unique
-  const filteredSortIndex = sortIndex.filter((item) => {
+  let filteredSortIndex = sortIndex.filter((item) => {
     const [matchFileID, , , isPrevious, similarity] = item;
 
     // Drop if it's not in one of the author's match files
@@ -75,6 +76,11 @@ function getSortedMatchList(state) {
 
     return true;
   });
+
+  // use descending order for similarity sort
+  if (sortBy === 'similarity') {
+    filteredSortIndex = filteredSortIndex.reverse();
+  }
 
   return uniqBy(filteredSortIndex, (d) => d[1]);
 }
