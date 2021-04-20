@@ -128,15 +128,19 @@ export const loadSearchFromUrl = () => {
       .split('&')
       .filter((arg) => arg)
       .forEach((arg) => {
-        const split = arg.split('=');
-        const k = split[0];
-        const val = JSON.parse(decodeURIComponent(split[1]));
-        if (k === 'sort') {
-          sort = val;
+        try {
+          const split = arg.split('=');
+          const k = split[0];
+          const val = JSON.parse(decodeURIComponent(split[1]));
+          if (k === 'sort') {
+            sort = val;
+          }
+          state = Object.assign({}, state, {
+            [k]: val
+          });
+        } catch (e) {
+          console.warn(`Error parsing ${arg}: ${e}`);
         }
-        state = Object.assign({}, state, {
-          [k]: val
-        });
       });
     // the url is already long enough!
     dispatch(setSort(sort));
