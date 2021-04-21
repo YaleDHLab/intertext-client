@@ -9,7 +9,7 @@ import { flatFileStringSearch } from '../utils/flatFileStringSearch';
 export const fetchSearchResults = () => {
   return (dispatch, getState) => {
     // Reset the max number of displayed results
-    dispatch({type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS'});
+    dispatch({ type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS' });
     // Save the user's search in the url
     dispatch(saveSearchInUrl());
     // Reset the typeahead index given new results
