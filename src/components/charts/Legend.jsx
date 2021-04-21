@@ -19,7 +19,7 @@ const Legend = (props) => {
 };
 
 const parse = (val, percents) => {
-  return percents ? (val * 100).toFixed(2) + '%' : val.toFixed(2);
+  return percents ? val.toFixed(2) + '%' : val.toFixed(2);
 };
 
 export default Legend;

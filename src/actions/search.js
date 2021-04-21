@@ -3,11 +3,7 @@ import { setSort } from './sort-results';
 import { setUseTypes } from './use-types';
 import { setCompare, filterResultsWithCompare } from './compare';
 import { setDisplayed, setSimilarity } from './similarity-slider';
-import {
-  setTypeaheadField,
-  setTypeaheadQuery,
-  setTypeaheadIndex
-} from './typeahead';
+import { setTypeaheadQuery, setTypeaheadIndex } from './typeahead';
 import { flatFileStringSearch } from '../utils/flatFileStringSearch';
 
 export const displayMoreResults = () => {
@@ -106,10 +102,12 @@ export const saveSearchInUrl = () => {
     const state = getState();
     let hash = 'results?';
     hash += '&query=' + JSON.stringify(state.typeahead.query);
+    hash += '&sort=' + JSON.stringify(state.sort.field);
+    hash += '&displayed=' + JSON.stringify(state.similarity.displayed);
+    hash += '&field=' + JSON.stringify(state.typeahead.field);
     hash += '&similarity=' + JSON.stringify(state.similarity);
     hash += '&useTypes=' + JSON.stringify(state.useTypes);
     hash += '&compare=' + JSON.stringify(state.compare);
-    hash += '&sort=' + JSON.stringify(state.sort);
     try {
       history.push(hash);
     } catch (err) {}
@@ -122,19 +120,30 @@ export const loadSearchFromUrl = () => {
     if (!search || !search.includes('?')) return; // str should be window.location.search
     if (search.includes('unit=')) return; // skip scatterplot urls
     let state = getState();
+
+    let sort = state.sort.field;
+
     search
       .split('?')[1]
       .split('&')
       .filter((arg) => arg)
-      .map((arg) => {
-        const split = arg.split('=');
-        state = Object.assign({}, state, {
-          [split[0]]: JSON.parse(decodeURIComponent(split[1]))
-        });
-        return null;
+      .forEach((arg) => {
+        try {
+          const split = arg.split('=');
+          const k = split[0];
+          const val = JSON.parse(decodeURIComponent(split[1]));
+          if (k === 'sort') {
+            sort = val;
+          }
+          state = Object.assign({}, state, {
+            [k]: val
+          });
+        } catch (e) {
+          console.warn(`Error parsing ${arg}: ${e}`);
+        }
       });
     // the url is already long enough!
-    dispatch(setSort(state.sort.field));
+    dispatch(setSort(sort));
     dispatch(setDisplayed(state.similarity.displayed));
     dispatch(setSimilarity(state.similarity.similarity));
     dispatch(setUseTypes(state.useTypes));

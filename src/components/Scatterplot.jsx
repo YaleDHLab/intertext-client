@@ -44,7 +44,7 @@ class Scatterplot extends React.Component {
   }
 
   xTickFormat(d) {
-    return Math.round(d * 100) / 100;
+    return Math.round(d) / 100;
   }
 
   yTickFormat(d) {
