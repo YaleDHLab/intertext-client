@@ -98,6 +98,7 @@ export const getSearchUrl = (state) => {
 };
 
 export const saveSearchInUrl = () => {
+  if (!(window.location.href.includes('/results'))) return;
   return (dispatch, getState) => {
     const state = getState();
     let hash = 'results?';
