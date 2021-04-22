@@ -36,7 +36,9 @@ function getSortedMatchList(state) {
     Object.keys(fieldIndex)
       // filter to just those keys that match the typeahead query
       .filter((k) =>
-        searchTerm.length < 1 ? true : k.toLowerCase().includes(searchTerm)
+        searchTerm.length < 1
+          ? true
+          : k.trim().toLowerCase().includes(searchTerm)
       )
       // expand from the key (author or title) to the array of match file IDs
       .map((k) => fieldIndex[k])
