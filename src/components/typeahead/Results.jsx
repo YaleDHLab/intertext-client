@@ -104,7 +104,7 @@ const mapStateToProps = (state) => ({
   results: state.typeahead.results,
   query: state.typeahead.query,
   index: state.typeahead.index,
-  maxDisplayed: state.search.maxDisplayed // I don't see this used elsehwere so I'll use it here.
+  maxDisplayed: state.search.maxDisplayed
 });
 
 const mapDispatchToProps = (dispatch) => ({

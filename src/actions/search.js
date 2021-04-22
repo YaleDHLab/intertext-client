@@ -6,21 +6,17 @@ import { setDisplayed, setSimilarity } from './similarity-slider';
 import { setTypeaheadQuery, setTypeaheadIndex } from './typeahead';
 import { flatFileStringSearch } from '../utils/flatFileStringSearch';
 
-export const displayMoreResults = () => {
+export const fetchSearchResults = () => {
   return (dispatch, getState) => {
-    const state = getState();
-    if (state.search.maxDisplayed >= state.search.resultsMeta.totalResults) {
-      return;
-    }
-    return dispatch({
-      type: 'DISPLAY_MORE_SEARCH_RESULTS'
-    });
+    // Reset the max number of displayed results
+    dispatch({ type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS' });
+    // Save the user's search in the url
+    dispatch(saveSearchInUrl());
+    // Reset the typeahead index given new results
+    dispatch(setTypeaheadIndex(0));
+    dispatch(fetchMoreSearchResults());
   };
 };
-
-export const resetMaxDisplayed = () => ({
-  type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS'
-});
 
 export const fetchMoreSearchResults = () => {
   return (dispatch, getState) => {
@@ -51,50 +47,16 @@ export const fetchMoreSearchResults = () => {
   };
 };
 
-export const fetchSearchResults = () => {
+export const displayMoreResults = () => {
   return (dispatch, getState) => {
-    // Reset the max number of displayed results
-    dispatch(resetMaxDisplayed());
-    // Save the user's search in the url
-    dispatch(saveSearchInUrl());
-    // Reset the typeahead index given new results
-    dispatch(setTypeaheadIndex(0));
-    dispatch(fetchMoreSearchResults());
+    const state = getState();
+    if (state.search.maxDisplayed >= state.search.resultsMeta.totalResults) {
+      return;
+    }
+    return dispatch({
+      type: 'DISPLAY_MORE_SEARCH_RESULTS'
+    });
   };
-};
-
-export const getSearchUrl = (state) => {
-  let url = window.location.origin + '/api/matches?',
-    query = '',
-    field = '';
-  if (!state.typeahead && !state.field) return url;
-
-  if (state.typeahead.query) {
-    query = encodeURIComponent(state.typeahead.query);
-  }
-  if (state.typeahead.field) {
-    field = state.typeahead.field.toLowerCase();
-  }
-  if (state.useTypes.previous && field && query) {
-    url += '&source_' + field + '=' + query;
-  }
-  if (state.useTypes.later && field && query) {
-    url += '&target_' + field + '=' + query;
-  }
-  if (state.similarity.similarity) {
-    url += '&min_similarity=' + state.similarity.similarity[0];
-    url += '&max_similarity=' + state.similarity.similarity[1];
-  }
-  if (state.sort.field && state.sort.field !== 'Sort By') {
-    url += '&sort=' + state.sort.field;
-  }
-  if (state.compare.type) {
-    url += '&' + state.compare.type + '_file_id=' + state.compare.file_id;
-    url +=
-      '&' + state.compare.type + '_segment_ids=' + state.compare.segment_ids;
-  }
-  url += '&limit=1000';
-  return url;
 };
 
 export const saveSearchInUrl = () => {
@@ -102,7 +64,7 @@ export const saveSearchInUrl = () => {
     const state = getState();
     let hash = 'results?';
     hash += '&query=' + JSON.stringify(state.typeahead.query);
-    hash += '&sort=' + JSON.stringify(state.sort.field);
+    hash += '&sort=' + JSON.stringify(state.sort);
     hash += '&displayed=' + JSON.stringify(state.similarity.displayed);
     hash += '&field=' + JSON.stringify(state.typeahead.field);
     hash += '&similarity=' + JSON.stringify(state.similarity);
@@ -120,9 +82,6 @@ export const loadSearchFromUrl = () => {
     if (!search || !search.includes('?')) return; // str should be window.location.search
     if (search.includes('unit=')) return; // skip scatterplot urls
     let state = getState();
-
-    let sort = state.sort.field;
-
     search
       .split('?')[1]
       .split('&')
@@ -132,9 +91,6 @@ export const loadSearchFromUrl = () => {
           const split = arg.split('=');
           const k = split[0];
           const val = JSON.parse(decodeURIComponent(split[1]));
-          if (k === 'sort') {
-            sort = val;
-          }
           state = Object.assign({}, state, {
             [k]: val
           });
@@ -142,8 +98,7 @@ export const loadSearchFromUrl = () => {
           console.warn(`Error parsing ${arg}: ${e}`);
         }
       });
-    // the url is already long enough!
-    dispatch(setSort(sort));
+    dispatch(setSort(state.sort.field));
     dispatch(setDisplayed(state.similarity.displayed));
     dispatch(setSimilarity(state.similarity.similarity));
     dispatch(setUseTypes(state.useTypes));
