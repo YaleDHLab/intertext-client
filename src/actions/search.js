@@ -2,14 +2,14 @@ import { history } from '../store';
 import { setSort } from './sort-results';
 import { setUseTypes } from './use-types';
 import { setCompare, filterResultsWithCompare } from './compare';
-import { setDisplayed, setSimilarity } from './similarity-slider';
+import { setDisplayedSimilarity, setSimilarity } from './similarity-slider';
 import { setTypeaheadQuery, setTypeaheadIndex } from './typeahead';
 import { flatFileStringSearch } from '../utils/flatFileStringSearch';
 
 export const fetchSearchResults = () => {
   return (dispatch, getState) => {
     // Reset the max number of displayed results
-    dispatch({ type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS' });
+    dispatch(resetMaxDisplayedSearchResults());
     // Save the user's search in the url
     dispatch(saveSearchInUrl());
     // Reset the typeahead index given new results
@@ -17,6 +17,10 @@ export const fetchSearchResults = () => {
     dispatch(fetchMoreSearchResults());
   };
 };
+
+export const resetMaxDisplayedSearchResults = () => ({
+  type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS',
+})
 
 export const fetchMoreSearchResults = () => {
   return (dispatch, getState) => {
@@ -99,7 +103,7 @@ export const loadSearchFromUrl = () => {
         }
       });
     dispatch(setSort(state.sort.field));
-    dispatch(setDisplayed(state.similarity.displayed));
+    dispatch(setDisplayedSimilarity(state.similarity.displayed));
     dispatch(setSimilarity(state.similarity.similarity));
     dispatch(setUseTypes(state.useTypes));
     dispatch(setTypeaheadQuery(state.query));

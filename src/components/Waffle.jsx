@@ -7,7 +7,6 @@ import Loader from './Loader';
 import Result, { ResultProps } from './results/Result';
 import headshot from '../assets/images/authors/default-headshot.jpg';
 import { colorScale } from './charts/colors';
-import { getResultHeights } from './results/Results';
 import {
   hideWaffle,
   setWaffleFeature,
@@ -83,7 +82,6 @@ const Button = (props) => {
 };
 
 const WaffleResults = (props) => {
-  const height = getResultHeights([props.active])[0];
   return (
     <div className="waffle-card-result-container">
       <div className="waffle-card-results">
@@ -92,7 +90,6 @@ const WaffleResults = (props) => {
             key="key-source"
             type={props.type}
             result={props.active}
-            height={height}
           />
         </div>
         <div className="waffle-results-right">
@@ -100,7 +97,6 @@ const WaffleResults = (props) => {
             key="key-target"
             type={props.type === 'source' ? 'target' : 'source'}
             result={props.active}
-            height={height}
           />
         </div>
         <div className="clear-both" />
