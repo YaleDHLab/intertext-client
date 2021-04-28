@@ -4,7 +4,12 @@ const initialState = {
   results: null, // {arr}
   allResults: null, // {arr}
   err: null, // {str}
-  maxDisplayed: maxDisplayedStep // {int}
+  maxDisplayed: maxDisplayedStep, // {int}
+  resultsMeta: {
+    totalResults: 0, // {int}
+    startIndex: 0, // {int}
+    matchesPerPage: 20 // {int}
+  }
 };
 
 const searchReducer = (state = initialState, action) => {
@@ -16,9 +21,16 @@ const searchReducer = (state = initialState, action) => {
 
     case 'SET_ALL_SEARCH_RESULTS':
       return Object.assign({}, state, {
-        results: action.docs.slice(0, state.maxDisplayed),
+        results: action.docs,
         allResults: action.docs,
         err: action.err
+      });
+
+    case 'SET_ALL_SEARCH_RESULTS_META':
+      return Object.assign({}, state, {
+        resultsMeta: {
+          totalResults: action.totalResults
+        }
       });
 
     case 'SET_SEARCH_RESULTS':

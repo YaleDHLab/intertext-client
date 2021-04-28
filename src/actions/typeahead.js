@@ -25,6 +25,11 @@ export const typeaheadRequestFailed = () => ({
   type: 'TYPEAHEAD_REQUEST_FAILED'
 });
 
+export const receiveFieldFile = (file) => ({
+  type: 'RECEIVE_FIELD_FILE',
+  fieldFile: file
+});
+
 export function fetchTypeaheadResults() {
   return function (dispatch, getState) {
     // Construct the data URL
@@ -33,6 +38,7 @@ export function fetchTypeaheadResults() {
     return fetchFieldFile(getState())
       .then((dataIndex) => {
         const fullList = Object.keys(dataIndex);
+        dispatch(receiveFieldFile(dataIndex));
         const json = fullList.filter((v) =>
           String(v).toLowerCase().includes(term.toLowerCase())
         );

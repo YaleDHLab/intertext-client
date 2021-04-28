@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchSearchResults } from '../../actions/search';
+import {
+  fetchMoreSearchResults,
+  fetchSearchResults
+} from '../../actions/search';
 import { setTypeaheadQuery } from '../../actions/typeahead';
 
 class Results extends React.Component {
@@ -9,6 +12,10 @@ class Results extends React.Component {
     super(props);
     this.handleMousedown = this.handleMousedown.bind(this);
     this.handleMouseup = this.handleMouseup.bind(this);
+  }
+
+  componentDidUpdate() {
+    this.props.fetchMoreSearchResults();
   }
 
   componentDidMount() {
@@ -29,7 +36,6 @@ class Results extends React.Component {
 
   handleMouseup(e) {
     if (!e.target.className.includes('typeahead-result')) return;
-    // this.props.setTypeaheadQuery(e.target.innerText);
     this.props.setTypeaheadQuery(e.target.getAttribute('data-value'));
     this.props.fetchSearchResults();
     document.querySelector('.typeahead input').blur();
@@ -97,12 +103,14 @@ Result.propTypes = {
 const mapStateToProps = (state) => ({
   results: state.typeahead.results,
   query: state.typeahead.query,
-  index: state.typeahead.index
+  index: state.typeahead.index,
+  maxDisplayed: state.search.maxDisplayed
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setTypeaheadQuery: (val) => dispatch(setTypeaheadQuery(val)),
-  fetchSearchResults: () => dispatch(fetchSearchResults())
+  fetchSearchResults: () => dispatch(fetchSearchResults()),
+  fetchMoreSearchResults: () => dispatch(fetchMoreSearchResults())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Results);

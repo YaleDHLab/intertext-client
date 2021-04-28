@@ -1,78 +1,135 @@
-import { selectSimilarity } from '../selectors/similarity';
-import { selectSortProperty, sortProperties } from '../selectors/sort';
-import {
-  selectTypeaheadField,
-  selectTypeaheadQuery
-} from '../selectors/typeahead';
-import { selectUseType, useTypes } from '../selectors/useType';
-import { fetchFieldFile, fetchMatchFile } from './fetchJSONFile';
-import { uniqBy } from 'lodash';
-
 /**
- * Performs a search based on flat files
+ * Get results based on filters, search and sort state
  *
- * 1. Load the appropriate field file (authors.json or titles.json)
- * 2. Locate and load matches files that with keys that have substring match
- * 3. Filter based on previous or later use selection
- * 4. Sort by specified property
+ * In order to prevent loading all match files in an
+ * unrestricted search case, we precompute which match
+ * files fit the search params and load them until we
+ * have enough.
  *
- * Returns: Promise<Array<Doc Object>>
  */
 
-export async function flatFileStringSearch(state) {
-  const searchTerm = selectTypeaheadQuery(state);
-  return fetchFieldFile(state).then(async (json) => {
-    // throw an error if the term isn't a key or empty
-    const filePaths = Object.keys(json)
-      // filter to those keys that match the user query
-      .filter(
-        (k) =>
-          searchTerm.trim().length < 1 ||
-          k.toLowerCase().includes(searchTerm.toLowerCase())
+import { selectSimilarity } from '../selectors/similarity';
+import { selectSortOrder, selectSortProperty } from '../selectors/sort';
+import { selectFieldFile, selectTypeaheadQuery } from '../selectors/typeahead';
+import { selectUseType, useTypes } from '../selectors/useType';
+import { fetchMatchFile } from './fetchJSONFile';
+import { addCacheRecord } from '../actions/cache';
+import { uniq, uniqBy } from 'lodash';
+
+/**
+ * Get a sorted list of match references
+ */
+
+function getSortedMatchList(state) {
+  const searchTerm = selectTypeaheadQuery(state).trim().toLowerCase();
+  const fieldIndex = selectFieldFile(state);
+  const sortIndex = selectSortOrder(state);
+  const [minSim, maxSim] = selectSimilarity(state);
+  const filterUseType = selectUseType(state);
+  const sortBy = selectSortProperty(state);
+
+  // avoid race conditions
+  if (!sortIndex) return [];
+
+  // get a list of match files based on the current typeahead query
+  const matchFileIDs = uniq(
+    Object.keys(fieldIndex)
+      // filter to just those keys that match the typeahead query
+      .filter((k) =>
+        searchTerm.length < 1
+          ? true
+          : k.trim().toLowerCase().includes(searchTerm)
       )
-      // get the match id values assigned to each key
-      .map((k) => json[k])
-      // flatten [[match_id, match_id], []] to 1D array [match_id, match_id]
+      // expand from the key (author or title) to the array of match file IDs
+      .map((k) => fieldIndex[k])
+      // flatten [[match_id_1], [match_id_2]] to 1D array [match_id_1, match_id_2]
       .flat()
-    // request the file paths in batches
-    let matches = [],
-        batchSize = 8;
-    while (matches.length < filePaths.length) {
-      // fetch a certain number of files per batch
-      matches = matches.concat(await Promise.all(filePaths.slice(matches.length, matches.length+batchSize).map(fetchMatchFile)));
+  );
+
+  // filter the sorted list of matches to only include matches that are
+  // in the file matchFileIDs array, are the appropriate useType, fall
+  // within the specified similarity range, and are unique
+  let filteredSortIndex = sortIndex.filter((item) => {
+    const [matchFileID, , , isPrevious, similarity] = item;
+
+    // Drop if it's not in one of the author's match files
+    if (!matchFileIDs.includes(matchFileID)) {
+      return false;
     }
-    return processMatchLists(state, matches.flat());
+    // Skip this match if there's a search and the match isn't the selected source/target type
+    if (
+      searchTerm.length.length &&
+      filterUseType === useTypes.Previous &&
+      !isPrevious
+    ) {
+      return false;
+    } else if (
+      searchTerm.length.length &&
+      filterUseType === useTypes.Later &&
+      isPrevious
+    ) {
+      return false;
+    }
+
+    // Drop if simlarity is out of range
+    if (minSim > similarity || maxSim < similarity) {
+      return false;
+    }
+
+    return true;
   });
+
+  // use descending order for similarity sort
+  if (sortBy === 'similarity') {
+    filteredSortIndex = filteredSortIndex.reverse();
+  }
+
+  return uniqBy(filteredSortIndex, (d) => d[1]);
 }
 
-export const processMatchLists = (state, matchLists) => {
-  const field = selectTypeaheadField(state);
-  const useType = selectUseType(state);
-  const searchTerm = selectTypeaheadQuery(state);
-  const sortAttribute = selectSortProperty(state);
-  const [minSimilarity, maxSimilarity] = selectSimilarity(state);
-
-  // deduplicate matches (each match list contains matches where the author/title is source and target)
-  let docs = uniqBy(matchLists, (d) => d._id);
-
-  // filter based on similarity slider
-  return docs
-    .filter(
-      (d) =>
-        d.similarity >= minSimilarity &&
-        d.similarity <= maxSimilarity
-    )
-    .filter((d) => {
-      const prefix = useType === useTypes.Previous ? 'source_' : 'target_';
-      return useType === useTypes.Both
-        ? true
-        : d[prefix + field.toLowerCase()]
-            .toLowerCase()
-            .includes(searchTerm.trim().toLowerCase());
-    })
-    .sort((a, b) => {
-      return sortAttribute === sortProperties.Similarity
-        ? b[sortAttribute] - a[sortAttribute]
-        : a[sortAttribute] - b[sortAttribute];
+export function flatFileStringSearch() {
+  return (dispatch, getState) => {
+    const state = getState();
+    const filteredOrderedIndex = getSortedMatchList(state);
+    const orderedIndex = filteredOrderedIndex.slice(
+      0,
+      state.search.maxDisplayed
+    );
+    // find the unique match file ids from which we need to extract matches
+    const matchFileIDs = uniq(orderedIndex.map((d) => d[0]));
+    // get the match file contents
+    return dispatch(getMatchFiles(matchFileIDs)).then((matchFiles) => {
+      const matches = orderedIndex.reduce((arr, i) => {
+        const [matchFileID, , matchIndex, ,] = i;
+        arr.push(matchFiles[matchFileIDs.indexOf(matchFileID)][matchIndex]);
+        return arr;
+      }, []);
+      return {
+        count: filteredOrderedIndex.length,
+        docs: matches
+      };
     });
+  };
+}
+
+const getMatchFiles = (matchFileIDs) => {
+  return (dispatch, getState) => {
+    return Promise.all(
+      matchFileIDs.map((matchFileID) => dispatch(getMatchFile(matchFileID)))
+    );
+  };
+};
+
+// Helper to fetch match file from memory or network
+const getMatchFile = (matchFileID) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const cacheKey = `matches/${matchFileID}.json`;
+    return cacheKey in state.cache
+      ? new Promise((resolve, reject) => resolve(state.cache[cacheKey]))
+      : fetchMatchFile(matchFileID).then((match) => {
+          dispatch(addCacheRecord(cacheKey, match));
+          return match;
+        });
+  };
 };

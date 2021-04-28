@@ -15,7 +15,7 @@ const routes = (
         <Route path="/waffle" component={Waffle} />
         <Route path="/scatterplot" component={Scatterplot} />
         <Route exact path="/">
-          <Redirect to='/results?store=true&query=""&sort="similarity"&similarity=[50,100]&displayed=[50,100]&field="Author"&useTypes={"previous":true,"later":true}&compare={}' />
+          <Redirect to='/results?query=""' />
         </Route>
       </Switch>
     </div>
