@@ -159,6 +159,10 @@
   font-style: italic;
 }
 
+.result.waffle-chart-card {
+  min-height: initial;
+}
+
 .waffle-chart-card .result-title {
   width: 100%;
 }

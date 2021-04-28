@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Chart from './charts/Chart';
+import Chart, { WaffleDataProps } from './charts/Chart';
 import Legend from './charts/Legend';
 import Loader from './Loader';
 import Result, { ResultProps } from './results/Result';
@@ -154,7 +154,9 @@ const StatelessWafflePlot = (props) => {
   );
 };
 
-const colorCell = (d) => colorScale(Number(Math.round(d + 'e2') + 'e-2'));
+const colorCell = (d) => {
+  return colorScale(parseInt(d));
+}
 
 let mapStateToProps = (state) => ({
   data: state.waffle.data,
@@ -176,14 +178,6 @@ const WafflePlot = connect(
 /**
  * Plot
  **/
-
-const WaffleDataProps = PropTypes.shape({
-  _id: PropTypes.string.isRequired,
-  column: PropTypes.number.isRequired,
-  row: PropTypes.number.isRequired,
-  similarity: PropTypes.number.isRequired,
-  xLevel: PropTypes.string.isRequired
-});
 
 StatelessWafflePlot.propTypes = {
   columnCounts: PropTypes.object.isRequired,

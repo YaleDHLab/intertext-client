@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Filters from '../filters/Filters';
@@ -8,7 +8,7 @@ import { loadSearchFromUrl, displayMoreResults } from '../../actions/search';
 import { throttle } from 'lodash';
 
 const Results = (props) => {
-  const { results, loadSearchFromUrl, displayMoreResults } = { ...props };
+  const { results, loading, loadSearchFromUrl, displayMoreResults } = { ...props };
 
   useEffect(() => {
     const onScroll = throttle(() => {
@@ -29,23 +29,21 @@ const Results = (props) => {
     <div className="results">
       <Filters />
       <div className="result-pair-container">
-        {results && results.length ? (
-          <ResultPairs results={results} />
-        ) : results ? (
-          <span>Sorry, no results could be found</span>
-        ) : (
-          <Loader />
-        )}
+        {results && results.length
+          ? <ResultPairs results={results} />
+          : loading
+            ? <Loader />
+            : <span>Sorry, no results could be found</span>
+        }
       </div>
     </div>
   );
 };
 
 const ResultPairs = (props) => {
-  const results = props.results;
   return (
-    <React.Fragment>
-      {results.map((result, idx) => (
+    <div id='results-container'>
+      {props.results.map((result, idx) => (
         <div className="result-pair" key={idx}>
           <Result result={result} type="source" />
           <div className="similarity-circle">
@@ -56,7 +54,7 @@ const ResultPairs = (props) => {
           <Result result={result} type="target" />
         </div>
       ))}
-    </React.Fragment>
+    </div>
   );
 };
 
@@ -71,7 +69,8 @@ Results.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  results: state.search.results
+  results: state.search.results,
+  loading: state.search.loading,
 });
 
 const mapDispatchToProps = (dispatch) => ({

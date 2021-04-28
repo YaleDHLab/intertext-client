@@ -55,6 +55,13 @@ export default class Chart extends React.Component {
   }
 }
 
+export const WaffleDataProps = PropTypes.shape({
+  column: PropTypes.number.isRequired,
+  row: PropTypes.number.isRequired,
+  similarity: PropTypes.number.isRequired,
+  xLevel: PropTypes.string.isRequired
+});
+
 Chart.propTypes = {
   color: PropTypes.func,
   colorKey: PropTypes.string,
@@ -73,15 +80,7 @@ Chart.propTypes = {
   onMouseout: PropTypes.func,
   onMouseover: PropTypes.func,
   setBrush: PropTypes.func,
-  waffleData: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string,
-      column: PropTypes.number.isRequired,
-      row: PropTypes.number.isRequired,
-      similarity: PropTypes.number.isRequired,
-      xLevel: PropTypes.string.isRequired
-    })
-  ),
+  waffleData: PropTypes.arrayOf(WaffleDataProps),
   waffleKey: PropTypes.string,
   width: PropTypes.number.isRequired,
   x: PropTypes.string,
