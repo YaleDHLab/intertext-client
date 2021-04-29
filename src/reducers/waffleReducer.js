@@ -5,7 +5,7 @@ const initialState = {
   width: 0, // width of the chart
   columnCounts: {},
   active: null, // the waffle cell the user clicked on most recently
-
+  matches: [], // array of the matches for the clicked file id
   type: '', // 'source' || 'target'
   file_id: '', // file_id of the selected passage
   author: '', // author of the selected passage
@@ -53,7 +53,8 @@ const waffleReducer = (state = initialState, action) => {
         width: action.obj.width,
         columnCounts: action.obj.columnCounts,
         maxColumn: action.obj.maxColumn,
-        levelMargin: action.obj.levelMargin
+        levelMargin: action.obj.levelMargin,
+        matches: action.obj.matches,
       });
 
     case 'SET_WAFFLE_ACTIVE':

@@ -62,7 +62,7 @@ export const saveWaffleInUrl = () => {
 
 export const requestWaffleActiveData = (d) => {
   return (dispatch, getState) => {
-    const result = getState().search.allResults.filter(
+    const result = getState().waffle.matches.filter(
       (r) => r._id === d._id
     )[0];
     dispatch(setActiveWaffle(Object.assign({}, result)));
@@ -76,9 +76,6 @@ export const plotWaffle = () => {
     const levelMargin = 10; // margin between levels
     const margin = { top: 0, right: 80, bottom: 90, left: 0 };
     getCellData(state.waffle.file_id, state.waffle.feature).then((data) => {
-
-      console.log(data)
-
       const cols = data.cols;
       // find the level with the max column count
       const maxCol = keys(cols).reduce((a, b) => (cols[a] > cols[b] ? a : b));
@@ -89,6 +86,7 @@ export const plotWaffle = () => {
       width += margin.right + margin.left;
       dispatch(
         setWaffleData({
+          matches: data.matches,
           data: data.cells,
           xDomain: xDomain,
           feature: state.waffle.feature,
@@ -133,7 +131,11 @@ const getCellData = async (fileId, feature) => {
       });
       return null;
     });
-    return { cells: data, cols: cols };
+    return {
+      cells: data,
+      cols: cols,
+      matches: matches
+    };
   });
 };
 
