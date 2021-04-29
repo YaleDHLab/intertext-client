@@ -54,7 +54,7 @@ const waffleReducer = (state = initialState, action) => {
         columnCounts: action.obj.columnCounts,
         maxColumn: action.obj.maxColumn,
         levelMargin: action.obj.levelMargin,
-        matches: action.obj.matches,
+        matches: action.obj.matches
       });
 
     case 'SET_WAFFLE_ACTIVE':

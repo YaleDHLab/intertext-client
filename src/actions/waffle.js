@@ -62,9 +62,7 @@ export const saveWaffleInUrl = () => {
 
 export const requestWaffleActiveData = (d) => {
   return (dispatch, getState) => {
-    const result = getState().waffle.matches.filter(
-      (r) => r._id === d._id
-    )[0];
+    const result = getState().waffle.matches.filter((r) => r._id === d._id)[0];
     dispatch(setActiveWaffle(Object.assign({}, result)));
   };
 };
