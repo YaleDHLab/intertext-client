@@ -77,10 +77,7 @@ class Result extends React.Component {
 
   render() {
     return (
-      <div
-        className={'result ' + this.props.type}
-      >
-
+      <div className={'result ' + this.props.type}>
         <div className="result-top">
           <div
             className="result-title"

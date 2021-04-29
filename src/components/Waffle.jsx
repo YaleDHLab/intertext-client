@@ -86,11 +86,7 @@ const WaffleResults = (props) => {
     <div className="waffle-card-result-container">
       <div className="waffle-card-results">
         <div className="waffle-results-left">
-          <Result
-            key="key-source"
-            type={props.type}
-            result={props.active}
-          />
+          <Result key="key-source" type={props.type} result={props.active} />
         </div>
         <div className="waffle-results-right">
           <Result
@@ -156,7 +152,7 @@ const StatelessWafflePlot = (props) => {
 
 const colorCell = (d) => {
   return colorScale(parseInt(d));
-}
+};
 
 let mapStateToProps = (state) => ({
   data: state.waffle.data,

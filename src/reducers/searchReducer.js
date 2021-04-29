@@ -57,7 +57,7 @@ const searchReducer = (state = initialState, action) => {
     case 'SET_SEARCH_LOADING':
       return Object.assign({}, state, {
         loading: action.bool
-      })
+      });
 
     default:
       return state;

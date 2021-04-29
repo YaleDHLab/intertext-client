@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Slider from 'rc-slider';
 import {
   setSimilarityAndSearch,
-  setDisplayedSimilarity,
+  setDisplayedSimilarity
 } from '../../actions/similarity-slider';
 
 const Range = Slider.createSliderWithTooltip(Slider.Range);

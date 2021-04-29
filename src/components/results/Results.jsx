@@ -8,7 +8,9 @@ import { loadSearchFromUrl, displayMoreResults } from '../../actions/search';
 import { throttle } from 'lodash';
 
 const Results = (props) => {
-  const { results, loading, loadSearchFromUrl, displayMoreResults } = { ...props };
+  const { results, loading, loadSearchFromUrl, displayMoreResults } = {
+    ...props
+  };
 
   useEffect(() => {
     const onScroll = throttle(() => {
@@ -29,12 +31,13 @@ const Results = (props) => {
     <div className="results">
       <Filters />
       <div className="result-pair-container">
-        {results && results.length
-          ? <ResultPairs results={results} />
-          : loading
-            ? <Loader />
-            : <span>Sorry, no results could be found</span>
-        }
+        {results && results.length ? (
+          <ResultPairs results={results} />
+        ) : loading ? (
+          <Loader />
+        ) : (
+          <span>Sorry, no results could be found</span>
+        )}
       </div>
     </div>
   );
@@ -42,7 +45,7 @@ const Results = (props) => {
 
 const ResultPairs = (props) => {
   return (
-    <div id='results-container'>
+    <div id="results-container">
       {props.results.map((result, idx) => (
         <div className="result-pair" key={idx}>
           <Result result={result} type="source" />
@@ -70,7 +73,7 @@ Results.propTypes = {
 
 const mapStateToProps = (state) => ({
   results: state.search.results,
-  loading: state.search.loading,
+  loading: state.search.loading
 });
 
 const mapDispatchToProps = (dispatch) => ({

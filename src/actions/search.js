@@ -33,7 +33,7 @@ export const fetchMoreSearchResults = () => {
           docs: dispatch(filterResultsWithCompare(docs)),
           err: false
         });
-        dispatch(setLoading(false))
+        dispatch(setLoading(false));
       },
       (err) => {
         console.warn(err);
@@ -47,14 +47,14 @@ export const fetchMoreSearchResults = () => {
   };
 };
 
-const setLoading = bool => ({
+const setLoading = (bool) => ({
   type: 'SET_SEARCH_LOADING',
-  bool: bool,
-})
+  bool: bool
+});
 
 export const resetMaxDisplayedSearchResults = () => ({
-  type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS',
-})
+  type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS'
+});
 
 export const displayMoreResults = () => {
   return (dispatch, getState) => {
@@ -73,7 +73,7 @@ export const saveSearchInUrl = () => {
     const state = getState();
     let hash = 'results?';
     hash += '&query=' + JSON.stringify(state.typeahead.query);
-    hash += '&sort=' + JSON.stringify({field: state.sort.field});
+    hash += '&sort=' + JSON.stringify({ field: state.sort.field });
     hash += '&displayed=' + JSON.stringify(state.similarity.displayed);
     hash += '&field=' + JSON.stringify(state.typeahead.field);
     hash += '&similarity=' + JSON.stringify(state.similarity);

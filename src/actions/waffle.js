@@ -75,7 +75,7 @@ export const plotWaffle = () => {
     const size = 10; // h, w of each waffle cell
     const levelMargin = 10; // margin between levels
     const margin = { top: 0, right: 80, bottom: 90, left: 0 };
-    getCellData(state.waffle.file_id, state.waffle.feature).then(data => {
+    getCellData(state.waffle.file_id, state.waffle.feature).then((data) => {
       const cols = data.cols;
       // find the level with the max column count
       const maxCol = keys(cols).reduce((a, b) => (cols[a] > cols[b] ? a : b));
@@ -95,7 +95,7 @@ export const plotWaffle = () => {
           levelMargin: levelMargin
         })
       );
-    })
+    });
   };
 };
 
@@ -105,12 +105,13 @@ const getCellData = async (fileId, feature) => {
     cols = {},
     data = [];
   // fetch all matches for the requested query file
-  return fetchMatchFile(fileId).then(matches => {
+  return fetchMatchFile(fileId).then((matches) => {
     matches.map((d, i) => {
       // get the portion of this match that isn't from the visualized fileId
-      let level = d.source_file_id === fileId
-        ? d['target_' + feature]
-        : d['source_' + feature];
+      let level =
+        d.source_file_id === fileId
+          ? d['target_' + feature]
+          : d['source_' + feature];
       // set the 0-based count of the times each level occurs
       counts[level] = counts[level] > -1 ? counts[level] + 1 : 0;
       // set the 0-based column index where this cell belongs

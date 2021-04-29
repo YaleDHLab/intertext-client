@@ -39,10 +39,10 @@ export const fetchFieldFile = (state) => {
   return field === typeaheadFieldTypes.Author
     ? fetchAuthorsFile()
     : field === typeaheadFieldTypes.Title
-      ? fetchTitlesFile()
-      : Promise((resolve, reject) => {
-          reject();
-        });
+    ? fetchTitlesFile()
+    : Promise((resolve, reject) => {
+        reject();
+      });
 };
 
 export const fetchMatchFile = (textID) =>

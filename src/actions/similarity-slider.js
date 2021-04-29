@@ -4,21 +4,21 @@ export const setDisplayedSimilarity = (val) => {
   return (dispatch, getState) => {
     dispatch({
       type: 'SET_DISPLAYED',
-      val: val,
-    })
-  }
-}
+      val: val
+    });
+  };
+};
 
 export const setSimilarity = (val) => {
   return (dispatch, getState) => {
     dispatch({
       type: 'SET_SIMILARITY',
       val: val
-    })
-    dispatch(resetMaxDisplayedSearchResults())
+    });
+    dispatch(resetMaxDisplayedSearchResults());
     window.scrollTo(0, 0);
-  }
-}
+  };
+};
 
 export const setSimilarityAndSearch = (val) => {
   return (dispatch) => {
