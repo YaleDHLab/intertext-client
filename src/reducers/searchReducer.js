@@ -1,14 +1,15 @@
 const maxDisplayedStep = 10;
 
 const initialState = {
-  results: null, // {arr}
-  allResults: null, // {arr}
-  err: null, // {str}
-  maxDisplayed: maxDisplayedStep, // {int}
+  loading: true,
+  results: [],
+  allResults: [],
+  err: false,
+  maxDisplayed: maxDisplayedStep,
   resultsMeta: {
-    totalResults: 0, // {int}
-    startIndex: 0, // {int}
-    matchesPerPage: 20 // {int}
+    totalResults: 0,
+    startIndex: 0,
+    matchesPerPage: 20
   }
 };
 
@@ -51,6 +52,11 @@ const searchReducer = (state = initialState, action) => {
     case 'RESET_MAX_DISPLAYED_SEARCH_RESULTS':
       return Object.assign({}, state, {
         maxDisplayed: maxDisplayedStep
+      });
+
+    case 'SET_SEARCH_LOADING':
+      return Object.assign({}, state, {
+        loading: action.bool
       });
 
     default:

@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Chart from './charts/Chart';
+import Chart, { WaffleDataProps } from './charts/Chart';
 import Legend from './charts/Legend';
 import Loader from './Loader';
 import Result, { ResultProps } from './results/Result';
 import headshot from '../assets/images/authors/default-headshot.jpg';
 import { colorScale } from './charts/colors';
-import { getResultHeights } from './results/Results';
 import {
   hideWaffle,
   setWaffleFeature,
@@ -83,24 +82,17 @@ const Button = (props) => {
 };
 
 const WaffleResults = (props) => {
-  const height = getResultHeights([props.active])[0];
   return (
     <div className="waffle-card-result-container">
       <div className="waffle-card-results">
         <div className="waffle-results-left">
-          <Result
-            key="key-source"
-            type={props.type}
-            result={props.active}
-            height={height}
-          />
+          <Result key="key-source" type={props.type} result={props.active} />
         </div>
         <div className="waffle-results-right">
           <Result
             key="key-target"
             type={props.type === 'source' ? 'target' : 'source'}
             result={props.active}
-            height={height}
           />
         </div>
         <div className="clear-both" />
@@ -138,7 +130,7 @@ const StatelessWafflePlot = (props) => {
           yLabel={''}
           xScale={'ordinal'}
           xTickFormat={(d) => d}
-          xLabelRotate={20}
+          xLabelRotate={40}
           yDomain={[1, 20]}
           waffleKey={'_id'}
           colorKey={'similarity'}
@@ -158,7 +150,9 @@ const StatelessWafflePlot = (props) => {
   );
 };
 
-const colorCell = (d) => colorScale(Number(Math.round(d + 'e2') + 'e-2'));
+const colorCell = (d) => {
+  return colorScale(parseInt(d));
+};
 
 let mapStateToProps = (state) => ({
   data: state.waffle.data,
@@ -180,14 +174,6 @@ const WafflePlot = connect(
 /**
  * Plot
  **/
-
-const WaffleDataProps = PropTypes.shape({
-  _id: PropTypes.string.isRequired,
-  column: PropTypes.number.isRequired,
-  row: PropTypes.number.isRequired,
-  similarity: PropTypes.number.isRequired,
-  xLevel: PropTypes.string.isRequired
-});
 
 StatelessWafflePlot.propTypes = {
   columnCounts: PropTypes.object.isRequired,

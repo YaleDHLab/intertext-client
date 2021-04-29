@@ -77,43 +77,37 @@ class Result extends React.Component {
 
   render() {
     return (
-      <div
-        className={'result ' + this.props.type}
-        style={{ height: this.props.height }}
-      >
-        <div className="result-wrapper">
-          <div className="result-top">
+      <div className={'result ' + this.props.type}>
+        <div className="result-top">
+          <div
+            className="result-title"
+            dangerouslySetInnerHTML={this.getText('title')}
+          />
+          <div className="result-year-container">
             <div
-              className="result-title"
-              dangerouslySetInnerHTML={this.getText('title')}
+              className="result-year"
+              dangerouslySetInnerHTML={this.getText('year')}
             />
-            <div className="result-year-container">
-              <div
-                className="result-year"
-                dangerouslySetInnerHTML={this.getText('year')}
-              />
-            </div>
           </div>
-          <div className="result-body">
-            <div
-              className="result-author"
-              dangerouslySetInnerHTML={this.getText('author')}
+        </div>
+        <div className="result-body">
+          <div
+            className="result-author"
+            dangerouslySetInnerHTML={this.getText('author')}
+          />
+          <div className="result-match">
+            <span
+              className="prematch"
+              dangerouslySetInnerHTML={this.getText('prematch')}
             />
-            <div className="result-match">
-              <span
-                className="prematch"
-                dangerouslySetInnerHTML={this.getText('prematch')}
-              />
-              <span
-                className="match"
-                dangerouslySetInnerHTML={this.getText('match', ' ')}
-              />
-              <span
-                className="postmatch"
-                dangerouslySetInnerHTML={this.getText('postmatch', ' ')}
-              />
-            </div>
-            <div className="white-fade" />
+            <span
+              className="match"
+              dangerouslySetInnerHTML={this.getText('match', ' ')}
+            />
+            <span
+              className="postmatch"
+              dangerouslySetInnerHTML={this.getText('postmatch', ' ')}
+            />
           </div>
         </div>
         <div className="result-footer-container">
@@ -224,7 +218,6 @@ Result.propTypes = {
     source: PropTypes.arrayOf(PropTypes.string),
     target: PropTypes.arrayOf(PropTypes.string)
   }),
-  height: PropTypes.number.isRequired,
   result: ResultProps,
   toggleFavorite: PropTypes.func.isRequired,
   toggleCompare: PropTypes.func.isRequired,

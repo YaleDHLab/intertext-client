@@ -1,14 +1,24 @@
-import { fetchSearchResults } from './search';
+import { resetMaxDisplayedSearchResults, fetchSearchResults } from './search';
 
-export const setDisplayed = (val) => ({
-  type: 'SET_DISPLAYED',
-  val: val
-});
+export const setDisplayedSimilarity = (val) => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: 'SET_DISPLAYED',
+      val: val
+    });
+  };
+};
 
-export const setSimilarity = (val) => ({
-  type: 'SET_SIMILARITY',
-  val: val
-});
+export const setSimilarity = (val) => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: 'SET_SIMILARITY',
+      val: val
+    });
+    dispatch(resetMaxDisplayedSearchResults());
+    window.scrollTo(0, 0);
+  };
+};
 
 export const setSimilarityAndSearch = (val) => {
   return (dispatch) => {

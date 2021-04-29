@@ -1,6 +1,6 @@
 const initialState = {
-  similarity: [50, 100],
-  displayed: [50, 100]
+  similarity: [60, 100],
+  displayed: [60, 100]
 };
 
 const similarityReducer = (state = initialState, action) => {

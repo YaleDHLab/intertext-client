@@ -2,19 +2,18 @@ import { history } from '../store';
 import { setSort } from './sort-results';
 import { setUseTypes } from './use-types';
 import { setCompare, filterResultsWithCompare } from './compare';
-import { setDisplayed, setSimilarity } from './similarity-slider';
+import { setDisplayedSimilarity, setSimilarity } from './similarity-slider';
 import { setTypeaheadQuery, setTypeaheadIndex } from './typeahead';
 import { flatFileStringSearch } from '../utils/flatFileStringSearch';
 
 export const fetchSearchResults = () => {
   return (dispatch, getState) => {
-    // Reset the max number of displayed results
-    dispatch({ type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS' });
-    // Save the user's search in the url
+    dispatch(setLoading(true));
+    dispatch(resetMaxDisplayedSearchResults());
     dispatch(saveSearchInUrl());
-    // Reset the typeahead index given new results
     dispatch(setTypeaheadIndex(0));
     dispatch(fetchMoreSearchResults());
+    window.scrollTo(0, 0);
   };
 };
 
@@ -34,6 +33,7 @@ export const fetchMoreSearchResults = () => {
           docs: dispatch(filterResultsWithCompare(docs)),
           err: false
         });
+        dispatch(setLoading(false));
       },
       (err) => {
         console.warn(err);
@@ -46,6 +46,15 @@ export const fetchMoreSearchResults = () => {
     );
   };
 };
+
+const setLoading = (bool) => ({
+  type: 'SET_SEARCH_LOADING',
+  bool: bool
+});
+
+export const resetMaxDisplayedSearchResults = () => ({
+  type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS'
+});
 
 export const displayMoreResults = () => {
   return (dispatch, getState) => {
@@ -64,7 +73,7 @@ export const saveSearchInUrl = () => {
     const state = getState();
     let hash = 'results?';
     hash += '&query=' + JSON.stringify(state.typeahead.query);
-    hash += '&sort=' + JSON.stringify(state.sort);
+    hash += '&sort=' + JSON.stringify({ field: state.sort.field });
     hash += '&displayed=' + JSON.stringify(state.similarity.displayed);
     hash += '&field=' + JSON.stringify(state.typeahead.field);
     hash += '&similarity=' + JSON.stringify(state.similarity);
@@ -99,7 +108,7 @@ export const loadSearchFromUrl = () => {
         }
       });
     dispatch(setSort(state.sort.field));
-    dispatch(setDisplayed(state.similarity.displayed));
+    dispatch(setDisplayedSimilarity(state.similarity.displayed));
     dispatch(setSimilarity(state.similarity.similarity));
     dispatch(setUseTypes(state.useTypes));
     dispatch(setTypeaheadQuery(state.query));

@@ -8,7 +8,7 @@ import { loadSearchFromUrl, displayMoreResults } from '../../actions/search';
 import { throttle } from 'lodash';
 
 const Results = (props) => {
-  const { results, loadSearchFromUrl, displayMoreResults } = {
+  const { results, loading, loadSearchFromUrl, displayMoreResults } = {
     ...props
   };
 
@@ -33,10 +33,10 @@ const Results = (props) => {
       <div className="result-pair-container">
         {results && results.length ? (
           <ResultPairs results={results} />
-        ) : results ? (
-          <span>Sorry, no results could be found</span>
-        ) : (
+        ) : loading ? (
           <Loader />
+        ) : (
+          <span>Sorry, no results could be found</span>
         )}
       </div>
     </div>
@@ -44,37 +44,21 @@ const Results = (props) => {
 };
 
 const ResultPairs = (props) => {
-  const results = props.results;
-  const heights = getResultHeights(results);
   return (
-    <React.Fragment>
-      {results.map((result, idx) => (
+    <div id="results-container">
+      {props.results.map((result, idx) => (
         <div className="result-pair" key={idx}>
-          <Result result={result} type="source" height={heights[idx]} />
+          <Result result={result} type="source" />
           <div className="similarity-circle">
             <div className="similarity">
               {Math.round(result.similarity) + '%'}
             </div>
           </div>
-          <Result result={result} type="target" height={heights[idx]} />
+          <Result result={result} type="target" />
         </div>
       ))}
-    </React.Fragment>
+    </div>
   );
-};
-
-// compute the heights of each result pair
-export const getResultHeights = (results) => {
-  if (!results) return [];
-  const heights = results.reduce((arr, result) => {
-    const maxLen = Math.max(
-      result.source_segment_ids.length,
-      result.target_segment_ids.length
-    );
-    arr.push(240 + maxLen * 10);
-    return arr;
-  }, []);
-  return heights;
 };
 
 Results.propTypes = {
@@ -88,7 +72,8 @@ Results.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  results: state.search.results
+  results: state.search.results,
+  loading: state.search.loading
 });
 
 const mapDispatchToProps = (dispatch) => ({
