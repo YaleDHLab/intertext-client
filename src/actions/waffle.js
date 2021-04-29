@@ -76,6 +76,9 @@ export const plotWaffle = () => {
     const levelMargin = 10; // margin between levels
     const margin = { top: 0, right: 80, bottom: 90, left: 0 };
     getCellData(state.waffle.file_id, state.waffle.feature).then((data) => {
+
+      console.log(data)
+
       const cols = data.cols;
       // find the level with the max column count
       const maxCol = keys(cols).reduce((a, b) => (cols[a] > cols[b] ? a : b));
