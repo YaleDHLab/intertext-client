@@ -20,6 +20,10 @@
   margin: 0;
 }
 
+.waffle-chart-card .result-title {
+  line-height: 0.9em;
+}
+
 /**
 * Controls
 **/
