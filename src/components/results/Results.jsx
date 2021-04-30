@@ -12,7 +12,7 @@ const Results = (props) => {
     ...props
   };
 
-  const containerRef = useRef()
+  const containerRef = useRef();
 
   useEffect(() => {
     const onScroll = throttle(() => {

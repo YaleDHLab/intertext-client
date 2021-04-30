@@ -3,7 +3,11 @@ import { setSort } from './sort-results';
 import { setUseTypes } from './use-types';
 import { setCompare, filterResultsWithCompare } from './compare';
 import { setDisplayedSimilarity, setSimilarity } from './similarity-slider';
-import { setTypeaheadQuery, setTypeaheadIndex, setTypeaheadField } from './typeahead';
+import {
+  setTypeaheadQuery,
+  setTypeaheadIndex,
+  setTypeaheadField
+} from './typeahead';
 import { flatFileStringSearch } from '../utils/flatFileStringSearch';
 
 export const fetchSearchResults = () => {
@@ -73,13 +77,13 @@ export const saveSearchInUrl = () => {
     const state = getState();
     let hash = 'results?';
     hash += '&query=' + JSON.stringify(state.typeahead.query);
-    hash += '&sort=' + JSON.stringify({field: state.sort.field});
+    hash += '&sort=' + JSON.stringify({ field: state.sort.field });
     hash += '&displayed=' + JSON.stringify(state.similarity.displayed);
     hash += '&field=' + JSON.stringify(state.typeahead.field);
     hash += '&similarity=' + JSON.stringify(state.similarity);
     hash += '&useTypes=' + JSON.stringify(state.useTypes);
     hash += '&compare=' + JSON.stringify(state.compare);
-    hash += '&typeahead=' + JSON.stringify({field: state.typeahead.field})
+    hash += '&typeahead=' + JSON.stringify({ field: state.typeahead.field });
     try {
       history.push(hash);
     } catch (err) {}
@@ -112,6 +116,6 @@ export const loadSearchFromUrl = () => {
     dispatch(setUseTypes(state.useTypes));
     dispatch(setTypeaheadQuery(state.query));
     dispatch(setCompare(state.compare));
-    dispatch(setTypeaheadField(state.typeahead.field))
+    dispatch(setTypeaheadField(state.typeahead.field));
   };
 };
