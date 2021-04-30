@@ -54,27 +54,10 @@ export const fetchScatterplotFile = (props) => {
 };
 
 export const fetchSortOrder = (field) => {
-  let sortPropertyString;
-  switch (field.toLowerCase().trim()) {
-    case 'author':
-    case sortProperties.Author:
-      sortPropertyString = 'author';
-      break;
-    case 'year':
-    case sortProperties.Year:
-      sortPropertyString = 'year';
-      break;
-    case 'similarity':
-    case sortProperties.Similarity:
-      sortPropertyString = 'similarity';
-      break;
-    default:
-      console.warn(
-        `Unsupported sort order: ${field}. Defaulting to similarity`
-      );
-      // default to author
-      sortPropertyString = 'similarity';
-      break;
-  }
+  let sortPropertyString = 'similarity';
+  const q = field.toLowerCase().trim();
+  if (q === 'author') sortPropertyString = 'author';
+  if (q === 'year') sortPropertyString = 'year';
+  if (q === 'similarity') sortPropertyString = 'similarity';
   return fetchJSONFile(`/api/indices/match-ids-by-${sortPropertyString}.json`);
 };
