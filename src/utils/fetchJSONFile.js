@@ -1,5 +1,4 @@
 import fetch from 'isomorphic-fetch';
-import { sortProperties } from '../selectors/sort';
 import {
   selectTypeaheadField,
   typeaheadFieldTypes

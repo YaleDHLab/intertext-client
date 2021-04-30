@@ -3,7 +3,11 @@ import { setSort } from './sort-results';
 import { setUseTypes } from './use-types';
 import { setCompare, filterResultsWithCompare } from './compare';
 import { setDisplayedSimilarity, setSimilarity } from './similarity-slider';
-import { setTypeaheadQuery, setTypeaheadIndex } from './typeahead';
+import {
+  setTypeaheadQuery,
+  setTypeaheadIndex,
+  setTypeaheadField
+} from './typeahead';
 import { flatFileStringSearch } from '../utils/flatFileStringSearch';
 
 export const fetchSearchResults = () => {
@@ -79,6 +83,7 @@ export const saveSearchInUrl = () => {
     hash += '&similarity=' + JSON.stringify(state.similarity);
     hash += '&useTypes=' + JSON.stringify(state.useTypes);
     hash += '&compare=' + JSON.stringify(state.compare);
+    hash += '&typeahead=' + JSON.stringify({ field: state.typeahead.field });
     try {
       history.push(hash);
     } catch (err) {}
@@ -98,10 +103,8 @@ export const loadSearchFromUrl = () => {
       .forEach((arg) => {
         try {
           const split = arg.split('=');
-          const k = split[0];
-          const val = JSON.parse(decodeURIComponent(split[1]));
           state = Object.assign({}, state, {
-            [k]: val
+            [split[0]]: JSON.parse(decodeURIComponent(split[1]))
           });
         } catch (e) {
           console.warn(`Error parsing ${arg}: ${e}`);
@@ -113,5 +116,6 @@ export const loadSearchFromUrl = () => {
     dispatch(setUseTypes(state.useTypes));
     dispatch(setTypeaheadQuery(state.query));
     dispatch(setCompare(state.compare));
+    dispatch(setTypeaheadField(state.typeahead.field));
   };
 };

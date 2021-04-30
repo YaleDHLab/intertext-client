@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Filters from '../filters/Filters';
@@ -12,9 +12,11 @@ const Results = (props) => {
     ...props
   };
 
+  const containerRef = useRef();
+
   useEffect(() => {
     const onScroll = throttle(() => {
-      const elem = document.querySelector('.result-pair-container');
+      const elem = containerRef.current;
       if (elem && window.scrollY / elem.clientHeight > 0.75) {
         displayMoreResults();
       }
@@ -30,7 +32,7 @@ const Results = (props) => {
   return (
     <div className="results">
       <Filters />
-      <div className="result-pair-container">
+      <div className="result-pair-container" ref={containerRef}>
         {results && results.length ? (
           <ResultPairs results={results} />
         ) : loading ? (
