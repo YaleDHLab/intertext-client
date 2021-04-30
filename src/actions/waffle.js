@@ -56,7 +56,7 @@ export const visualize = (obj) => {
 export const saveWaffleInUrl = () => {
   // TODO: Store waffle state in url params
   return (dispatch) => {
-    //history.push('waffle');
+    history.push('waffle');
   };
 };
 
@@ -138,18 +138,3 @@ const getCellData = async (fileId, feature) => {
 };
 
 const keys = (obj) => Object.keys(obj);
-
-const getKey = (feature, type) => {
-  const otherType = type === 'source' ? 'target' : 'source';
-  return feature === 'segment_ids'
-    ? type + '_segment_ids'
-    : otherType + '_' + feature;
-};
-
-const getLevel = (d, key, feature) => {
-  if (!d[key]) {
-    console.warn('level data is unreachable');
-    return;
-  }
-  return feature === 'segment_ids' ? d[key][0] : d[key];
-};
