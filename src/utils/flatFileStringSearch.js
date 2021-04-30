@@ -56,24 +56,15 @@ function getSortedMatchList(state) {
     if (!matchFileIDs.includes(matchFileID)) {
       return false;
     }
-    // Skip this match if there's a search and the match isn't the selected source/target type
-    if (
-      searchTerm.length.length &&
-      filterUseType === useTypes.Previous &&
-      !isPrevious
-    ) {
-      return false;
-    } else if (
-      searchTerm.length.length &&
-      filterUseType === useTypes.Later &&
-      isPrevious
-    ) {
-      return false;
-    }
 
     // Drop if simlarity is out of range
     if (minSim > similarity || maxSim < similarity) {
       return false;
+    }
+
+    if (searchTerm.length) {
+      if (filterUseType === useTypes.Previous && !isPrevious) return false;
+      if (filterUseType === useTypes.Later && isPrevious) return false;
     }
 
     return true;
