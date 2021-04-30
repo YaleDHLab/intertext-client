@@ -130,7 +130,7 @@ const StatelessWafflePlot = (props) => {
           yLabel={''}
           xScale={'ordinal'}
           xTickFormat={(d) => d}
-          xLabelRotate={40}
+          xLabelRotate={25}
           yDomain={[1, 20]}
           waffleKey={'_id'}
           colorKey={'similarity'}
