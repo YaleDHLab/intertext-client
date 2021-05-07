@@ -25,7 +25,7 @@ export const fetchMoreSearchResults = () => {
   return (dispatch, getState) => {
     return dispatch(flatFileStringSearch()).then(
       ({ count, docs }) => {
-        if (!docs) {
+        if (!docs || !docs.length) {
           return;
         }
         dispatch({
