@@ -11,7 +11,9 @@ import {
  * @param {string} url
  */
 const fetchJSONFile = (url) => {
-  return fetch(url)
+  const base = window.location.href.split('#')[0].replace('index.html', '');
+  url = url[0] == '/' ? url.substring(1) : url;
+  return fetch(base + url)
     .then((response) => {
       if (response.status !== 200) {
         throw new Error(
