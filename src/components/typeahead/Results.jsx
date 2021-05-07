@@ -103,7 +103,7 @@ Result.propTypes = {
 const mapStateToProps = (state) => ({
   results: state.typeahead.results,
   query: state.typeahead.query,
-  index: state.typeahead.index,
+  index: state.typeahead.index
 });
 
 const mapDispatchToProps = (dispatch) => ({
