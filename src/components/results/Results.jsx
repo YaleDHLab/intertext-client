@@ -20,7 +20,7 @@ const Results = (props) => {
       if (elem && window.scrollY / elem.clientHeight > 0.75) {
         displayMoreResults();
       }
-    }, 100);
+    }, 500);
 
     window.addEventListener('scroll', onScroll);
     loadSearchFromUrl();

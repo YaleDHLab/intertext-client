@@ -14,10 +14,6 @@ class Results extends React.Component {
     this.handleMouseup = this.handleMouseup.bind(this);
   }
 
-  componentDidUpdate() {
-    this.props.fetchMoreSearchResults();
-  }
-
   componentDidMount() {
     window.addEventListener('mousedown', this.handleMousedown, false);
   }
@@ -103,13 +99,12 @@ Result.propTypes = {
 const mapStateToProps = (state) => ({
   results: state.typeahead.results,
   query: state.typeahead.query,
-  index: state.typeahead.index
+  index: state.typeahead.index,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setTypeaheadQuery: (val) => dispatch(setTypeaheadQuery(val)),
   fetchSearchResults: () => dispatch(fetchSearchResults()),
-  fetchMoreSearchResults: () => dispatch(fetchMoreSearchResults())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Results);
