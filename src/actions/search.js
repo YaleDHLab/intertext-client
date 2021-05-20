@@ -25,7 +25,7 @@ export const fetchMoreSearchResults = () => {
   return (dispatch, getState) => {
     return dispatch(flatFileStringSearch()).then(
       ({ count, docs }) => {
-        if (!docs) {
+        if (!docs || !docs.length) {
           return;
         }
         dispatch({
@@ -66,9 +66,8 @@ export const displayMoreResults = () => {
     if (state.search.maxDisplayed >= state.search.resultsMeta.totalResults) {
       return;
     }
-    return dispatch({
-      type: 'DISPLAY_MORE_SEARCH_RESULTS'
-    });
+    dispatch({type: 'DISPLAY_MORE_SEARCH_RESULTS'});
+    dispatch(fetchMoreSearchResults());
   };
 };
 
