@@ -1,5 +1,4 @@
 import { history } from '../store';
-import { fetchSearchResults } from './search';
 import { fetchMatchFile } from '../utils/fetchJSONFile';
 
 export const setWaffleVisualized = (obj) => ({
