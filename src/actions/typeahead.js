@@ -6,6 +6,11 @@ export const setTypeaheadField = (field) => ({
   field
 });
 
+export const receiveFieldFile = (file) => ({
+  type: 'RECEIVE_FIELD_FILE',
+  fieldFile: file
+});
+
 export const setTypeaheadQuery = (query) => ({
   type: 'SET_TYPEAHEAD_QUERY',
   query
@@ -25,21 +30,15 @@ export const typeaheadRequestFailed = () => ({
   type: 'TYPEAHEAD_REQUEST_FAILED'
 });
 
-export const receiveFieldFile = (file) => ({
-  type: 'RECEIVE_FIELD_FILE',
-  fieldFile: file
-});
-
 export function fetchTypeaheadResults() {
   return function (dispatch, getState) {
     // Construct the data URL
     const term = selectTypeaheadQuery(getState());
 
-    return fetchFieldFile(getState())
-      .then((dataIndex) => {
-        const fullList = Object.keys(dataIndex);
-        dispatch(receiveFieldFile(dataIndex));
-        const json = fullList.filter((v) =>
+    return dispatch(fetchFieldFile())
+      .then((dataMap) => {
+        dispatch(receiveFieldFile(dataMap));
+        const json = Object.keys(dataMap).filter((v) =>
           String(v).toLowerCase().includes(term.toLowerCase())
         );
         return { json };

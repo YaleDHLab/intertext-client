@@ -14,21 +14,8 @@ const Typeahead = (props) => {
   const { field, query, type, fetchTypeaheadResults } = { ...props };
 
   useEffect(() => {
-    fetchTypeaheadResults(buildTypeaheadQuery(field, query, type));
+    fetchTypeaheadResults();
   }, [query, field, type, fetchTypeaheadResults]);
-
-  const buildTypeaheadQuery = (field, query, type) => {
-    // build the url to which the query will be sent
-    let url =
-      window.location.origin +
-      '/api/typeahead' +
-      '?field=' +
-      field.toLowerCase() +
-      '&value=' +
-      query;
-    if (type) url += '&type=' + type + '_' + field.toLowerCase();
-    return url;
-  };
 
   const handleKeyUp = (e) => {
     var index = props.index;
