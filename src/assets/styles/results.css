@@ -14,6 +14,10 @@
 * Container for result pairs
 **/
 
+.result-pair.hide-authors .result-author {
+  display: none;
+}
+
 .result-pair-container {
   max-width: 1210px;
   display: inline-block;
