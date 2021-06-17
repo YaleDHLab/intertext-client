@@ -10,6 +10,7 @@ class Select extends React.Component {
         <select
           className="custom-select"
           onChange={this.props.setTypeaheadField}
+          value={this.props.field}
         >
           <option value="Author">Author</option>
           <option value="Title">Title</option>
