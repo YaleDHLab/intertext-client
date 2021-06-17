@@ -27,23 +27,26 @@ const fetchJSONFile = (url) => {
     });
 };
 
+export const fetchFieldFile = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const field = selectTypeaheadField(state);
+    return field === typeaheadFieldTypes.Author
+      ? fetchAuthorsFile()
+      : field === typeaheadFieldTypes.Title
+      ? fetchTitlesFile()
+      : Promise((resolve, reject) => {
+          reject();
+        });
+  }
+};
+
 export const fetchAuthorsFile = () => {
   return fetchJSONFile('/api/authors.json');
 };
 
 export const fetchTitlesFile = () => {
   return fetchJSONFile('/api/titles.json');
-};
-
-export const fetchFieldFile = (state) => {
-  const field = selectTypeaheadField(state);
-  return field === typeaheadFieldTypes.Author
-    ? fetchAuthorsFile()
-    : field === typeaheadFieldTypes.Title
-    ? fetchTitlesFile()
-    : Promise((resolve, reject) => {
-        reject();
-      });
 };
 
 export const fetchMatchFile = (textID) =>
