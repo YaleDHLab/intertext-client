@@ -6,12 +6,9 @@ import Legend from './charts/Legend';
 import Loader from './Loader';
 import Result, { ResultProps } from './results/Result';
 import headshot from '../assets/images/authors/default-headshot.jpg';
+import { Link } from 'react-router-dom';
 import { colorScale } from './charts/colors';
-import {
-  hideWaffle,
-  setWaffleFeature,
-  getWaffleActive
-} from '../actions/waffle';
+import { setWaffleFeature, getWaffleActive } from '../actions/waffle';
 
 class Waffle extends React.Component {
   render() {
@@ -30,12 +27,9 @@ class Waffle extends React.Component {
               />
             ))}
             <Legend />
-            <div
-              className="close-visualization-wrapper"
-              onClick={this.props.closeWaffle}
-            >
+            <Link to="/" className="close-visualization-wrapper">
               <div className="close-visualization" />
-            </div>
+            </Link>
           </div>
           <div className="result waffle-chart-card">
             <div className="result-top">
@@ -191,7 +185,6 @@ StatelessWafflePlot.propTypes = {
 Waffle.propTypes = {
   active: ResultProps,
   author: PropTypes.string.isRequired,
-  closeWaffle: PropTypes.func.isRequired,
   data: PropTypes.arrayOf(WaffleDataProps).isRequired,
   feature: PropTypes.string.isRequired,
   history: PropTypes.shape({
@@ -216,7 +209,6 @@ mapStateToProps = (state) => ({
 });
 
 mapDispatchToProps = (dispatch) => ({
-  closeWaffle: () => dispatch(hideWaffle()),
   setFeature: (feature) => dispatch(setWaffleFeature(feature))
 });
 

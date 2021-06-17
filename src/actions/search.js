@@ -74,8 +74,8 @@ export const displayMoreResults = () => {
 export const saveSearchInUrl = () => {
   return (dispatch, getState) => {
     const state = getState();
-    let hash = 'results?';
-    hash += '&query=' + JSON.stringify(state.typeahead.query);
+    let hash = '?';
+    hash += 'query=' + JSON.stringify(state.typeahead.query);
     hash += '&sort=' + JSON.stringify({ field: state.sort.field });
     hash += '&displayed=' + JSON.stringify(state.similarity.displayed);
     hash += '&field=' + JSON.stringify(state.typeahead.field);
@@ -92,11 +92,9 @@ export const saveSearchInUrl = () => {
 export const loadSearchFromUrl = () => {
   return (dispatch, getState) => {
     let search = window.location.hash.split('#/')[1];
-    if (!search || !search.includes('?')) return; // str should be window.location.search
-    if (search.includes('unit=')) return; // skip scatterplot urls
+    if (search.includes('?')) search = search.split('?')[1];
     let state = getState();
     search
-      .split('?')[1]
       .split('&')
       .filter((arg) => arg)
       .forEach((arg) => {
@@ -113,7 +111,7 @@ export const loadSearchFromUrl = () => {
     dispatch(setDisplayedSimilarity(state.similarity.displayed));
     dispatch(setSimilarity(state.similarity.similarity));
     dispatch(setUseTypes(state.useTypes));
-    dispatch(setTypeaheadQuery(state.query));
+    dispatch(setTypeaheadQuery(state.query || ''));
     dispatch(setCompare(state.compare));
     dispatch(setTypeaheadField(state.typeahead.field));
   };

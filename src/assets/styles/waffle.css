@@ -161,6 +161,7 @@ span.label {
 
 .waffle-chart text {
   fill: #333;
+  font-size: 10px;
 }
 
 .waffle-chart .axis path {

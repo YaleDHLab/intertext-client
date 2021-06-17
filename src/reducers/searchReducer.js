@@ -15,11 +15,6 @@ const initialState = {
 
 const searchReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'SET_SEARCH_QUERY':
-      return Object.assign({}, state, {
-        query: action.query
-      });
-
     case 'SET_ALL_SEARCH_RESULTS':
       return Object.assign({}, state, {
         results: action.docs,

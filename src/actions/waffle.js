@@ -26,12 +26,6 @@ export const receiveWaffleImage = (url) => ({
   url: url
 });
 
-export const hideWaffle = () => {
-  return (dispatch) => {
-    dispatch(fetchSearchResults());
-  };
-};
-
 export const setWaffleFeature = (feature) => {
   return (dispatch) => {
     dispatch({ type: 'SET_WAFFLE_FEATURE', feature: feature });
