@@ -49,11 +49,16 @@ const ResultPairs = (props) => {
   return (
     <div id="results-container">
       {props.results.map((result, idx) => (
-        <div className={`result-pair
-            ${result.source_author === 'Unknown' &&
+        <div
+          className={`result-pair
+            ${
+              result.source_author === 'Unknown' &&
               result.target_author === 'Unknown'
-              ? 'hide-authors'
-              : ''}`} key={idx}>
+                ? 'hide-authors'
+                : ''
+            }`}
+          key={idx}
+        >
           <Result result={result} type="source" />
           <div className="similarity-circle">
             <div className="similarity">

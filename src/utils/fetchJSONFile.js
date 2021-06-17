@@ -38,7 +38,7 @@ export const fetchFieldFile = () => {
       : Promise((resolve, reject) => {
           reject();
         });
-  }
+  };
 };
 
 export const fetchAuthorsFile = () => {

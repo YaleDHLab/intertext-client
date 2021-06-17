@@ -15,6 +15,7 @@ export const selectTypeaheadField = (state) => {
   throw new Error('Invalid typeahead field: ' + field);
 };
 
-export const selectFieldFile = (state) => state.typeahead.fieldFiles[state.typeahead.field];
+export const selectFieldFile = (state) =>
+  state.typeahead.fieldFiles[state.typeahead.field];
 
 export const selectTypeaheadQuery = (state) => state.typeahead.query;

@@ -112,21 +112,19 @@ class Result extends React.Component {
         </div>
         <div className="result-footer-container">
           <div className="result-footer">
-            {this.props.result[this.props.type + '_url']
-              ?
-                <>
-                  <a
-                    className="read"
-                    target="_blank"
-                    href={this.props.result[this.props.type + '_url']}
-                    rel="noreferrer"
-                  >
+            {this.props.result[this.props.type + '_url'] ? (
+              <>
+                <a
+                  className="read"
+                  target="_blank"
+                  href={this.props.result[this.props.type + '_url']}
+                  rel="noreferrer"
+                >
                   <ReadIcon />
                   Read
                 </a>
               </>
-              : null
-            }
+            ) : null}
             <div onClick={this.compare} className={this.getCompareClass()}>
               <CompareIcon />
               Compare
@@ -225,7 +223,7 @@ Result.propTypes = {
 
 const mapStateToProps = (state) => ({
   favorites: state.favorites,
-  compare: state.compare,
+  compare: state.compare
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -12,7 +12,7 @@ const typeaheadReducer = (state = initialState, action) => {
     case 'RECEIVE_FIELD_FILE':
       return Object.assign({}, state, {
         fieldFiles: Object.assign({}, state.fieldFiles, {
-          [state.field]: action.fieldFile,
+          [state.field]: action.fieldFile
         })
       });
 
@@ -34,7 +34,7 @@ const typeaheadReducer = (state = initialState, action) => {
     case 'RECEIVE_TYPEAHEAD_RESULTS':
       return Object.assign({}, state, {
         results: action.results,
-        err: null,
+        err: null
       });
 
     case 'TYPEAHEAD_REQUEST_FAILED':
