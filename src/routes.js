@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import App from './components/App';
 import Results from './components/results/Results';
 import Waffle from './components/Waffle';
