@@ -112,15 +112,21 @@ class Result extends React.Component {
         </div>
         <div className="result-footer-container">
           <div className="result-footer">
-            <a
-              className="read"
-              target="_blank"
-              href={getHref(this.props.result, this.props.type)}
-              rel="noreferrer"
-            >
-              <ReadIcon />
-              Read
-            </a>
+            {this.props.result[this.props.type + '_url']
+              ?
+                <>
+                  <a
+                    className="read"
+                    target="_blank"
+                    href={this.props.result[this.props.type + '_url']}
+                    rel="noreferrer"
+                  >
+                  <ReadIcon />
+                  Read
+                </a>
+              </>
+              : null
+            }
             <div onClick={this.compare} className={this.getCompareClass()}>
               <CompareIcon />
               Compare
@@ -174,14 +180,6 @@ const removeAnimation = (elem) => {
   circle.className = circle.className.replace(' fade-out', '');
 };
 
-const getHref = (result, type) => {
-  return result[type + '_url']
-    ? result[type + '_url']
-    : window.location.origin +
-        '/api/files?file_path=' +
-        result[type + '_file_path'];
-};
-
 export const ResultProps = PropTypes.shape({
   _id: PropTypes.number,
   similarity: PropTypes.number.isRequired,
@@ -215,8 +213,8 @@ Result.propTypes = {
     type: PropTypes.string
   }),
   favorites: PropTypes.shape({
-    source: PropTypes.arrayOf(PropTypes.string),
-    target: PropTypes.arrayOf(PropTypes.string)
+    source: PropTypes.arrayOf(PropTypes.number),
+    target: PropTypes.arrayOf(PropTypes.number)
   }),
   result: ResultProps,
   toggleFavorite: PropTypes.func.isRequired,
@@ -227,7 +225,7 @@ Result.propTypes = {
 
 const mapStateToProps = (state) => ({
   favorites: state.favorites,
-  compare: state.compare
+  compare: state.compare,
 });
 
 const mapDispatchToProps = (dispatch) => ({
