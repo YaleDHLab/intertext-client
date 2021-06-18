@@ -26,15 +26,11 @@ export const fetchMoreSearchResults = () => {
     return dispatch(flatFileStringSearch()).then(
       ({ count, docs }) => {
         dispatch({
-          type: 'SET_ALL_SEARCH_RESULTS_META',
-          totalResults: count
-        });
-        dispatch({
           type: 'SET_ALL_SEARCH_RESULTS',
           docs: dispatch(filterResultsWithCompare(docs)),
+          total: count,
           err: false
         });
-        dispatch(setLoading(false));
       },
       (err) => {
         console.warn(err);

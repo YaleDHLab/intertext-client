@@ -19,14 +19,11 @@ const searchReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         results: action.docs,
         allResults: action.docs,
-        err: action.err
-      });
-
-    case 'SET_ALL_SEARCH_RESULTS_META':
-      return Object.assign({}, state, {
-        resultsMeta: {
-          totalResults: action.totalResults
-        }
+        err: action.err,
+        resultsMeta: Object.assign({}, state.resultsMeta, {
+          totalResults: action.total,
+        }),
+        loading: false,
       });
 
     case 'SET_SEARCH_RESULTS':
