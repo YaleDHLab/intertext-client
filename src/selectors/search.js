@@ -8,29 +8,21 @@ export const selectSimilarity = (state) => state.search.similarity;
  * Sort
  **/
 
-export const sortProperties = {
-  Author: 'source_author',
-  Year: 'source_year',
-  Similarity: 'similarity'
+export const selectSortByIndex = (state) => {
+  return state.search.sortByIndex;
 };
 
-export const selectSortOrder = (state) => {
-  return state.search.orderIndex;
-};
+export const selectSortBy = state => {
+  return state.search.sortBy;
+}
 
-export const selectSortProperty = (state) => {
-  const sortString = state.search.field;
-  switch (sortString) {
-    case 'author':
-      return sortProperties.Author;
-    case 'year':
-      return sortProperties.Year;
-    case 'similarity':
-      return sortProperties.Similarity;
-    default:
-      console.warn('Invalid sort property string: ' + sortString);
-      return sortProperties.Similarity;
-  }
+export const selectSortAttribute = (state) => {
+  const f = selectSortBy(state);
+  if (f === 'author') return 'source_author';
+  if (f === 'year') return 'source_year';
+  if (f === 'similarity') return 'similarity';
+  console.warn('Invalid sort property string: ' + f);
+  return 'similarity';
 };
 
 /**
@@ -38,16 +30,16 @@ export const selectSortProperty = (state) => {
  **/
 
 export const useTypes = {
-  Previous: 'PREVIOUS',
+  Earlier: 'EARLIER',
   Later: 'LATER',
   Both: 'BOTH'
 };
 
 export const selectUseType = (state) => {
-  const previous = state.search.earlier;
+  const earlier = state.search.earlier;
   const later = state.search.later;
-  if (previous && later) return useTypes.Both;
-  if (previous) return useTypes.Previous;
+  if (earlier && later) return useTypes.Both;
+  if (earlier) return useTypes.Earlier;
   if (later) return useTypes.Later;
   throw new Error('Invalid useTypes state');
 };

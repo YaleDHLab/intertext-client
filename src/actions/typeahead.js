@@ -1,5 +1,5 @@
 import { selectTypeaheadQuery } from '../selectors/typeahead';
-import { fetchFieldFile } from '../utils/fetchJSONFile';
+import { fetchTypeaheadFieldFile } from '../utils/fetchJSONFile';
 
 export const setTypeaheadField = (field) => ({
   type: 'SET_TYPEAHEAD_FIELD',
@@ -16,14 +16,10 @@ export const setTypeaheadIndex = (index) => ({
   index
 });
 
-export const receiveTypeaheadResults = (results) => ({
+export const receiveTypeaheadResults = (obj) => ({
   type: 'RECEIVE_TYPEAHEAD_RESULTS',
-  results
-});
-
-export const receiveFieldFile = (file) => ({
-  type: 'RECEIVE_FIELD_FILE',
-  fieldFile: file,
+  results: obj.results,
+  fieldFile: obj.file,
 });
 
 export const typeaheadRequestFailed = () => ({
@@ -33,22 +29,22 @@ export const typeaheadRequestFailed = () => ({
 export function fetchTypeaheadResults() {
   return function (dispatch, getState) {
     // Construct the data URL
-    const term = selectTypeaheadQuery(getState());
-    return dispatch(fetchFieldFile())
-      .then((dataMap) => {
-        dispatch(receiveFieldFile(dataMap));
-        const json = Object.keys(dataMap).filter((v) =>
-          String(v).toLowerCase().includes(term.toLowerCase())
-        );
-        return { json };
-      })
-      .then(
-        ({ json }) => {
-          dispatch(receiveTypeaheadResults(json));
-        },
-        (err) => {
-          dispatch(typeaheadRequestFailed());
-        }
-      );
+    const q = selectTypeaheadQuery(getState()).toLowerCase();
+    return dispatch(fetchTypeaheadFieldFile())
+      .then(dataMap => dataMap)
+      .then(dataMap => {
+        dispatch({
+          type: 'RECEIVE_TYPEAHEAD_RESULTS',
+          file: dataMap,
+          filtered: Object.keys(dataMap).filter((v) => v.toLowerCase().includes(q))
+        });
+      });
   };
+}
+
+export const setTypeaheadFieldAndFetch = (field) => {
+  return (dispatch) => {
+    dispatch(setTypeaheadField(field));
+    dispatch(fetchTypeaheadResults());
+  }
 }

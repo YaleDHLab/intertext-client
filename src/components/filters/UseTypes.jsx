@@ -17,10 +17,10 @@ class UseTypes extends React.Component {
     return (
       <div className="use-type">
         <Button
-          use={'previous'}
+          use={'earlier'}
           useTypes={this.props.useTypes}
           toggleUse={this.toggleUse}
-          label={'Previous Use'}
+          label={'Earlier Use'}
         />
         <Button
           use={'later'}

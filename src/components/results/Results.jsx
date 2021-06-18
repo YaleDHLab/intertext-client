@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import Filters from '../filters/Filters';
 import Result, { ResultProps } from './Result';
 import Loader from '../Loader';
-import { loadSearchFromUrl, displayMoreResults } from '../../actions/search';
+import { loadSearchFromUrl, runInitialSearch, displayMoreResults } from '../../actions/search';
 import { throttle } from 'lodash';
 
 const Results = (props) => {
-  const { results, loading, loadSearchFromUrl, displayMoreResults } = {
+  const { results, loading, loadSearchFromUrl, runInitialSearch, displayMoreResults } = {
     ...props
   };
 
@@ -29,7 +29,8 @@ const Results = (props) => {
 
   useEffect(() => {
     loadSearchFromUrl();
-  }, [loadSearchFromUrl])
+    runInitialSearch();
+  }, [loadSearchFromUrl, runInitialSearch])
 
   return (
     <div className="results">
@@ -91,7 +92,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   loadSearchFromUrl: (obj) => dispatch(loadSearchFromUrl(obj)),
-  displayMoreResults: () => dispatch(displayMoreResults())
+  displayMoreResults: () => dispatch(displayMoreResults()),
+  runInitialSearch: () => dispatch(runInitialSearch()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Results);

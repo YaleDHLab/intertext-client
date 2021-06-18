@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { setTypeaheadField } from '../../actions/typeahead';
+import { setTypeaheadFieldAndFetch } from '../../actions/typeahead';
 
 class Select extends React.Component {
   render() {
@@ -9,7 +9,7 @@ class Select extends React.Component {
       <div className="select-container">
         <select
           className="custom-select"
-          onChange={this.props.setTypeaheadField}
+          onChange={this.props.setTypeaheadFieldAndFetch}
           value={this.props.field}
         >
           <option value="Author">Author</option>
@@ -22,7 +22,7 @@ class Select extends React.Component {
 
 Select.propTypes = {
   field: PropTypes.string.isRequired,
-  setTypeaheadField: PropTypes.func.isRequired
+  setTypeaheadFieldAndFetch: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
@@ -30,7 +30,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setTypeaheadField: (event) => dispatch(setTypeaheadField(event.target.value))
+  setTypeaheadFieldAndFetch: (event) => dispatch(setTypeaheadFieldAndFetch(event.target.value))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Select);

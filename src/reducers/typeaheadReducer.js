@@ -9,12 +9,6 @@ const initialState = {
 
 const typeaheadReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'RECEIVE_FIELD_FILE':
-      return Object.assign({}, state, {
-        fieldFiles: Object.assign({}, state.fieldFiles, {
-          [state.field]: action.fieldFile
-        })
-      });
 
     case 'SET_TYPEAHEAD_FIELD':
       return Object.assign({}, state, {
@@ -33,7 +27,10 @@ const typeaheadReducer = (state = initialState, action) => {
 
     case 'RECEIVE_TYPEAHEAD_RESULTS':
       return Object.assign({}, state, {
-        results: action.results,
+        fieldFiles: Object.assign({}, state.fieldFiles, {
+          [state.field]: action.file
+        }),
+        results: action.filtered,
         err: null
       });
 

@@ -11,7 +11,7 @@ export const selectTypeaheadField = (state) => {
 
 export const selectTypeaheadFieldFiles = state => state.typeahead.fieldFiles;
 
-export const selectFieldFile = (state) =>
+export const selectTypeaheadFieldFile = (state) =>
   selectTypeaheadFieldFiles(state)[state.typeahead.field];
 
 export const selectTypeaheadQuery = (state) => state.typeahead.query;

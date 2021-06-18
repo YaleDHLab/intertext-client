@@ -3,10 +3,12 @@ import { setCompare, filterResultsWithCompare } from './compare';
 import {
   setTypeaheadQuery,
   setTypeaheadIndex,
-  setTypeaheadField
+  setTypeaheadField,
+  fetchTypeaheadResults,
 } from './typeahead';
 import { flatFileStringSearch } from '../utils/flatFileStringSearch';
-import { fetchSortOrder } from '../utils/fetchJSONFile';
+import { fetchSortOrderFile } from '../utils/fetchJSONFile';
+import { selectSortBy } from '../selectors/search';
 
 export const fetchSearchResults = () => {
   return (dispatch, getState) => {
@@ -61,16 +63,14 @@ export const saveSearchInUrl = () => {
     const state = getState();
     let hash = '?';
     hash += 'query=' + JSON.stringify(state.typeahead.query);
-    hash += '&sort=' + JSON.stringify({ field: state.sort.field });
     hash += '&field=' + JSON.stringify(state.typeahead.field);
-    hash += '&displayed=' + JSON.stringify(state.search.displayed);
+    hash += '&sort=' + JSON.stringify(state.search.sortBy);
     hash += '&similarity=' + JSON.stringify(state.search.similarity);
-    hash += '&useTypes=' + JSON.stringify(state.useTypes);
-    hash += '&compare=' + JSON.stringify(state.compare);
-    hash += '&typeahead=' + JSON.stringify({ field: state.typeahead.field });
-    try {
-      history.push(hash);
-    } catch (err) {}
+    hash += '&earlier=' + JSON.stringify(state.search.earlier);
+    hash += '&later=' + JSON.stringify(state.search.later);
+    //hash += '&displayed=' + JSON.stringify(state.search.displayed);
+    //hash += '&compare=' + JSON.stringify(state.compare);
+    history.push(hash);
   };
 };
 
@@ -78,14 +78,15 @@ export const loadSearchFromUrl = () => {
   return (dispatch, getState) => {
     let search = window.location.hash.split('#/')[1];
     if (search.includes('?')) search = search.split('?')[1];
-    let state = getState();
+    if (!search) return;
+    let obj = {};
     search
       .split('&')
       .filter((arg) => arg)
       .forEach((arg) => {
         try {
           const split = arg.split('=');
-          state = Object.assign({}, state, {
+          obj = Object.assign({}, obj, {
             [split[0]]: JSON.parse(decodeURIComponent(split[1]))
           });
         } catch (e) {
@@ -93,14 +94,26 @@ export const loadSearchFromUrl = () => {
         }
       });
     dispatch({
-      type: 'LOAD_SEARCH_FROM_OBJECT',
-      obj: state.search,
+      type: 'LOAD_SEARCH_FROM_URL',
+      obj: obj,
     })
-    if (Object.values(state.compare).length) dispatch(setCompare(state.compare));
-    if (state.query && state.query.length) dispatch(setTypeaheadQuery(state.query || ''));
-    dispatch(setTypeaheadField(state.typeahead.field));
+    if (obj.compare && Object.values(obj.compare).length) dispatch(setCompare(obj.compare));
+    if (obj.query && obj.query.length) dispatch(setTypeaheadQuery(obj.query));
+    if (obj.field && obj.field.length) dispatch(setTypeaheadField(obj.field));
   };
 };
+
+export const runInitialSearch = () => {
+  return (dispatch) => {
+    // we need both the sorted match ids and the typeahead to allow search
+    Promise.all([
+      dispatch(fetchSortedResults()),
+      dispatch(fetchTypeaheadResults()),
+    ]).then(v => {
+      dispatch(fetchSearchResults());
+    })
+  }
+}
 
 /**
 * Similarity
@@ -114,10 +127,6 @@ export const setDisplayedSimilarity = (val) => {
     });
   };
 };
-
-/**
-* Similarity
-**/
 
 export const setSimilarity = (val) => {
   return (dispatch, getState) => {
@@ -162,25 +171,34 @@ const setSortOrderIndex = (orderIndex) => ({
   orderIndex: orderIndex
 });
 
-export const setSort = (field, search) => {
+const fetchSortedResults = () => {
   return (dispatch, getState) => {
-    fetchSortOrder(field)
+    const state = getState();
+    return fetchSortOrderFile(selectSortBy(state))
       .then((orderIndex) => {
-        dispatch({
-          type: 'SET_SORT',
-          field: field
-        });
-        dispatch(setSortOrderIndex(orderIndex));
-        if (search) dispatch(fetchSearchResults());
+        try {
+          dispatch(setSortOrderIndex(orderIndex));
+        } catch(err) {
+          console.log(err)
+        }
       })
       .catch((e) => {
         console.warn('Could not fetch sort order: ' + e);
       });
+  }
+}
+
+export const setSort = (s) => {
+  return (dispatch, getState) => {
+    dispatch({type: 'SET_SORT', sortBy: s});
+    return dispatch(fetchSortedResults());
   };
 };
 
 export const setSortAndSearch = (field) => {
   return (dispatch) => {
-    dispatch(setSort(field, true));
+    dispatch(setSort(field)).then(() => {
+      dispatch(fetchSearchResults())
+    })
   };
 };

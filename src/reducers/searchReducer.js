@@ -12,12 +12,12 @@ const initialState = {
   displayed: [50, 100],
 
   // use types
-  previous: true,
+  earlier: true,
   later: true,
 
   // sort
-  field: 'similarity',
-  orderIndex: null,
+  sortBy: 'similarity',
+  sortByIndex: null,
 
   resultsMeta: {
     totalResults: 0,
@@ -48,8 +48,14 @@ const searchReducer = (state = initialState, action) => {
         results: action.results
       });
 
-    case 'LOAD_SEARCH_FROM_OBJECT':
-      return Object.assign({}, state, action.obj);
+    case 'LOAD_SEARCH_FROM_URL':
+      return Object.assign({}, state, {
+        sortBy: action.obj.sort,
+        similarity: action.obj.similarity,
+        displayed: action.obj.similarity,
+        earlier: action.obj.earlier,
+        later: action.obj.later,
+      });
 
     case 'DISPLAY_MORE_SEARCH_RESULTS':
       const newMax = state.maxDisplayed + maxDisplayedStep;
@@ -82,7 +88,7 @@ const searchReducer = (state = initialState, action) => {
       return Object.assign({}, state, action.obj);
 
     case 'TOGGLE_USE_TYPES':
-      const otherUse = action.use === 'previous' ? 'later' : 'previous';
+      const otherUse = action.use === 'earlier' ? 'later' : 'earlier';
       // ensure at least one use is active
       return state[action.use] && !state[otherUse]
         ? Object.assign({}, state, {
@@ -95,12 +101,12 @@ const searchReducer = (state = initialState, action) => {
 
     case 'SET_SORT':
       return Object.assign({}, state, {
-        field: action.field
+        sortBy: action.sortBy
       });
 
     case 'SET_SORT_ORDER_INDEX':
       return Object.assign({}, state, {
-        orderIndex: action.orderIndex
+        sortByIndex: action.orderIndex
       });
 
     default:

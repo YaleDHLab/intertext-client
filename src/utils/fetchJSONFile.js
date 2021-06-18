@@ -29,7 +29,11 @@ const fetchJSONFile = (url) => {
     });
 };
 
-export const fetchFieldFile = () => {
+export const fetchSortOrderFile = (s) => {
+  return fetchJSONFile(`/api/indices/match-ids-by-${s.toLowerCase().trim()}.json`);
+};
+
+export const fetchTypeaheadFieldFile = () => {
   return (dispatch, getState) => {
     const state = getState();
     const field = selectTypeaheadField(state);
@@ -63,8 +67,4 @@ export const fetchMatchFile = (textID) =>
 export const fetchScatterplotFile = (props) => {
   const { use, unit, stat } = props;
   return fetchJSONFile(`/api/scatterplots/${use}-${unit}-${stat}.json`);
-};
-
-export const fetchSortOrder = (field) => {
-  return fetchJSONFile(`/api/indices/match-ids-by-${field.toLowerCase().trim()}.json`);
 };
