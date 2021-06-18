@@ -1,6 +1,6 @@
 /**
-* Similarity
-**/
+ * Similarity
+ **/
 
 export const selectSimilarity = (state) => state.search.similarity;
 
@@ -12,9 +12,9 @@ export const selectSortByIndex = (state) => {
   return state.search.sortByIndex;
 };
 
-export const selectSortBy = state => {
+export const selectSortBy = (state) => {
   return state.search.sortBy;
-}
+};
 
 export const selectSortAttribute = (state) => {
   const f = selectSortBy(state);

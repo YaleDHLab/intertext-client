@@ -3,7 +3,7 @@ import { fetchSearchResults } from './search';
 
 export const toggleCompare = (obj) => {
   return (dispatch, getState) => {
-    const { type, result } = {...obj};
+    const { type, result } = { ...obj };
     const state = getState();
     const compare = {
       type: type,

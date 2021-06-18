@@ -20,7 +20,7 @@ const initialState = {
   sortByIndex: null,
 
   resultsMeta: {
-    totalResults: 0,
+    totalResults: 0
   }
 };
 
@@ -29,8 +29,8 @@ const searchReducer = (state = initialState, action) => {
     case 'RESET_SEARCH':
       return Object.assign({}, state, {
         loading: true,
-        maxDisplayed: maxDisplayedStep,
-      })
+        maxDisplayed: maxDisplayedStep
+      });
 
     case 'SET_ALL_SEARCH_RESULTS':
       return Object.assign({}, state, {
@@ -38,9 +38,9 @@ const searchReducer = (state = initialState, action) => {
         allResults: action.docs,
         err: action.err,
         resultsMeta: Object.assign({}, state.resultsMeta, {
-          totalResults: action.total,
+          totalResults: action.total
         }),
-        loading: false,
+        loading: false
       });
 
     case 'SET_SEARCH_RESULTS':
@@ -54,7 +54,7 @@ const searchReducer = (state = initialState, action) => {
         similarity: action.obj.similarity,
         displayed: action.obj.similarity,
         earlier: action.obj.earlier,
-        later: action.obj.later,
+        later: action.obj.later
       });
 
     case 'DISPLAY_MORE_SEARCH_RESULTS':

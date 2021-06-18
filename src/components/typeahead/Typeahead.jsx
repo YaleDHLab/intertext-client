@@ -4,13 +4,9 @@ import Results from './Results';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchSearchResults } from '../../actions/search';
-import {
-  setTypeaheadQuery,
-  setTypeaheadIndex,
-} from '../../actions/typeahead';
+import { setTypeaheadQuery, setTypeaheadIndex } from '../../actions/typeahead';
 
 const Typeahead = (props) => {
-
   const handleKeyUp = (e) => {
     var index = props.index;
     // up arrow
@@ -71,7 +67,7 @@ Typeahead.propTypes = {
 const mapStateToProps = (state) => ({
   index: state.typeahead.index,
   results: state.typeahead.results,
-  query: state.typeahead.query,
+  query: state.typeahead.query
 });
 
 const mapDispatchToProps = (dispatch) => ({

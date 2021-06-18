@@ -2,7 +2,7 @@ import fetch from 'isomorphic-fetch';
 import {
   selectTypeaheadField,
   typeaheadFieldTypes,
-  selectTypeaheadFieldFiles,
+  selectTypeaheadFieldFiles
 } from '../selectors/typeahead';
 
 /**
@@ -30,7 +30,9 @@ const fetchJSONFile = (url) => {
 };
 
 export const fetchSortOrderFile = (s) => {
-  return fetchJSONFile(`/api/indices/match-ids-by-${s.toLowerCase().trim()}.json`);
+  return fetchJSONFile(
+    `/api/indices/match-ids-by-${s.toLowerCase().trim()}.json`
+  );
 };
 
 export const fetchTypeaheadFieldFile = () => {
@@ -41,7 +43,7 @@ export const fetchTypeaheadFieldFile = () => {
     // return cached field file if possible, else fetch the file
     return field in fieldFiles
       ? new Promise((resolve, reject) => {
-          return resolve(fieldFiles[field]).then(val => val)
+          return resolve(fieldFiles[field]).then((val) => val);
         })
       : field === typeaheadFieldTypes.Author
       ? fetchAuthorsFile()

@@ -9,7 +9,6 @@ const initialState = {
 
 const typeaheadReducer = (state = initialState, action) => {
   switch (action.type) {
-
     case 'SET_TYPEAHEAD_FIELD':
       return Object.assign({}, state, {
         field: action.field

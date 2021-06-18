@@ -4,7 +4,7 @@ import {
   setTypeaheadQuery,
   setTypeaheadIndex,
   setTypeaheadField,
-  fetchTypeaheadResults,
+  fetchTypeaheadResults
 } from './typeahead';
 import { flatFileStringSearch } from '../utils/flatFileStringSearch';
 import { fetchSortOrderFile } from '../utils/fetchJSONFile';
@@ -12,7 +12,7 @@ import { selectSortBy } from '../selectors/search';
 
 export const fetchSearchResults = () => {
   return (dispatch, getState) => {
-    dispatch({type: 'RESET_SEARCH'});
+    dispatch({ type: 'RESET_SEARCH' });
     dispatch(saveSearchInUrl());
     dispatch(setTypeaheadIndex(0));
     dispatch(fetchMoreSearchResults());
@@ -95,9 +95,10 @@ export const loadSearchFromUrl = () => {
       });
     dispatch({
       type: 'LOAD_SEARCH_FROM_URL',
-      obj: obj,
-    })
-    if (obj.compare && Object.values(obj.compare).length) dispatch(setCompare(obj.compare));
+      obj: obj
+    });
+    if (obj.compare && Object.values(obj.compare).length)
+      dispatch(setCompare(obj.compare));
     if (obj.query && obj.query.length) dispatch(setTypeaheadQuery(obj.query));
     if (obj.field && obj.field.length) dispatch(setTypeaheadField(obj.field));
   };
@@ -108,16 +109,16 @@ export const runInitialSearch = () => {
     // we need both the sorted match ids and the typeahead to allow search
     Promise.all([
       dispatch(fetchSortedResults()),
-      dispatch(fetchTypeaheadResults()),
-    ]).then(v => {
+      dispatch(fetchTypeaheadResults())
+    ]).then((v) => {
       dispatch(fetchSearchResults());
-    })
-  }
-}
+    });
+  };
+};
 
 /**
-* Similarity
-**/
+ * Similarity
+ **/
 
 export const setDisplayedSimilarity = (val) => {
   return (dispatch, getState) => {
@@ -147,8 +148,8 @@ export const setSimilarityAndSearch = (val) => {
 };
 
 /**
-* Use Types
-**/
+ * Use Types
+ **/
 
 export const setUseTypes = (obj) => ({
   type: 'SET_USE_TYPES',
@@ -163,8 +164,8 @@ export const toggleUseTypes = (use) => {
 };
 
 /**
-* Sort
-**/
+ * Sort
+ **/
 
 const setSortOrderIndex = (orderIndex) => ({
   type: 'SET_SORT_ORDER_INDEX',
@@ -178,19 +179,19 @@ const fetchSortedResults = () => {
       .then((orderIndex) => {
         try {
           dispatch(setSortOrderIndex(orderIndex));
-        } catch(err) {
-          console.log(err)
+        } catch (err) {
+          console.log(err);
         }
       })
       .catch((e) => {
         console.warn('Could not fetch sort order: ' + e);
       });
-  }
-}
+  };
+};
 
 export const setSort = (s) => {
   return (dispatch, getState) => {
-    dispatch({type: 'SET_SORT', sortBy: s});
+    dispatch({ type: 'SET_SORT', sortBy: s });
     return dispatch(fetchSortedResults());
   };
 };
@@ -198,7 +199,7 @@ export const setSort = (s) => {
 export const setSortAndSearch = (field) => {
   return (dispatch) => {
     dispatch(setSort(field)).then(() => {
-      dispatch(fetchSearchResults())
-    })
+      dispatch(fetchSearchResults());
+    });
   };
 };

@@ -30,7 +30,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setTypeaheadFieldAndFetch: (event) => dispatch(setTypeaheadFieldAndFetch(event.target.value))
+  setTypeaheadFieldAndFetch: (event) =>
+    dispatch(setTypeaheadFieldAndFetch(event.target.value))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Select);
