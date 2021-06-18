@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { toggleUseTypes } from '../../actions/use-types';
+import { toggleUseTypes } from '../../actions/search';
 
 class UseTypes extends React.Component {
   constructor(props) {
@@ -55,7 +55,7 @@ UseTypes.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  useTypes: state.useTypes
+  useTypes: state.search
 });
 
 const mapDispatchToProps = (dispatch) => ({

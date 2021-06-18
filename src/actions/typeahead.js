@@ -4,17 +4,12 @@ import { fetchFieldFile } from '../utils/fetchJSONFile';
 export const setTypeaheadField = (field) => ({
   type: 'SET_TYPEAHEAD_FIELD',
   field
-});
-
-export const receiveFieldFile = (file) => ({
-  type: 'RECEIVE_FIELD_FILE',
-  fieldFile: file
-});
+})
 
 export const setTypeaheadQuery = (query) => ({
   type: 'SET_TYPEAHEAD_QUERY',
   query
-});
+})
 
 export const setTypeaheadIndex = (index) => ({
   type: 'SET_TYPEAHEAD_INDEX',
@@ -24,6 +19,11 @@ export const setTypeaheadIndex = (index) => ({
 export const receiveTypeaheadResults = (results) => ({
   type: 'RECEIVE_TYPEAHEAD_RESULTS',
   results
+});
+
+export const receiveFieldFile = (file) => ({
+  type: 'RECEIVE_FIELD_FILE',
+  fieldFile: file,
 });
 
 export const typeaheadRequestFailed = () => ({

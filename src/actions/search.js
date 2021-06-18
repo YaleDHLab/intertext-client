@@ -1,19 +1,16 @@
 import { history } from '../store';
-import { setSort } from './sort-results';
-import { setUseTypes } from './use-types';
 import { setCompare, filterResultsWithCompare } from './compare';
-import { setDisplayedSimilarity, setSimilarity } from './similarity-slider';
 import {
   setTypeaheadQuery,
   setTypeaheadIndex,
   setTypeaheadField
 } from './typeahead';
 import { flatFileStringSearch } from '../utils/flatFileStringSearch';
+import { fetchSortOrder } from '../utils/fetchJSONFile';
 
 export const fetchSearchResults = () => {
   return (dispatch, getState) => {
-    dispatch(setLoading(true));
-    dispatch(resetMaxDisplayedSearchResults());
+    dispatch({type: 'RESET_SEARCH'});
     dispatch(saveSearchInUrl());
     dispatch(setTypeaheadIndex(0));
     dispatch(fetchMoreSearchResults());
@@ -44,11 +41,6 @@ export const fetchMoreSearchResults = () => {
   };
 };
 
-const setLoading = (bool) => ({
-  type: 'SET_SEARCH_LOADING',
-  bool: bool
-});
-
 export const resetMaxDisplayedSearchResults = () => ({
   type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS'
 });
@@ -70,9 +62,9 @@ export const saveSearchInUrl = () => {
     let hash = '?';
     hash += 'query=' + JSON.stringify(state.typeahead.query);
     hash += '&sort=' + JSON.stringify({ field: state.sort.field });
-    hash += '&displayed=' + JSON.stringify(state.similarity.displayed);
     hash += '&field=' + JSON.stringify(state.typeahead.field);
-    hash += '&similarity=' + JSON.stringify(state.similarity);
+    hash += '&displayed=' + JSON.stringify(state.search.displayed);
+    hash += '&similarity=' + JSON.stringify(state.search.similarity);
     hash += '&useTypes=' + JSON.stringify(state.useTypes);
     hash += '&compare=' + JSON.stringify(state.compare);
     hash += '&typeahead=' + JSON.stringify({ field: state.typeahead.field });
@@ -100,12 +92,95 @@ export const loadSearchFromUrl = () => {
           console.warn(`Error parsing ${arg}: ${e}`);
         }
       });
-    dispatch(setSort(state.sort.field));
-    dispatch(setDisplayedSimilarity(state.similarity.displayed));
-    dispatch(setSimilarity(state.similarity.similarity));
-    dispatch(setUseTypes(state.useTypes));
-    dispatch(setTypeaheadQuery(state.query || ''));
-    dispatch(setCompare(state.compare));
+    dispatch({
+      type: 'LOAD_SEARCH_FROM_OBJECT',
+      obj: state.search,
+    })
+    if (Object.values(state.compare).length) dispatch(setCompare(state.compare));
+    if (state.query && state.query.length) dispatch(setTypeaheadQuery(state.query || ''));
     dispatch(setTypeaheadField(state.typeahead.field));
+  };
+};
+
+/**
+* Similarity
+**/
+
+export const setDisplayedSimilarity = (val) => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: 'SET_DISPLAYED',
+      val: val
+    });
+  };
+};
+
+/**
+* Similarity
+**/
+
+export const setSimilarity = (val) => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: 'SET_SIMILARITY',
+      val: val
+    });
+    dispatch(resetMaxDisplayedSearchResults());
+    window.scrollTo(0, 0);
+  };
+};
+
+export const setSimilarityAndSearch = (val) => {
+  return (dispatch) => {
+    dispatch(setSimilarity(val));
+    dispatch(fetchSearchResults());
+  };
+};
+
+/**
+* Use Types
+**/
+
+export const setUseTypes = (obj) => ({
+  type: 'SET_USE_TYPES',
+  obj: obj
+});
+
+export const toggleUseTypes = (use) => {
+  return (dispatch) => {
+    dispatch({ type: 'TOGGLE_USE_TYPES', use: use });
+    dispatch(fetchSearchResults());
+  };
+};
+
+/**
+* Sort
+**/
+
+const setSortOrderIndex = (orderIndex) => ({
+  type: 'SET_SORT_ORDER_INDEX',
+  orderIndex: orderIndex
+});
+
+export const setSort = (field, search) => {
+  return (dispatch, getState) => {
+    fetchSortOrder(field)
+      .then((orderIndex) => {
+        dispatch({
+          type: 'SET_SORT',
+          field: field
+        });
+        dispatch(setSortOrderIndex(orderIndex));
+        if (search) dispatch(fetchSearchResults());
+      })
+      .catch((e) => {
+        console.warn('Could not fetch sort order: ' + e);
+      });
+  };
+};
+
+export const setSortAndSearch = (field) => {
+  return (dispatch) => {
+    dispatch(setSort(field, true));
   };
 };

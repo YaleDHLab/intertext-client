@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Select from './Select';
 import Results from './Results';
 import PropTypes from 'prop-types';
@@ -7,15 +7,9 @@ import { fetchSearchResults } from '../../actions/search';
 import {
   setTypeaheadQuery,
   setTypeaheadIndex,
-  fetchTypeaheadResults
 } from '../../actions/typeahead';
 
 const Typeahead = (props) => {
-  const { field, query, type, fetchTypeaheadResults } = { ...props };
-
-  useEffect(() => {
-    fetchTypeaheadResults();
-  }, [query, field, type, fetchTypeaheadResults]);
 
   const handleKeyUp = (e) => {
     var index = props.index;
@@ -67,8 +61,6 @@ const Typeahead = (props) => {
 
 Typeahead.propTypes = {
   fetchSearchResults: PropTypes.func.isRequired,
-  fetchTypeaheadResults: PropTypes.func.isRequired,
-  field: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
   query: PropTypes.string.isRequired,
   results: PropTypes.arrayOf(PropTypes.string),
@@ -77,17 +69,14 @@ Typeahead.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  query: state.typeahead.query,
-  field: state.typeahead.field,
   index: state.typeahead.index,
   results: state.typeahead.results,
-  type: state.search.type
+  query: state.typeahead.query,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setTypeaheadQuery: (val) => dispatch(setTypeaheadQuery(val)),
   setTypeaheadIndex: (val) => dispatch(setTypeaheadIndex(val)),
-  fetchTypeaheadResults: (query) => dispatch(fetchTypeaheadResults(query)),
   fetchSearchResults: () => dispatch(fetchSearchResults())
 });
 

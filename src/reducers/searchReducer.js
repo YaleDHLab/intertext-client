@@ -6,6 +6,19 @@ const initialState = {
   allResults: [],
   err: false,
   maxDisplayed: maxDisplayedStep,
+
+  // similarity range
+  similarity: [50, 100],
+  displayed: [50, 100],
+
+  // use types
+  previous: true,
+  later: true,
+
+  // sort
+  field: 'similarity',
+  orderIndex: null,
+
   resultsMeta: {
     totalResults: 0,
   }
@@ -13,6 +26,12 @@ const initialState = {
 
 const searchReducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'RESET_SEARCH':
+      return Object.assign({}, state, {
+        loading: true,
+        maxDisplayed: maxDisplayedStep,
+      })
+
     case 'SET_ALL_SEARCH_RESULTS':
       return Object.assign({}, state, {
         results: action.docs,
@@ -47,6 +66,41 @@ const searchReducer = (state = initialState, action) => {
     case 'SET_SEARCH_LOADING':
       return Object.assign({}, state, {
         loading: action.bool
+      });
+
+    case 'SET_SIMILARITY':
+      return Object.assign({}, state, {
+        similarity: action.val
+      });
+
+    case 'SET_DISPLAYED':
+      return Object.assign({}, state, {
+        displayed: action.val
+      });
+
+    case 'SET_USE_TYPES':
+      return Object.assign({}, state, action.obj);
+
+    case 'TOGGLE_USE_TYPES':
+      const otherUse = action.use === 'previous' ? 'later' : 'previous';
+      // ensure at least one use is active
+      return state[action.use] && !state[otherUse]
+        ? Object.assign({}, state, {
+            [otherUse]: true,
+            [action.use]: false
+          })
+        : Object.assign({}, state, {
+            [action.use]: !state[action.use]
+          });
+
+    case 'SET_SORT':
+      return Object.assign({}, state, {
+        field: action.field
+      });
+
+    case 'SET_SORT_ORDER_INDEX':
+      return Object.assign({}, state, {
+        orderIndex: action.orderIndex
       });
 
     default:

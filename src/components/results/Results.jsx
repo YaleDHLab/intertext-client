@@ -21,13 +21,15 @@ const Results = (props) => {
         displayMoreResults();
       }
     }, 100);
-
     window.addEventListener('scroll', onScroll);
-    loadSearchFromUrl();
     return () => {
       window.removeEventListener('scroll', onScroll);
     };
-  }, [loadSearchFromUrl, displayMoreResults]);
+  }, [displayMoreResults]);
+
+  useEffect(() => {
+    loadSearchFromUrl();
+  }, [loadSearchFromUrl])
 
   return (
     <div className="results">
