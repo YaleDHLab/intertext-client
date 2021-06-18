@@ -5,17 +5,15 @@ export const typeaheadFieldTypes = {
 
 export const selectTypeaheadField = (state) => {
   const { field } = state.typeahead;
-  if (field === 'Author') {
-    return typeaheadFieldTypes.Author;
-  }
-  if (field === 'Title') {
-    return typeaheadFieldTypes.Title;
-  }
-
+  if (typeaheadFieldTypes[field]) return typeaheadFieldTypes[field];
   throw new Error('Invalid typeahead field: ' + field);
 };
 
+export const selectTypeaheadFieldFiles = state => state.typeahead.fieldFiles;
+
 export const selectFieldFile = (state) =>
-  state.typeahead.fieldFiles[state.typeahead.field];
+  selectTypeaheadFieldFiles(state)[state.typeahead.field];
 
 export const selectTypeaheadQuery = (state) => state.typeahead.query;
+
+

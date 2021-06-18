@@ -1,7 +1,8 @@
 import fetch from 'isomorphic-fetch';
 import {
   selectTypeaheadField,
-  typeaheadFieldTypes
+  typeaheadFieldTypes,
+  selectTypeaheadFieldFiles,
 } from '../selectors/typeahead';
 
 /**
@@ -31,11 +32,17 @@ export const fetchFieldFile = () => {
   return (dispatch, getState) => {
     const state = getState();
     const field = selectTypeaheadField(state);
-    return field === typeaheadFieldTypes.Author
+    const fieldFiles = selectTypeaheadFieldFiles(state);
+    // return cached field file if possible, else fetch the file
+    return field in fieldFiles
+      ? new Promise((resolve, reject) => {
+          return resolve(fieldFiles[field]).then(val => val)
+        })
+      : field === typeaheadFieldTypes.Author
       ? fetchAuthorsFile()
       : field === typeaheadFieldTypes.Title
       ? fetchTitlesFile()
-      : Promise((resolve, reject) => {
+      : new Promise((resolve, reject) => {
           reject();
         });
   };

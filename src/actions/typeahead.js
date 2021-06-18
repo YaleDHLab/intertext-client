@@ -34,7 +34,6 @@ export function fetchTypeaheadResults() {
   return function (dispatch, getState) {
     // Construct the data URL
     const term = selectTypeaheadQuery(getState());
-
     return dispatch(fetchFieldFile())
       .then((dataMap) => {
         dispatch(receiveFieldFile(dataMap));
