@@ -8,8 +8,6 @@ const initialState = {
   maxDisplayed: maxDisplayedStep,
   resultsMeta: {
     totalResults: 0,
-    startIndex: 0,
-    matchesPerPage: 20
   }
 };
 
