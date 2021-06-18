@@ -8,10 +8,8 @@
  *
  */
 
-import { selectSimilarity } from '../selectors/similarity';
-import { selectSortOrder, selectSortProperty } from '../selectors/sort';
+import { selectSimilarity, selectSortOrder, selectSortProperty, selectUseType, useTypes } from '../selectors/search';
 import { selectFieldFile, selectTypeaheadQuery } from '../selectors/typeahead';
-import { selectUseType, useTypes } from '../selectors/useType';
 import { fetchMatchFile } from './fetchJSONFile';
 import { addCacheRecord } from '../actions/cache';
 import { uniq, uniqBy } from 'lodash';

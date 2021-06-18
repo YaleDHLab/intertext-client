@@ -11,6 +11,7 @@ import {
  * Returns: Promise
  * @param {string} url
  */
+
 const fetchJSONFile = (url) => {
   const base = window.location.href.split('#')[0].replace('index.html', '');
   url = url[0] === '/' ? url.substring(1) : url;
@@ -65,10 +66,5 @@ export const fetchScatterplotFile = (props) => {
 };
 
 export const fetchSortOrder = (field) => {
-  let sortPropertyString = 'similarity';
-  const q = field.toLowerCase().trim();
-  if (q === 'author') sortPropertyString = 'author';
-  if (q === 'year') sortPropertyString = 'year';
-  if (q === 'similarity') sortPropertyString = 'similarity';
-  return fetchJSONFile(`/api/indices/match-ids-by-${sortPropertyString}.json`);
+  return fetchJSONFile(`/api/indices/match-ids-by-${field.toLowerCase().trim()}.json`);
 };
