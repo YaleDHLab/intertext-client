@@ -1,15 +1,10 @@
 import { fetchSortOrder } from '../utils/fetchJSONFile';
 import { fetchSearchResults } from './search';
 
-const setSortOrderIndex = (orderIndex) => {
-  return (dispatch, getState) => {
-    dispatch({
-      type: 'SET_SORT_ORDER_INDEX',
-      orderIndex: orderIndex
-    });
-    dispatch(fetchSearchResults());
-  };
-};
+const setSortOrderIndex = (orderIndex) => ({
+  type: 'SET_SORT_ORDER_INDEX',
+  orderIndex: orderIndex
+});
 
 export const setSort = (field, search) => {
   return (dispatch, getState) => {
