@@ -3,11 +3,12 @@ import { fetchSearchResults } from './search';
 
 export const toggleCompare = (obj) => {
   return (dispatch, getState) => {
+    const { type, result } = {...obj};
     const state = getState();
     const compare = {
-      type: obj.type,
-      file_id: obj.result[obj.type + '_file_id'],
-      segment_ids: sort(obj.result[obj.type + '_segment_ids']).join('.')
+      type: type,
+      file_id: result[type + '_file_id'],
+      segment_ids: sort(result[type + '_segment_ids']).join('.')
     };
     if (
       compare.type === state.compare.type &&
