@@ -205,6 +205,10 @@ path.area {
   display: none;
 }
 
+.waffle-card-results {
+  margin-bottom: 10px;
+}
+
 .waffle-card-results .result {
   outline: 3px solid #6dd1d1;
   display: flex;
