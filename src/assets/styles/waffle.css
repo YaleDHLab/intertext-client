@@ -186,16 +186,6 @@ path.area {
 * Active results
 **/
 
-.waffle-results-left,
-.waffle-results-right {
-  display: inline-block;
-  float: left;
-}
-
-.waffle-results-left {
-  margin: 0 35px 35px 0;
-}
-
 .waffle-card-result-container {
   margin-top: 40px;
   text-align: center;
@@ -205,10 +195,6 @@ path.area {
   display: none;
 }
 
-.waffle-card-results {
-  margin-bottom: 10px;
-}
-
 .waffle-card-results .result {
   outline: 3px solid #6dd1d1;
   display: flex;
@@ -216,4 +202,14 @@ path.area {
   margin: 0;
   box-sizing: border-box;
   float: left;
+}
+
+.waffle-card-result-container .result.source {
+  margin-left: 3px;
+  margin-right: 20px;
+}
+
+.waffle-card-result-container .result.target {
+  margin-right: 3px;
+  margin-left: 20px;
 }
