@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setSortAndSearch } from '../../actions/sort-results';
+import { setSortAndSearch } from '../../actions/search';
 
 class SortResults extends React.Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class SortResults extends React.Component {
     return (
       <select
         className="sort-results"
-        value={this.props.sortField}
+        value={this.props.sortBy}
         onChange={this.handleChange}
       >
         <option value="author">Author</option>
@@ -28,7 +28,7 @@ class SortResults extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  sortField: state.sort.field
+  sortBy: state.search.sortBy
 });
 
 const mapDispatchToProps = (dispatch) => ({

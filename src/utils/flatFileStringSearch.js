@@ -8,10 +8,17 @@
  *
  */
 
-import { selectSimilarity } from '../selectors/similarity';
-import { selectSortOrder, selectSortProperty } from '../selectors/sort';
-import { selectFieldFile, selectTypeaheadQuery } from '../selectors/typeahead';
-import { selectUseType, useTypes } from '../selectors/useType';
+import {
+  selectSimilarity,
+  selectSortByIndex,
+  selectSortAttribute,
+  selectUseType,
+  useTypes
+} from '../selectors/search';
+import {
+  selectTypeaheadFieldFile,
+  selectTypeaheadQuery
+} from '../selectors/typeahead';
 import { fetchMatchFile } from './fetchJSONFile';
 import { addCacheRecord } from '../actions/cache';
 import { uniq, uniqBy } from 'lodash';
@@ -22,14 +29,11 @@ import { uniq, uniqBy } from 'lodash';
 
 function getSortedMatchList(state) {
   const searchTerm = selectTypeaheadQuery(state).trim().toLowerCase();
-  const fieldIndex = selectFieldFile(state);
-  const sortIndex = selectSortOrder(state);
+  const fieldIndex = selectTypeaheadFieldFile(state);
+  const sortIndex = selectSortByIndex(state);
   const [minSim, maxSim] = selectSimilarity(state);
   const filterUseType = selectUseType(state);
-  const sortBy = selectSortProperty(state);
-
-  // avoid race conditions
-  if (!sortIndex) return [];
+  const sortBy = selectSortAttribute(state);
 
   // get a list of match files based on the current typeahead query
   const matchFileIDs = uniq(

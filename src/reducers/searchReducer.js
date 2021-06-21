@@ -6,32 +6,41 @@ const initialState = {
   allResults: [],
   err: false,
   maxDisplayed: maxDisplayedStep,
+
+  // similarity range
+  similarity: [50, 100],
+  displayed: [50, 100],
+
+  // use types
+  earlier: true,
+  later: true,
+
+  // sort
+  sortBy: 'similarity',
+  sortByIndex: null,
+
   resultsMeta: {
-    totalResults: 0,
-    startIndex: 0,
-    matchesPerPage: 20
+    totalResults: 0
   }
 };
 
 const searchReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'SET_SEARCH_QUERY':
+    case 'RESET_SEARCH':
       return Object.assign({}, state, {
-        query: action.query
+        loading: true,
+        maxDisplayed: maxDisplayedStep
       });
 
     case 'SET_ALL_SEARCH_RESULTS':
       return Object.assign({}, state, {
         results: action.docs,
         allResults: action.docs,
-        err: action.err
-      });
-
-    case 'SET_ALL_SEARCH_RESULTS_META':
-      return Object.assign({}, state, {
-        resultsMeta: {
-          totalResults: action.totalResults
-        }
+        err: action.err,
+        resultsMeta: Object.assign({}, state.resultsMeta, {
+          totalResults: action.total
+        }),
+        loading: false
       });
 
     case 'SET_SEARCH_RESULTS':
@@ -39,8 +48,14 @@ const searchReducer = (state = initialState, action) => {
         results: action.results
       });
 
-    case 'LOAD_SEARCH_FROM_OBJECT':
-      return Object.assign({}, state, action.obj);
+    case 'LOAD_SEARCH_FROM_URL':
+      return Object.assign({}, state, {
+        sortBy: action.obj.sort,
+        similarity: action.obj.similarity,
+        displayed: action.obj.similarity,
+        earlier: action.obj.earlier,
+        later: action.obj.later
+      });
 
     case 'DISPLAY_MORE_SEARCH_RESULTS':
       const newMax = state.maxDisplayed + maxDisplayedStep;
@@ -57,6 +72,41 @@ const searchReducer = (state = initialState, action) => {
     case 'SET_SEARCH_LOADING':
       return Object.assign({}, state, {
         loading: action.bool
+      });
+
+    case 'SET_SIMILARITY':
+      return Object.assign({}, state, {
+        similarity: action.val
+      });
+
+    case 'SET_DISPLAYED':
+      return Object.assign({}, state, {
+        displayed: action.val
+      });
+
+    case 'SET_USE_TYPES':
+      return Object.assign({}, state, action.obj);
+
+    case 'TOGGLE_USE_TYPES':
+      const otherUse = action.use === 'earlier' ? 'later' : 'earlier';
+      // ensure at least one use is active
+      return state[action.use] && !state[otherUse]
+        ? Object.assign({}, state, {
+            [otherUse]: true,
+            [action.use]: false
+          })
+        : Object.assign({}, state, {
+            [action.use]: !state[action.use]
+          });
+
+    case 'SET_SORT':
+      return Object.assign({}, state, {
+        sortBy: action.sortBy
+      });
+
+    case 'SET_SORT_ORDER_INDEX':
+      return Object.assign({}, state, {
+        sortByIndex: action.orderIndex
       });
 
     default:

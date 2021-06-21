@@ -1,7 +1,8 @@
 import fetch from 'isomorphic-fetch';
 import {
   selectTypeaheadField,
-  typeaheadFieldTypes
+  typeaheadFieldTypes,
+  selectTypeaheadFieldFiles
 } from '../selectors/typeahead';
 
 /**
@@ -10,9 +11,10 @@ import {
  * Returns: Promise
  * @param {string} url
  */
+
 const fetchJSONFile = (url) => {
   const base = window.location.href.split('#')[0].replace('index.html', '');
-  url = url[0] == '/' ? url.substring(1) : url;
+  url = url[0] === '/' ? url.substring(1) : url;
   return fetch(base + url)
     .then((response) => {
       if (response.status !== 200) {
@@ -27,6 +29,32 @@ const fetchJSONFile = (url) => {
     });
 };
 
+export const fetchSortOrderFile = (s) => {
+  return fetchJSONFile(
+    `/api/indices/match-ids-by-${s.toLowerCase().trim()}.json`
+  );
+};
+
+export const fetchTypeaheadFieldFile = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const field = selectTypeaheadField(state);
+    const fieldFiles = selectTypeaheadFieldFiles(state);
+    // return cached field file if possible, else fetch the file
+    return field in fieldFiles
+      ? new Promise((resolve, reject) => {
+          return resolve(fieldFiles[field]).then((val) => val);
+        })
+      : field === typeaheadFieldTypes.Author
+      ? fetchAuthorsFile()
+      : field === typeaheadFieldTypes.Title
+      ? fetchTitlesFile()
+      : new Promise((resolve, reject) => {
+          reject();
+        });
+  };
+};
+
 export const fetchAuthorsFile = () => {
   return fetchJSONFile('/api/authors.json');
 };
@@ -35,30 +63,10 @@ export const fetchTitlesFile = () => {
   return fetchJSONFile('/api/titles.json');
 };
 
-export const fetchFieldFile = (state) => {
-  const field = selectTypeaheadField(state);
-  return field === typeaheadFieldTypes.Author
-    ? fetchAuthorsFile()
-    : field === typeaheadFieldTypes.Title
-    ? fetchTitlesFile()
-    : Promise((resolve, reject) => {
-        reject();
-      });
-};
-
 export const fetchMatchFile = (textID) =>
   fetchJSONFile('/api/matches/' + String(textID) + '.json');
 
 export const fetchScatterplotFile = (props) => {
   const { use, unit, stat } = props;
   return fetchJSONFile(`/api/scatterplots/${use}-${unit}-${stat}.json`);
-};
-
-export const fetchSortOrder = (field) => {
-  let sortPropertyString = 'similarity';
-  const q = field.toLowerCase().trim();
-  if (q === 'author') sortPropertyString = 'author';
-  if (q === 'year') sortPropertyString = 'year';
-  if (q === 'similarity') sortPropertyString = 'similarity';
-  return fetchJSONFile(`/api/indices/match-ids-by-${sortPropertyString}.json`);
 };

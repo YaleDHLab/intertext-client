@@ -5,7 +5,6 @@ import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import { rootReducer } from './reducers/index';
 import { loadFavorites } from './actions/favorite';
-import { setUnit, getUnitFromUrl } from './actions/scatterplot';
 import freeze from 'redux-freeze';
 
 const history = createHashHistory();
@@ -25,8 +24,7 @@ let middleware = applyMiddleware(...middlewares);
 // create the store
 const store = createStore(connectRouter(history)(rootReducer), middleware);
 
+// load the favorites saved in clientside storage
 store.dispatch(loadFavorites());
-if (window.location.href.includes('scatterplot'))
-  store.dispatch(setUnit(getUnitFromUrl()));
 
 export { store, history };

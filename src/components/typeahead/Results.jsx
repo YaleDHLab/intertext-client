@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  fetchMoreSearchResults,
-  fetchSearchResults
-} from '../../actions/search';
+import { fetchSearchResults } from '../../actions/search';
 import { setTypeaheadQuery } from '../../actions/typeahead';
 
 class Results extends React.Component {
@@ -99,12 +96,12 @@ Result.propTypes = {
 const mapStateToProps = (state) => ({
   results: state.typeahead.results,
   query: state.typeahead.query,
-  index: state.typeahead.index,
+  index: state.typeahead.index
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setTypeaheadQuery: (val) => dispatch(setTypeaheadQuery(val)),
-  fetchSearchResults: () => dispatch(fetchSearchResults()),
+  fetchSearchResults: () => dispatch(fetchSearchResults())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Results);

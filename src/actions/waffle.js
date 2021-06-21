@@ -1,5 +1,4 @@
 import { history } from '../store';
-import { fetchSearchResults } from './search';
 import { fetchMatchFile } from '../utils/fetchJSONFile';
 
 export const setWaffleVisualized = (obj) => ({
@@ -25,12 +24,6 @@ export const receiveWaffleImage = (url) => ({
   type: 'RECEIVE_WAFFLE_IMAGE',
   url: url
 });
-
-export const hideWaffle = () => {
-  return (dispatch) => {
-    dispatch(fetchSearchResults());
-  };
-};
 
 export const setWaffleFeature = (feature) => {
   return (dispatch) => {
