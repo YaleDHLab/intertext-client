@@ -54,7 +54,7 @@ function getSortedMatchList(state) {
   // in the file matchFileIDs array, are the appropriate useType, fall
   // within the specified similarity range, and are unique
   let filteredSortIndex = sortIndex.filter((item) => {
-    const [matchFileID, , , isPrevious, similarity] = item;
+    const [matchFileID, , , isEarlier, similarity] = item;
 
     // Drop if it's not in one of the author's match files
     if (!matchFileIDs.includes(matchFileID)) {
@@ -67,8 +67,8 @@ function getSortedMatchList(state) {
     }
 
     if (searchTerm.length) {
-      if (filterUseType === useTypes.Previous && !isPrevious) return false;
-      if (filterUseType === useTypes.Later && isPrevious) return false;
+      if (filterUseType === useTypes.Earlier && !isEarlier) return false;
+      if (filterUseType === useTypes.Later && isEarlier) return false;
     }
 
     return true;
