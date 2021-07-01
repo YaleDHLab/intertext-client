@@ -63,7 +63,7 @@ const ResultPairs = (props) => {
     <div id="results-container">
       {props.results.map((result, idx) => (
         <div
-          className={`result-pair
+          className={`result-pair row justify-center align-center
             ${
               result.source_author === 'Unknown' &&
               result.target_author === 'Unknown'
@@ -73,9 +73,9 @@ const ResultPairs = (props) => {
           key={idx}
         >
           <Result result={result} type="source" />
-          <div className="similarity-circle">
-            <div className="similarity">
-              {Math.round(result.similarity) + '%'}
+          <div className="similarity-circle row justify-center align-center">
+            <div className="similarity row justify-center align-center">
+              <span>{Math.round(result.similarity) + '%'}</span>
             </div>
           </div>
           <Result result={result} type="target" />

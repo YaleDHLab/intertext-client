@@ -2,16 +2,6 @@
 * Footer styles
 **/
 
-.page-wrap {
-  min-height: 100%;
-  margin-bottom: -120px;
-  background: #f8f8f8;
-}
-
-.push {
-  height: 120px;
-}
-
 footer {
   height: 120px;
   background: #666666;

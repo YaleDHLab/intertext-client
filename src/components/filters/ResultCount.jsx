@@ -6,11 +6,10 @@ const ResultCount = (props) => (
   <div className="results-count">
     {props.loading ? null : (
       <>
-        <span>Your query returned</span>
         <span>
           <b>{props.totalResults || 0}</b>
         </span>
-        <span>results</span>
+        <span>matches</span>
       </>
     )}
   </div>

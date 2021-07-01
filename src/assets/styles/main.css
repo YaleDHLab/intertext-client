@@ -33,12 +33,45 @@ body {
 }
 
 .page-container {
-  padding: 90px 0 90px;
   text-align: center;
   overflow: hidden;
   background: #f8f8f8;
-  height: 100%;
+  flex: 1;
   box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-start {
+  justify-content: flex-start;
 }
 
 /**

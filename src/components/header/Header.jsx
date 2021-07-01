@@ -1,15 +1,13 @@
 import React from 'react';
-import Typeahead from '../typeahead/Typeahead';
 import { Link } from 'react-router-dom';
 import brand from '../../assets/images/intertext.png';
 
 const Header = (props) => (
   <header>
-    <div className="header-text">
+    <div className="header-text row align-center">
       <Link className="brand" to="/">
         <img src={brand} alt="Intertext brand logo" />
       </Link>
-      <Typeahead />
     </div>
   </header>
 );

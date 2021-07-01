@@ -6,12 +6,10 @@ import Waffle from './components/Waffle';
 
 const routes = (
   <App>
-    <div className="page-container">
-      <Switch>
-        <Route path="/waffle" component={Waffle} />
-        <Route path="/" component={Results} />
-      </Switch>
-    </div>
+    <Switch>
+      <Route path="/waffle" component={Waffle} />
+      <Route path="/" component={Results} />
+    </Switch>
   </App>
 );
 

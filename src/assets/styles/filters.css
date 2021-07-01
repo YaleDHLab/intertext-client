@@ -7,22 +7,24 @@
   width: 100%;
   text-align: center;
   box-sizing: border-box;
-  position: fixed;
-  top: 90px;
   z-index: 3;
-  height: 60px;
-  overflow: hidden;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  padding: 15px 0;
 }
 
 .filters {
-  display: inline-block;
-  width: 1160px;
+  width: 1092px;
   position: relative;
+  box-shadow: 0 0 4px #c7c7c7;
+  margin: 4px;
+  white-space: nowrap;
+  padding: 6px 10px;
 }
 
-.filter-fields {
-  display: inline-block;
-  margin: 3px;
+.filter-group {
+  width: 300px;
 }
 
 .filter-label {
@@ -41,7 +43,7 @@
   text-align: left;
   font-size: 0.8em;
   display: inline-block;
-  width: 250px;
+  margin-right: 30px;
 }
 
 .results-count span {

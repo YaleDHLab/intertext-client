@@ -4,10 +4,11 @@
 
 .results {
   background: #f8f8f8;
-  width: 100vw;
   overflow: auto;
   text-align: center;
-  padding-top: 70px;
+  padding-top: 60px;
+  width: 1100px;
+  margin: 0 auto;
 }
 
 /**
@@ -19,10 +20,11 @@
 }
 
 .result-pair-container {
-  max-width: 1210px;
+  width: 1100px;
   display: inline-block;
   opacity: 1;
   transition: opacity 0.5s ease;
+  padding-top: 80px;
 }
 
 .result-pair-container.fade-out {
@@ -34,7 +36,6 @@
 **/
 
 .result-pair {
-  width: 1210px;
   display: flex;
   text-align: left;
   position: relative;
@@ -59,23 +60,21 @@
 **/
 
 .similarity-circle {
+  width: 80px;
+  height: 100%;
+}
+
+.similarity {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  opacity: 1;
+  transition: opacity 1s;
   background: #bfbfbf;
   color: #fff;
   text-align: center;
   font-size: 0.85em;
   display: inline-block;
-  position: absolute;
-  top: 50%;
-  right: 0;
-  bottom: 0;
-  left: 50%;
-  width: 40px;
-  height: 40px;
-  margin-left: -24px;
-  margin-top: -20px;
-  border-radius: 20px;
-  opacity: 1;
-  transition: opacity 1s;
 }
 
 .result-pair:hover .similarity-circle {
@@ -96,17 +95,18 @@
 **/
 
 .result {
-  margin: 14px 40px;
+  margin: 14px 4px;
   box-shadow: 2px 2px 2px #ddd;
   border: 1px solid lightgray;
   background: #fff;
   position: relative;
-  width: 520px;
+  flex: 1;
   transition: transform 1s ease, height 0.3s ease;
   display: inline-block;
   text-align: left;
   display: flex;
   flex-direction: column;
+  align-self: flex-start;
 }
 
 .result-pair:hover .result {
@@ -119,7 +119,6 @@
 
 .result.source {
   left: 0;
-  float: left;
 }
 
 .result.target {
@@ -182,7 +181,8 @@
 
 .result-year-container {
   display: inline-block;
-  background: #f4f4f4;
+  background: #71CCCE;
+  color: #fff;
   padding: 3px 15px 3px 6px;
   height: 100%;
 }

@@ -3,16 +3,20 @@ import SortResults from './SortResults';
 import UseTypes from './UseTypes';
 import ResultCount from './ResultCount';
 import SimilaritySlider from './SimilaritySlider';
+import Typeahead from '../typeahead/Typeahead'
+import TypeaheadSelect from '../typeahead/TypeaheadSelect';
 
 class Filters extends React.Component {
   render() {
     return (
-      <div className="filters-container">
-        <div className="filters">
-          <ResultCount />
-          <div className="filter-fields">
-            <UseTypes />
-            <SimilaritySlider />
+      <div className="filters-container row justify-center">
+        <div className="filters row space-between justify-center align-center">
+          <div className='row justify-start align-center filter-group'>
+            <TypeaheadSelect />
+          </div>
+          <Typeahead />
+          <div className='row justify-end align-center filter-group'>
+            <ResultCount />
             <SortResults />
           </div>
         </div>

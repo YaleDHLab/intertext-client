@@ -1,5 +1,4 @@
 import React from 'react';
-import Select from './Select';
 import Results from './Results';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -43,7 +42,6 @@ const Typeahead = (props) => {
 
   return (
     <div className="typeahead">
-      <Select />
       <div className="search-button" />
       <input
         value={props.query}
