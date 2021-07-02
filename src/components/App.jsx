@@ -7,9 +7,7 @@ export default class AppWrapper extends React.Component {
     return (
       <div className="app-container">
         <Header />
-        <div className='page-container'>
-          {this.props.children}
-        </div>
+        <div className="page-container">{this.props.children}</div>
         <Footer />
       </div>
     );

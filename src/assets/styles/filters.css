@@ -35,7 +35,7 @@
   margin-right: 14px;
 }
 
-@media (max-width:  1180px) {
+@media (max-width: 1180px) {
   .filters-container {
     left: 40px;
     justify-content: flex-start;

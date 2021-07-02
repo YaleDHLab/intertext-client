@@ -6,7 +6,7 @@ import { setTypeaheadFieldAndFetch } from '../../actions/typeahead';
 class TypeaheadSelect extends React.Component {
   render() {
     return (
-      <div className='typeahead-select-container'>
+      <div className="typeahead-select-container">
         <select
           className="custom-select"
           onChange={this.props.setTypeaheadFieldAndFetch}
