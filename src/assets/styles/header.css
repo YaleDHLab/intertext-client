@@ -30,3 +30,19 @@ header {
 .brand img {
   height: 100%;
 }
+
+@media (max-width: 700px) {
+  .header-text {
+    margin: 0 10px;
+  }
+
+  .brand {
+    height: 17px;
+    width: auto;
+    padding: 5px;
+  }
+
+  header {
+    height: 40px;
+  }
+}

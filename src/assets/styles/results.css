@@ -8,7 +8,7 @@
   text-align: center;
   width: 1180px;
   margin: 0 auto;
-  padding: 60px 40px 0;
+  padding: 0 40px;
 }
 
 /**
@@ -110,6 +110,7 @@
 
 .result-pair:hover .result {
   outline: 3px solid #6dd1d1;
+  border: 1px solid #6dd1d1;
 }
 
 /**
@@ -408,4 +409,58 @@
 
 .visualize:hover rect {
   fill: #6dd1d1;
+}
+
+@media (max-width: 700px) {
+  .results {
+    padding: 0 10px;
+    width: auto;
+  }
+
+  .result-pair-container {
+    padding-top: 52px;
+  }
+
+  .similarity-circle {
+    width: 10px;
+  }
+
+  .similarity {
+    display: none;
+  }
+
+  .result {
+    min-height: initial;
+  }
+
+  .result-title {
+    font-size: 12px;
+  }
+
+  .result-body {
+    padding: 10px;
+  }
+
+  .result-author {
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+  .result-match {
+    font-size: 10px;
+    line-height: 14px;
+  }
+
+  .result-top {
+    height: auto;
+  }
+
+  .result-title {
+    width: auto;
+    margin-top: 0;
+  }
+
+  .result-year-container {
+    padding: 0px 12px 0px 3px;
+  }
 }

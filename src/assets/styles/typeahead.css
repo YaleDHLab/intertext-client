@@ -42,7 +42,7 @@
   font-size: 0.8em;
   max-height: 164px;
   overflow: auto;
-  min-width: 260px;
+  width: 100%;
 }
 
 input:focus + .typeahead-results {
@@ -133,4 +133,16 @@ input:focus + .typeahead-results {
 .typeahead-select-label {
   font-size: 0.8em;
   margin-right: 6px;
+}
+
+@media (max-width: 700px) {
+  .typeahead {
+    margin: 0;
+    display: block;
+    width: 100%;
+  }
+
+  .typeahead input {
+    width: 100%;
+  }
 }

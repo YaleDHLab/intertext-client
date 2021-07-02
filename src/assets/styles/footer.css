@@ -28,3 +28,22 @@ footer {
   font-family: 'Yale Roman';
   color: #bababa;
 }
+
+@media (max-width: 700px) {
+  .experiment {
+    display: none;
+  }
+
+  footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+  }
+
+  .yale-mark {
+    height: 20px;
+    float: none;
+    margin-left: 0
+  }
+}

@@ -78,7 +78,7 @@ class Result extends React.Component {
   render() {
     return (
       <div className={'result ' + this.props.type}>
-        <div className="result-top row">
+        <div className="result-top row space-between align-center">
           {this.props.type === 'source' ? (
             <>
               <div

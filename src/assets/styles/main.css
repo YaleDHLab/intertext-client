@@ -34,10 +34,10 @@ body {
 
 .page-container {
   text-align: center;
-  overflow: hidden;
   background: #f8f8f8;
   flex: 1;
   box-sizing: border-box;
+  padding-top: 60px;
 }
 
 .row {
@@ -134,4 +134,10 @@ input {
 
 .clear-both {
   clear: both;
+}
+
+@media (max-width: 700px) {
+  .page-container {
+    padding-top: 40px;
+  }
 }

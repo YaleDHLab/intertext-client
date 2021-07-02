@@ -68,3 +68,23 @@
   top: 30px;
   cursor: pointer;
 }
+
+@media (max-width: 700px) {
+  .filters-container {
+    left: 0;
+    top: 40px;
+    right: 0;
+    width: 100vw;
+    padding: 0;
+  }
+
+  .filters {
+    padding: 8px;
+    margin: 0;
+    width: 100%;
+  }
+
+  .filters .filter-group {
+    display: none;
+  }
+}

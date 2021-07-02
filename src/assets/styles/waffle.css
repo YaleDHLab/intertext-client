@@ -96,7 +96,7 @@ span.label {
 
 .headshot-container {
   width: 150px;
-  height: 241px;
+  height: 100%;
   float: left;
   text-align: center;
   background: #e1f4f4;
