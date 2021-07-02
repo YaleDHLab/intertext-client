@@ -78,17 +78,37 @@ class Result extends React.Component {
   render() {
     return (
       <div className={'result ' + this.props.type}>
-        <div className="result-top">
-          <div
-            className="result-title"
-            dangerouslySetInnerHTML={this.getText('title')}
-          />
-          <div className="result-year-container">
-            <div
-              className="result-year"
-              dangerouslySetInnerHTML={this.getText('year')}
-            />
-          </div>
+        <div className="result-top row">
+          {this.props.type === 'source'
+            ? (
+                <>
+                  <div
+                    className="result-title"
+                    dangerouslySetInnerHTML={this.getText('title')}
+                  />
+                  <div className="result-year-container">
+                    <div
+                      className="result-year"
+                      dangerouslySetInnerHTML={this.getText('year')}
+                    />
+                  </div>
+                </>
+              )
+            : (
+                <>
+                  <div className="result-year-container">
+                    <div
+                      className="result-year"
+                      dangerouslySetInnerHTML={this.getText('year')}
+                    />
+                  </div>
+                  <div
+                    className="result-title"
+                    dangerouslySetInnerHTML={this.getText('title')}
+                  />
+                </>
+              )
+          }
         </div>
         <div className="result-body">
           <div

@@ -20,7 +20,7 @@
   box-shadow: 0 0 4px #c7c7c7;
   margin: 4px;
   white-space: nowrap;
-  padding: 6px 10px;
+  padding: 6px 16px;
 }
 
 .filter-group {
@@ -33,6 +33,13 @@
   color: #666666;
   display: inline-block;
   margin-right: 14px;
+}
+
+@media (max-width:  1180px) {
+  .filters-container {
+    left: 40px;
+    justify-content: flex-start;
+  }
 }
 
 /**

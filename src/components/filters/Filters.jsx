@@ -12,6 +12,7 @@ class Filters extends React.Component {
       <div className="filters-container row justify-center">
         <div className="filters row space-between justify-center align-center">
           <div className='row justify-start align-center filter-group'>
+            <span className='typeahead-select-label'>Search all passages by</span>
             <TypeaheadSelect />
           </div>
           <Typeahead />

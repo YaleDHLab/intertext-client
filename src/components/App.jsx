@@ -5,7 +5,7 @@ import Footer from './Footer';
 export default class AppWrapper extends React.Component {
   render() {
     return (
-      <div className="app-container col">
+      <div className="app-container">
         <Header />
         <div className='page-container'>
           {this.props.children}
