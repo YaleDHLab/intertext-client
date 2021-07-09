@@ -1,8 +1,6 @@
 import React from 'react';
 import SortResults from './SortResults';
-import UseTypes from './UseTypes';
 import ResultCount from './ResultCount';
-import SimilaritySlider from './SimilaritySlider';
 import Typeahead from '../typeahead/Typeahead';
 import TypeaheadSelect from '../typeahead/TypeaheadSelect';
 
