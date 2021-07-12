@@ -4,9 +4,9 @@ import brand from '../../assets/images/intertext.png';
 import { connect } from 'react-redux';
 
 const Header = (props) => {
-  const isActive = route => {
+  const isActive = (route) => {
     return props.route === route;
-  }
+  };
 
   return (
     <header>
@@ -14,9 +14,13 @@ const Header = (props) => {
         <Link className="brand" to="/">
           <img src={brand} alt="Intertext brand logo" />
         </Link>
-        <nav className='row align-center'>
-          {routes.map(r => (
-            <Link key={r.route} to={r.route} className={isActive(r.route) ? 'active' : ''}>
+        <nav className="row align-center">
+          {routes.map((r) => (
+            <Link
+              key={r.route}
+              to={r.route}
+              className={isActive(r.route) ? 'active' : ''}
+            >
               {r.label}
             </Link>
           ))}
@@ -24,22 +28,22 @@ const Header = (props) => {
         <div />
       </div>
     </header>
-  )
-}
+  );
+};
 
 const routes = [
   {
     route: '/',
-    label: 'Cards',
+    label: 'Cards'
   },
   {
     route: '/sankey',
-    label: 'Sankey',
+    label: 'Sankey'
   }
-]
+];
 
-const mapStateToProps = state => ({
-  route: state.router.location.pathname,
-})
+const mapStateToProps = (state) => ({
+  route: state.router.location.pathname
+});
 
 export default connect(mapStateToProps)(Header);
