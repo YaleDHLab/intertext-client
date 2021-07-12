@@ -3,7 +3,7 @@
 **/
 
 footer {
-  height: 120px;
+  padding: 12px 0;
   background: #666666;
   color: #fff;
   display: table;
@@ -17,7 +17,7 @@ footer {
 }
 
 .yale-mark {
-  height: 54px;
+  height: 35px;
   float: left;
   margin-left: 50px;
 }

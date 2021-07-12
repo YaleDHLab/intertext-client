@@ -14,6 +14,7 @@ import './sort-results.css';
 import './typeahead.css';
 import './use-type.css';
 import './waffle.css';
+import './sankey.css';
 
 // node module styles
 import 'rc-slider/assets/index.css';
