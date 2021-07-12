@@ -10,14 +10,15 @@
   position: fixed;
   top: 60px;
   left: 0;
-  padding: 15px 0;
+  padding: 15px 0 0;
+  background: #f9f9f9;
 }
 
 .filters {
   width: 1092px;
   position: relative;
   box-shadow: 0 0 4px #c7c7c7;
-  margin: 4px;
+  margin: 4px 4px 0;
   white-space: nowrap;
   padding: 6px 16px;
 }

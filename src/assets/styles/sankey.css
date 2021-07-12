@@ -1,3 +1,7 @@
+#sankey-plot {
+  margin:  30px 0;
+}
+
 #sankey-plot g.links path {
   opacity: 0.5;
   cursor: pointer;
