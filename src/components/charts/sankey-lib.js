@@ -15,7 +15,6 @@ export const plot = (svg, data) => {
     .domain([0, 50, 60, 70, 80])
     .range(['#EFECEC', '#F0E442', '#E69F00', '#D55E00']);
 
-  // append the svg canvas to the page
   svg = d3
     .select(svg)
     .attr('width', width + margin.left + margin.right)
@@ -23,7 +22,6 @@ export const plot = (svg, data) => {
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-  // Set the sankey diagram properties
   const sankey = d3sankey()
     .nodeId((d) => d.id)
     .nodeAlign(d3sankeyCenter)
@@ -40,7 +38,6 @@ export const plot = (svg, data) => {
     links: data.links.map((d) => Object.assign({}, d))
   });
 
-  // add in the links
   const link = svg
     .append('g')
     .attr('class', 'links')
@@ -54,10 +51,8 @@ export const plot = (svg, data) => {
     .style('stroke-width', (d) => Math.max(1, d.width))
     .attr('stroke', (d) => linkColor(d.similarity));
 
-  // add the link titles
   link.append('title').text((d) => d.source.label + ' →\n' + d.target.label);
 
-  // add in the nodes
   var node = svg
     .append('g')
     .attr('class', 'nodes')
@@ -68,7 +63,6 @@ export const plot = (svg, data) => {
     .attr('class', 'node')
     .attr('transform', (d) => 'translate(' + d.x0 + ',' + d.y0 + ')');
 
-  // add the rectangles for the nodes
   node
     .append('rect')
     .attr('height', (d) => d.y1 - d.y0)
@@ -78,7 +72,6 @@ export const plot = (svg, data) => {
     .append('title')
     .text((d) => d.label);
 
-  // add in the title for the nodes
   node
     .append('text')
     .attr('x', -6)
