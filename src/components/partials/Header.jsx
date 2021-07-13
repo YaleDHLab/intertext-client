@@ -33,7 +33,7 @@ const Header = (props) => {
           ))}
         </nav>
         {/* Equal width as the brand text to center the links */}
-        <div style={{'width': '132px'}} />
+        <div style={{ width: '132px' }} />
       </div>
     </header>
   );

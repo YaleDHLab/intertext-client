@@ -17,22 +17,22 @@ import {
   setDomains
 } from '../actions/scatterplot';
 
-const Scatterplot = props => {
+const Scatterplot = (props) => {
   return (
     <div className="scatterplot-container flex-1">
       <div className="scatterplot hide-x-grid flex-1">
         <IntroText {...props} />
         <Controls {...props} />
-        <div className='row align-start justify-center'>
+        <div className="row align-start justify-center">
           <Left {...props} />
           <Right {...props} />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-const IntroText = props => {
+const IntroText = (props) => {
   return (
     <>
       <h1>Popular {props.unit}s</h1>
@@ -40,13 +40,12 @@ const IntroText = props => {
         <span>The chart below displays the most popular </span>
         <span>{props.unit}s </span>
         <span>
-          within your corpus. Hover over individual points for more
-          information.
+          within your corpus. Hover over individual points for more information.
         </span>
       </div>
     </>
-  )
-}
+  );
+};
 
 const Controls = (props) => {
   return (
@@ -66,39 +65,37 @@ const Controls = (props) => {
   );
 };
 
-const Left = props => {
+const Left = (props) => {
   return (
     <div className="left">
       <LeftControls {...props} />
       <LeftChart {...props} />
     </div>
-  )
-}
+  );
+};
 
-const Right = props => {
+const Right = (props) => {
   return (
-    <div className='col'>
+    <div className="col">
       {props.tooltip.title ? <Tooltip {...props} /> : null}
       <Table {...props} />
       <div className="controls-lower">
         <div
           className={props.zoomed ? 'reset-button visible' : 'reset-button'}
-          onClick={props.resetZoom}>
+          onClick={props.resetZoom}
+        >
           Reset zoom
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-const LeftControls = props => {
+const LeftControls = (props) => {
   return (
-    <div className='row align-center'>
+    <div className="row align-center">
       <span className="swatch-label">Similarity</span>
-      <Legend
-        domain={props.xDomain}
-        percents={props.statistic === 'mean'}
-      />
+      <Legend domain={props.xDomain} percents={props.statistic === 'mean'} />
       <div className="jitter row align-center">
         <span>Jitter</span>
         <input
@@ -108,10 +105,10 @@ const LeftControls = props => {
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-const LeftChart = props => {
+const LeftChart = (props) => {
   const handleMouseover = (d) => {
     const container = d3.select('.scatterplot-container').node();
     const mouseLocation = d3.mouse(container);
@@ -122,7 +119,7 @@ const LeftChart = props => {
       author: d.author,
       year: d[props.y]
     });
-  }
+  };
 
   const handleMouseout = (d) => {
     props.setTooltip({
@@ -132,14 +129,14 @@ const LeftChart = props => {
       author: '',
       year: null
     });
-  }
+  };
 
   const setBrush = (brushElem, scales) => {
     const brush = d3.brush();
     return brush.on('end', () => {
       handleBrush(scales, brush, brushElem);
     });
-  }
+  };
 
   const handleBrush = (scales, brush, brushElem) => {
     if (!d3.event.sourceEvent || !d3.event.selection) return;
@@ -165,43 +162,44 @@ const LeftChart = props => {
     else props.resetZoom();
     // clear the brush
     brushElem.call(brush.move, null);
-  }
+  };
 
-  const colorScale = d3
-      .scaleQuantize()
-      .domain(props.xDomain)
-      .range(colors);
+  const colorScale = d3.scaleQuantize().domain(props.xDomain).range(colors);
 
-  return props.data.length === 0
-    ? <div className='col flex-1 justify-center align-center'><Loader /></div>
-    : <Chart
-        width={480}
-        height={600}
-        margin={{ top: 15, right: 20, bottom: 20, left: 40 }}
-        pointData={props.data}
-        pointStroke={d => '#fff'}
-        pointFill={d => colorScale(d.similarity)}
-        pointLabels={true}
-        pointKey={d => d.key}
-        jitter={props.jitter}
-        r={8}
-        x={'similarity'}
-        xTicks={7}
-        xDomain={props.xDomain}
-        xTickFormat={d => Math.round(d) / 100}
-        y={props.y}
-        yTicks={5}
-        yScale={'inverse'}
-        yDomain={props.yDomain}
-        yTickFormat={d => parseInt(d)}
-        drawGrid={true}
-        setBrush={setBrush}
-        onBrush={handleBrush}
-        resize={false}
-        onMouseover={handleMouseover}
-        onMouseout={handleMouseout}
-      />
-}
+  return props.data.length === 0 ? (
+    <div className="col flex-1 justify-center align-center">
+      <Loader />
+    </div>
+  ) : (
+    <Chart
+      width={480}
+      height={600}
+      margin={{ top: 15, right: 20, bottom: 20, left: 40 }}
+      pointData={props.data}
+      pointStroke={(d) => '#fff'}
+      pointFill={(d) => colorScale(d.similarity)}
+      pointLabels={true}
+      pointKey={(d) => d.key}
+      jitter={props.jitter}
+      r={8}
+      x={'similarity'}
+      xTicks={7}
+      xDomain={props.xDomain}
+      xTickFormat={(d) => Math.round(d) / 100}
+      y={props.y}
+      yTicks={5}
+      yScale={'inverse'}
+      yDomain={props.yDomain}
+      yTickFormat={(d) => parseInt(d)}
+      drawGrid={true}
+      setBrush={setBrush}
+      onBrush={handleBrush}
+      resize={false}
+      onMouseover={handleMouseover}
+      onMouseout={handleMouseout}
+    />
+  );
+};
 
 const Tooltip = (props) => {
   return (
