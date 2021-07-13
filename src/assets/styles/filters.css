@@ -6,11 +6,9 @@
   width: 100%;
   text-align: center;
   box-sizing: border-box;
-  z-index: 3;
-  top: 60px;
-  left: 0;
-  padding: 15px 0 0;
   background: #f9f9f9;
+  margin-top: 20px;
+  margin-bottom: 2px;
 }
 
 .filters {
@@ -31,13 +29,6 @@
   color: #666666;
   display: inline-block;
   margin-right: 14px;
-}
-
-@media (max-width: 1180px) {
-  .filters-container {
-    left: 40px;
-    justify-content: flex-start;
-  }
 }
 
 /**
@@ -68,13 +59,6 @@
 }
 
 @media (max-width: 700px) {
-  .filters-container {
-    left: 0;
-    top: 40px;
-    right: 0;
-    width: 100vw;
-    padding: 0;
-  }
 
   .filters {
     padding: 8px;
