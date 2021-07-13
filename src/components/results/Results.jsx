@@ -23,8 +23,8 @@ const Results = (props) => {
   };
 
   const onScroll = (e) => {
-    if (e.target.scrollTop / e.target.clientHeight > 0.75) displayMoreResults()
-  }
+    if (e.target.scrollTop / e.target.clientHeight > 0.75) displayMoreResults();
+  };
 
   useEffect(() => {
     loadSearchFromUrl();
