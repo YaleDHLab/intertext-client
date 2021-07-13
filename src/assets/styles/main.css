@@ -50,6 +50,10 @@ body {
   flex-direction: column;
 }
 
+.align-start {
+  align-items: flex-start;
+}
+
 .align-center {
   align-items: center;
 }
@@ -72,6 +76,10 @@ body {
 
 .justify-start {
   justify-content: flex-start;
+}
+
+.flex-1 {
+  flex: 1;
 }
 
 /**

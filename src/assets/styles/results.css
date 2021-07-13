@@ -21,7 +21,6 @@
 
 .result-pair-container {
   width: 1100px;
-  display: inline-block;
   opacity: 1;
   transition: opacity 0.5s ease;
   padding-top: 80px;
@@ -36,11 +35,11 @@
 **/
 
 .result-pair {
-  display: flex;
   text-align: left;
   position: relative;
   /* to support card animations */
   overflow-x: hidden;
+  margin: 14px 0;
 }
 
 /**
@@ -84,17 +83,12 @@
   opacity: 0;
 }
 
-.similarity {
-  position: relative;
-  top: 10px;
-}
-
 /**
 * Result cards
 **/
 
 .result {
-  margin: 14px 4px;
+  margin: 4px;
   box-shadow: 2px 2px 2px #ddd;
   border: 1px solid lightgray;
   background: #fff;
@@ -105,7 +99,7 @@
   text-align: left;
   display: flex;
   flex-direction: column;
-  align-self: flex-start;
+  align-self: stretch;
 }
 
 .result-pair:hover .result {

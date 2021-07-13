@@ -5,13 +5,11 @@
 .scatterplot-container {
   box-sizing: border-box;
   text-align: center;
-  margin-bottom: -90px;
 }
 
 .scatterplot {
   width: 1000px;
   display: inline-block;
-  margin-top: 60px;
 }
 
 .scatterplot select {
@@ -28,9 +26,12 @@
 }
 
 .jitter {
-  display: inline-block;
   margin: 0 15px;
   font-size: 0.825em;
+}
+
+.jitter span {
+  margin-right: 4px;
 }
 
 /**
@@ -38,7 +39,6 @@
 **/
 
 .scatterplot .left {
-  float: left;
   display: inline-block;
   padding-right: 20px;
   border-right: 1px solid lightgray;
@@ -46,13 +46,8 @@
   text-align: left;
 }
 
-.scatterplot .left .chart-legend {
-  transform: scale(0.9);
-}
-
 .scatterplot .left .swatch-label {
   font-size: 0.825em;
-  margin: 0 6px 0 50px;
 }
 
 /**
@@ -62,7 +57,6 @@
 .scatterplot .right {
   padding: 0 30px;
   display: inline-block;
-  float: left;
   margin-top: 12px;
   text-align: left;
   font-size: 0.825em;
@@ -85,14 +79,6 @@ hr {
 .book-number {
   width: 20px;
   display: inline-block;
-}
-
-/**
-* Loader
-**/
-
-.scatterplot .loader {
-  margin-top: 200px;
 }
 
 /**
