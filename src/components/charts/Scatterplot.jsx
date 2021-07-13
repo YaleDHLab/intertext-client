@@ -1,11 +1,11 @@
 import React from 'react';
+import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { colors } from './charts/lib/color-lib';
-import Chart from './charts/Chart';
-import Legend from './charts/Legend';
-import Loader from './partials/Loader';
-import * as d3 from 'd3';
+import { colors } from './lib/color-lib';
+import Chart from './Chart';
+import Legend from './Legend';
+import Loader from '../partials/Loader';
 import {
   setY,
   setUse,
@@ -15,7 +15,7 @@ import {
   setStatistic,
   toggleJitter,
   setDomains
-} from '../actions/scatterplot';
+} from '../../actions/scatterplot';
 
 const Scatterplot = (props) => {
   return (
