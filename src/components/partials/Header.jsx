@@ -3,11 +3,18 @@ import { Link } from 'react-router-dom';
 import brand from '../../assets/images/intertext.png';
 import { connect } from 'react-redux';
 
-const Header = (props) => {
-  const isActive = (route) => {
-    return props.route === route;
-  };
+const routes = [
+  {
+    route: '/',
+    label: 'Cards'
+  },
+  {
+    route: '/sankey',
+    label: 'Sankey'
+  }
+];
 
+const Header = (props) => {
   return (
     <header>
       <div className="header-text row align-center space-between">
@@ -19,7 +26,7 @@ const Header = (props) => {
             <Link
               key={r.route}
               to={r.route}
-              className={isActive(r.route) ? 'active' : ''}
+              className={props.route === r.route ? 'active' : ''}
             >
               {r.label}
             </Link>
@@ -31,17 +38,6 @@ const Header = (props) => {
     </header>
   );
 };
-
-const routes = [
-  {
-    route: '/',
-    label: 'Cards'
-  },
-  {
-    route: '/sankey',
-    label: 'Sankey'
-  }
-];
 
 const mapStateToProps = (state) => ({
   route: state.router.location.pathname

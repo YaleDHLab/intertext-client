@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import ChartLib from './chart-lib';
+import ChartLib from './lib/chart-lib';
 
 export default class Chart extends React.Component {
   constructor(props) {

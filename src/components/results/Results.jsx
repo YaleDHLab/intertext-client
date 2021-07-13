@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Filters from '../filters/Filters';
 import Result, { ResultProps } from './Result';
-import Loader from '../Loader';
+import Loader from '../partials/Loader';
 import {
   loadSearchFromUrl,
   runInitialSearch,
@@ -43,9 +43,9 @@ const Results = (props) => {
   }, [loadSearchFromUrl, runInitialSearch]);
 
   return (
-    <div className="results">
+    <div className="results col">
       <Filters />
-      <div className="result-pair-container" ref={containerRef}>
+      <div className="result-pair-container flex-1" ref={containerRef}>
         {results && results.length ? (
           <ResultPairs results={results} />
         ) : loading ? (

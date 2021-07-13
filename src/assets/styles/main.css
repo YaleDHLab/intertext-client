@@ -35,7 +35,6 @@ body {
 .page-container {
   text-align: center;
   background: #f8f8f8;
-  flex: 1;
   box-sizing: border-box;
   padding-top: 60px;
 }

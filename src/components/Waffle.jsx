@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Chart, { WaffleDataProps } from './charts/Chart';
 import Legend from './charts/Legend';
-import Loader from './Loader';
+import Loader from './partials/Loader';
 import Result, { ResultProps } from './results/Result';
 import headshot from '../assets/images/authors/default-headshot.jpg';
 import { Link } from 'react-router-dom';
-import { colorScale } from './charts/colors';
+import { colorScale } from './charts/lib/color-lib';
 import { setWaffleFeature, getWaffleActive } from '../actions/waffle';
 
 class Waffle extends React.Component {

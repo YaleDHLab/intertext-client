@@ -23,7 +23,6 @@
   width: 1100px;
   opacity: 1;
   transition: opacity 0.5s ease;
-  padding-top: 80px;
 }
 
 .result-pair-container.fade-out {
@@ -408,10 +407,6 @@
   .results {
     padding: 0 10px;
     width: auto;
-  }
-
-  .result-pair-container {
-    padding-top: 52px;
   }
 
   .similarity-circle {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { colors } from './colors';
+import { colors } from './lib/color-lib';
 
 const Legend = (props) => {
   const min = props.domain && props.domain[0] ? props.domain[0] : 50;

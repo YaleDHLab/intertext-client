@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { colors } from './charts/colors';
+import { colors } from './charts/lib/color-lib';
 import Chart from './charts/Chart';
 import Legend from './charts/Legend';
-import Loader from './Loader';
+import Loader from './partials/Loader';
 import * as d3 from 'd3';
 import {
   setY,

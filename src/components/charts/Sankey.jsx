@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { plot } from './sankey-lib';
+import { plot } from './lib/sankey-lib';
 import { connect } from 'react-redux';
 import { runInitialSearch } from '../../actions/search';
 import * as _ from 'lodash';

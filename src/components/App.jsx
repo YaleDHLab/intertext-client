@@ -1,6 +1,6 @@
 import React from 'react';
-import Header from './header/Header';
-import Footer from './Footer';
+import Header from './partials/Header';
+import Footer from './partials/Footer';
 
 export default class AppWrapper extends React.Component {
   render() {
