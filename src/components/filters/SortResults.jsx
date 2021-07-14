@@ -19,8 +19,9 @@ class SortResults extends React.Component {
         value={this.props.sortBy}
         onChange={this.handleChange}
       >
+        <option disabled>Sort By</option>
         <option value="author">Author</option>
-        <option value="year">Publication Year</option>
+        <option value="year">Date</option>
         <option value="similarity">Similarity</option>
       </select>
     );

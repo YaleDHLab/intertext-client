@@ -12,6 +12,7 @@ class TypeaheadSelect extends React.Component {
           onChange={this.props.setTypeaheadFieldAndFetch}
           value={this.props.field}
         >
+          <option disabled>Search By</option>
           <option value="Author">Author</option>
           <option value="Title">Title</option>
         </select>
