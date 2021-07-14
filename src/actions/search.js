@@ -60,6 +60,7 @@ export const displayMoreResults = () => {
 
 export const saveSearchInUrl = () => {
   return (dispatch, getState) => {
+    return;
     const state = getState();
     let hash = '?';
     hash += 'query=' + JSON.stringify(state.typeahead.query);
@@ -68,8 +69,8 @@ export const saveSearchInUrl = () => {
     hash += '&similarity=' + JSON.stringify(state.search.similarity);
     hash += '&earlier=' + JSON.stringify(state.search.earlier);
     hash += '&later=' + JSON.stringify(state.search.later);
-    //hash += '&displayed=' + JSON.stringify(state.search.displayed);
-    //hash += '&compare=' + JSON.stringify(state.compare);
+    hash += '&displayed=' + JSON.stringify(state.search.displayed);
+    hash += '&compare=' + JSON.stringify(state.compare);
     history.push(hash);
   };
 };
