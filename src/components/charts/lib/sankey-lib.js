@@ -6,6 +6,16 @@ import {
 } from 'd3-sankey';
 
 export const plot = (svg, data) => {
+
+  // sort the nodes by how many edges they have
+  let counts = {};
+  data.links.map(e => counts[e.source] = counts[e.source] ? counts[e.source] + 1 : 1)
+  data.nodes.sort((a, b) => {
+    const ca = counts[a.id] || 0;
+    const cb = counts[b.id] || 0;
+    return cb - ca;
+  })
+
   var margin = { top: 10, right: 10, bottom: 10, left: 10 },
     width = 900 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
