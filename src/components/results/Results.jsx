@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Filters from '../filters/Filters';
@@ -22,9 +22,18 @@ const Results = (props) => {
     ...props
   };
 
-  const onScroll = (e) => {
-    if (e.target.scrollTop / e.target.clientHeight > 0.75) displayMoreResults();
-  };
+  const ref = useRef();
+
+  useEffect(() => {
+    const onScroll = throttle(() => {
+      const elem = ref.current;
+      if (elem.scrollTop / elem.clientHeight > 0.75) displayMoreResults();
+    }, 500);
+    ref.current.addEventListener('scroll', onScroll);
+    return () => {
+      ref.current.removeEventListener('scroll', onScroll);
+    };
+  }, [displayMoreResults]);
 
   useEffect(() => {
     loadSearchFromUrl();
@@ -34,7 +43,7 @@ const Results = (props) => {
   return (
     <div className="results-container col align-center">
       <Filters />
-      <div className="result-pair-container flex-1" onScroll={onScroll}>
+      <div className="result-pair-container flex-1" ref={ref}>
         {results && results.length ? (
           <ResultPairs results={results} />
         ) : loading ? (
