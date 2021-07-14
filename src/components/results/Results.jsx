@@ -31,7 +31,7 @@ const Results = (props) => {
     }, 500);
     ref.current.addEventListener('scroll', onScroll);
     return () => {
-      ref.current.removeEventListener('scroll', onScroll);
+      if (ref && ref.current) ref.current.removeEventListener('scroll', onScroll);
     };
   }, [displayMoreResults]);
 
