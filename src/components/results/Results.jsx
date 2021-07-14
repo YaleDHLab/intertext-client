@@ -35,12 +35,13 @@ const Results = (props) => {
     <div className="results-container col align-center">
       <Filters />
       <div className="result-pair-container flex-1" onScroll={onScroll}>
-        {results && results.length
-          ? <ResultPairs results={results} />
-          : loading
-            ? <Loader />
-            : <span>Sorry, no results could be found</span>
-        }
+        {results && results.length ? (
+          <ResultPairs results={results} />
+        ) : loading ? (
+          <Loader />
+        ) : (
+          <span>Sorry, no results could be found</span>
+        )}
       </div>
     </div>
   );

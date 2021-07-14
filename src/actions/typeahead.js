@@ -36,7 +36,7 @@ export function fetchTypeaheadResults() {
         dispatch({
           type: 'RECEIVE_TYPEAHEAD_RESULTS',
           file: dataMap,
-          results: Object.keys(dataMap),
+          results: Object.keys(dataMap)
         });
       });
   };
