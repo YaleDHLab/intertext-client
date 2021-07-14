@@ -29,7 +29,7 @@ const typeaheadReducer = (state = initialState, action) => {
         fieldFiles: Object.assign({}, state.fieldFiles, {
           [state.field]: action.file
         }),
-        results: action.filtered,
+        results: action.results,
         err: null
       });
 
