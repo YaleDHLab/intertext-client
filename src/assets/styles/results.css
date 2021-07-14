@@ -2,18 +2,14 @@
 * Container for all results
 **/
 
-.results {
+.results-container {
   background: #f8f8f8;
-  overflow: auto;
-  text-align: center;
-  width: 1180px;
-  margin: 0 auto;
-  padding: 0 40px;
   position: absolute;
   top: 60px;
   right: 0;
   bottom: 46px;
   left: 0;
+  overflow: hidden;
 }
 
 /**
@@ -410,11 +406,6 @@
 }
 
 @media (max-width: 700px) {
-  .results {
-    padding: 0 10px;
-    width: auto;
-  }
-
   .similarity-circle {
     width: 10px;
   }
