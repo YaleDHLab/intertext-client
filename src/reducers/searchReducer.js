@@ -1,10 +1,8 @@
 const maxDisplayedStep = 10;
 
 const initialState = {
-  loading: true,
   results: [],
   allResults: [],
-  err: false,
   maxDisplayed: maxDisplayedStep,
 
   // similarity range
@@ -20,6 +18,8 @@ const initialState = {
   sortByIndex: null,
 
   resultsMeta: {
+    err: false,
+    loading: true,
     totalResults: 0
   }
 };
@@ -28,19 +28,22 @@ const searchReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'RESET_SEARCH':
       return Object.assign({}, state, {
-        loading: true,
-        maxDisplayed: maxDisplayedStep
+        maxDisplayed: maxDisplayedStep,
+        resultsMeta: {
+          err: false,
+          loading: true,
+        }
       });
 
     case 'SET_ALL_SEARCH_RESULTS':
       return Object.assign({}, state, {
         results: action.docs,
         allResults: action.docs,
-        err: action.err,
         resultsMeta: Object.assign({}, state.resultsMeta, {
-          totalResults: action.total
+          totalResults: action.total,
+          err: action.err,
+          loading: false,
         }),
-        loading: false
       });
 
     case 'SET_SEARCH_RESULTS':
@@ -49,13 +52,7 @@ const searchReducer = (state = initialState, action) => {
       });
 
     case 'LOAD_SEARCH_FROM_URL':
-      return Object.assign({}, state, {
-        sortBy: action.obj.sort,
-        similarity: action.obj.similarity,
-        displayed: action.obj.similarity,
-        earlier: action.obj.earlier,
-        later: action.obj.later
-      });
+      return Object.assign({}, state, action.obj);
 
     case 'DISPLAY_MORE_SEARCH_RESULTS':
       const newMax = state.maxDisplayed + maxDisplayedStep;
@@ -83,21 +80,6 @@ const searchReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         displayed: action.val
       });
-
-    case 'SET_USE_TYPES':
-      return Object.assign({}, state, action.obj);
-
-    case 'TOGGLE_USE_TYPES':
-      const otherUse = action.use === 'earlier' ? 'later' : 'earlier';
-      // ensure at least one use is active
-      return state[action.use] && !state[otherUse]
-        ? Object.assign({}, state, {
-            [otherUse]: true,
-            [action.use]: false
-          })
-        : Object.assign({}, state, {
-            [action.use]: !state[action.use]
-          });
 
     case 'SET_SORT':
       return Object.assign({}, state, {

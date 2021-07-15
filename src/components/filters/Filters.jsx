@@ -1,6 +1,6 @@
 import React from 'react';
 import SortResults from './SortResults';
-import ResultCount from './ResultCount';
+import ResultCount from '../results/ResultCount';
 import Typeahead from '../typeahead/Typeahead';
 import TypeaheadSelect from '../typeahead/TypeaheadSelect';
 

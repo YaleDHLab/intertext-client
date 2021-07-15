@@ -1,5 +1,5 @@
 import React from 'react';
-import Results from './Results';
+import Results from './TypeaheadResults';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchSearchResults } from '../../actions/search';

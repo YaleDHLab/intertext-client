@@ -12,8 +12,6 @@ import {
   selectSimilarity,
   selectSortByIndex,
   selectSortAttribute,
-  selectUseType,
-  useTypes
 } from '../selectors/search';
 import {
   selectTypeaheadFieldFile,
@@ -32,7 +30,6 @@ function getSortedMatchList(state) {
   const fieldIndex = selectTypeaheadFieldFile(state);
   const sortIndex = selectSortByIndex(state);
   const [minSim, maxSim] = selectSimilarity(state);
-  const filterUseType = selectUseType(state);
   const sortBy = selectSortAttribute(state);
 
   // get a list of match files based on the current typeahead query
@@ -46,13 +43,11 @@ function getSortedMatchList(state) {
       )
       // expand from the key (author or title) to the array of match file IDs
       .map((k) => fieldIndex[k])
-      // flatten [[match_id_1], [match_id_2]] to 1D array [match_id_1, match_id_2]
+      // flatten [[file_id_1], [file_id_2]] to 1D array [file_id_1, file_id_2]
       .flat()
   );
 
-  // filter the sorted list of matches to only include matches that are
-  // in the file matchFileIDs array, are the appropriate useType, fall
-  // within the specified similarity range, and are unique
+  // filter the sorted list of matches according to search criteria
   let filteredSortIndex = sortIndex.filter((item) => {
     const [matchFileID, , , isEarlier, similarity] = item;
 
@@ -64,11 +59,6 @@ function getSortedMatchList(state) {
     // Drop if simlarity is out of range
     if (minSim > similarity || maxSim < similarity) {
       return false;
-    }
-
-    if (searchTerm.length) {
-      if (filterUseType === useTypes.Earlier && !isEarlier) return false;
-      if (filterUseType === useTypes.Later && isEarlier) return false;
     }
 
     return true;

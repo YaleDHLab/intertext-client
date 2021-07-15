@@ -1,4 +1,3 @@
-import { selectTypeaheadQuery } from '../selectors/typeahead';
 import { fetchTypeaheadFieldFile } from '../utils/fetchJSONFile';
 
 export const setTypeaheadField = (field) => ({
@@ -28,10 +27,7 @@ export const typeaheadRequestFailed = () => ({
 
 export function fetchTypeaheadResults() {
   return function (dispatch, getState) {
-    // Construct the data URL
-    const q = selectTypeaheadQuery(getState()).toLowerCase();
     return dispatch(fetchTypeaheadFieldFile())
-      .then((dataMap) => dataMap)
       .then((dataMap) => {
         dispatch({
           type: 'RECEIVE_TYPEAHEAD_RESULTS',

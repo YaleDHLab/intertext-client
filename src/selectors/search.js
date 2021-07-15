@@ -24,22 +24,3 @@ export const selectSortAttribute = (state) => {
   console.warn('Invalid sort property string: ' + f);
   return 'similarity';
 };
-
-/**
- * Use Types
- **/
-
-export const useTypes = {
-  Earlier: 'EARLIER',
-  Later: 'LATER',
-  Both: 'BOTH'
-};
-
-export const selectUseType = (state) => {
-  const earlier = state.search.earlier;
-  const later = state.search.later;
-  if (earlier && later) return useTypes.Both;
-  if (earlier) return useTypes.Earlier;
-  if (later) return useTypes.Later;
-  throw new Error('Invalid useTypes state');
-};

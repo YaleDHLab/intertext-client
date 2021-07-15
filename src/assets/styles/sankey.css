@@ -3,11 +3,11 @@
 }
 
 #sankey-plot g.links path {
-  opacity: 0.5;
+  opacity: 0.3;
   cursor: pointer;
 }
 
 #sankey-plot g.links path.active,
 #sankey-plot g.links path:hover {
-  opacity: 0.9;
+  opacity: 0.8;
 }

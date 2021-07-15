@@ -25,13 +25,14 @@ const Results = (props) => {
   const ref = useRef();
 
   useEffect(() => {
+    const elem = ref.current;
+    if (!elem) return;
     const onScroll = throttle(() => {
-      const elem = ref.current;
       if (elem.scrollTop / elem.clientHeight > 0.75) displayMoreResults();
     }, 500);
     ref.current.addEventListener('scroll', onScroll);
     return () => {
-      if (ref && ref.current) ref.current.removeEventListener('scroll', onScroll);
+      if (elem) elem.removeEventListener('scroll', onScroll);
     };
   }, [displayMoreResults]);
 
@@ -95,7 +96,7 @@ Results.propTypes = {
 
 const mapStateToProps = (state) => ({
   results: state.search.results,
-  loading: state.search.loading
+  loading: state.search.resultsMeta.loading
 });
 
 const mapDispatchToProps = (dispatch) => ({

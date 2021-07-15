@@ -13,7 +13,6 @@ import { selectSortBy } from '../selectors/search';
 export const fetchSearchResults = () => {
   return (dispatch, getState) => {
     dispatch({ type: 'RESET_SEARCH' });
-    dispatch(saveSearchInUrl());
     dispatch(setTypeaheadIndex(0));
     dispatch(fetchMoreSearchResults());
     window.scrollTo(0, 0);
@@ -60,7 +59,6 @@ export const displayMoreResults = () => {
 
 export const saveSearchInUrl = () => {
   return (dispatch, getState) => {
-    return;
     const state = getState();
     let hash = '?';
     hash += 'query=' + JSON.stringify(state.typeahead.query);
@@ -144,22 +142,6 @@ export const setSimilarity = (val) => {
 export const setSimilarityAndSearch = (val) => {
   return (dispatch) => {
     dispatch(setSimilarity(val));
-    dispatch(fetchSearchResults());
-  };
-};
-
-/**
- * Use Types
- **/
-
-export const setUseTypes = (obj) => ({
-  type: 'SET_USE_TYPES',
-  obj: obj
-});
-
-export const toggleUseTypes = (use) => {
-  return (dispatch) => {
-    dispatch({ type: 'TOGGLE_USE_TYPES', use: use });
     dispatch(fetchSearchResults());
   };
 };

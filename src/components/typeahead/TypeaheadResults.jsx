@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { fetchSearchResults } from '../../actions/search';
 import { setTypeaheadQuery } from '../../actions/typeahead';
 
-class Results extends React.Component {
+class TypeaheadResults extends React.Component {
   constructor(props) {
     super(props);
     this.handleMousedown = this.handleMousedown.bind(this);
@@ -67,7 +67,7 @@ class Results extends React.Component {
   }
 }
 
-Results.propTypes = {
+TypeaheadResults.propTypes = {
   fetchSearchResults: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
   query: PropTypes.string.isRequired,
@@ -104,4 +104,4 @@ const mapDispatchToProps = (dispatch) => ({
   fetchSearchResults: () => dispatch(fetchSearchResults())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Results);
+export default connect(mapStateToProps, mapDispatchToProps)(TypeaheadResults);
