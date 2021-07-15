@@ -4,6 +4,7 @@ import {
   sankeyLinkHorizontal as d3sankeyLinkHorizontal,
   sankeyCenter as d3sankeyCenter
 } from 'd3-sankey';
+import { history } from '../../../store'
 
 export const plot = (svg, data) => {
 
@@ -16,7 +17,7 @@ export const plot = (svg, data) => {
     return cb - ca;
   })
 
-  var margin = { top: 10, right: 10, bottom: 10, left: 10 },
+  const margin = { top: 10, right: 10, bottom: 10, left: 10 },
     width = 900 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
@@ -33,7 +34,7 @@ export const plot = (svg, data) => {
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
   const sankey = d3sankey()
-    .nodeId((d) => d.id)
+    .nodeId((d) => d.sankeyId)
     .nodeAlign(d3sankeyCenter)
     .nodeSort(null)
     .nodeWidth(15)
@@ -48,6 +49,10 @@ export const plot = (svg, data) => {
     links: data.links.map((d) => Object.assign({}, d))
   });
 
+  const handleLinkClick = d => {
+    history.push(`/?earlier=${d.source.id}&later=${d.target.id}`)
+  }
+
   const link = svg
     .append('g')
     .attr('class', 'links')
@@ -59,11 +64,12 @@ export const plot = (svg, data) => {
     .attr('fill', 'none')
     .attr('d', d3sankeyLinkHorizontal())
     .style('stroke-width', (d) => Math.max(1, d.width))
-    .attr('stroke', (d) => linkColor(d.similarity));
+    .attr('stroke', (d) => linkColor(d.similarity))
+    .on('click', d => handleLinkClick(d));
 
   link.append('title').text((d) => d.source.label + ' →\n' + d.target.label);
 
-  var node = svg
+  const node = svg
     .append('g')
     .attr('class', 'nodes')
     .selectAll('.node')
@@ -84,13 +90,8 @@ export const plot = (svg, data) => {
 
   node
     .append('text')
-    .attr('x', -6)
-    .attr('y', (d) => d.dy)
-    .attr('dy', '.35em')
-    .attr('text-anchor', 'end')
-    .attr('transform', null)
-    .text((d) => d.dy)
-    .filter((d) => d.x < width / 2)
-    .attr('x', 6 + sankey.nodeWidth())
-    .attr('text-anchor', 'start');
+    .attr('x', (d) => d.sankeyId.includes('earlier') ? 20 : -5)
+    .attr('y', (d) => (d.y1-d.y0 + 8)/2)
+    .text((d) => d.label)
+    .attr('text-anchor', d => d.sankeyId.includes('earlier') ? 'start' : 'end')
 };

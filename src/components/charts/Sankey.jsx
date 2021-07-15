@@ -8,6 +8,8 @@ const Sankey = (props) => {
   const ref = useRef();
   const [initialized, setInitialized] = useState(false);
 
+  const {runInitialSearch} = {...props}
+
   const getData = (orderIndex, labelToFileIds) => {
     // wait for the match index to load before showing plot
     if (!orderIndex || Object.values(orderIndex).length === 0) return;
@@ -40,25 +42,25 @@ const Sankey = (props) => {
         const fileIdA = _a === fileId ? _a : _b;
         const fileIdB = _a === fileId ? _b : _a;
         // set file ids based on which is earlier
-        let a = aIsEarlier ? fileIdA : fileIdB;
-        let b = aIsEarlier ? fileIdB : fileIdA;
+        const a = aIsEarlier ? fileIdA : fileIdB;
+        const b = aIsEarlier ? fileIdB : fileIdA;
         // create node labels
         const aLabel = fileIdToLabel[a];
         const bLabel = fileIdToLabel[b];
         // add earlier/later prefixes so nodes are stacked in two columns
-        a = 'earlier-' + a.toString();
-        b = 'later-' + b.toString();
+        const sankeyIdA = 'earlier-' + a.toString();
+        const sankeyIdB = 'later-' + b.toString();
         // create the nodes
-        const aNode = { id: a, label: aLabel };
-        const bNode = { id: b, label: bLabel };
+        const aNode = { id: a, label: aLabel, sankeyId: sankeyIdA };
+        const bNode = { id: b, label: bLabel, sankeyId: sankeyIdB };
         // add the nodes
-        nodes[a] = aNode;
-        nodes[b] = bNode;
+        nodes[sankeyIdA] = aNode;
+        nodes[sankeyIdB] = bNode;
         // update the edges
-        links[a] = links[a] || {};
-        links[a][b] = links[a][b] || { count: 0, similarity: [] };
-        links[a][b]['count'] += 1;
-        links[a][b]['similarity'].push(similarity);
+        links[sankeyIdA] = links[sankeyIdA] || {};
+        links[sankeyIdA][sankeyIdB] = links[sankeyIdA][sankeyIdB] || { count: 0, similarity: [] };
+        links[sankeyIdA][sankeyIdB]['count'] += 1;
+        links[sankeyIdA][sankeyIdB]['similarity'].push(similarity);
       }
     });
 
@@ -82,15 +84,15 @@ const Sankey = (props) => {
   };
 
   useEffect(() => {
-    props.runInitialSearch();
-  }, [props.runInitialSearch]);
+    runInitialSearch();
+  }, [runInitialSearch]);
 
   useEffect(() => {
     if (initialized || !props.orderIndex || !props.labelToFileIds) return;
     setInitialized(true);
     const data = getData(props.orderIndex, props.labelToFileIds);
     plot(ref.current, data);
-  }, [getData, props.orderIndex, props.labelToFileIds]);
+  }, [initialized, getData, props.orderIndex, props.labelToFileIds]);
 
   return (
     <div className="sankey-wrap">
