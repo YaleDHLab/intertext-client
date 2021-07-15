@@ -31,7 +31,7 @@ const searchReducer = (state = initialState, action) => {
         maxDisplayed: maxDisplayedStep,
         resultsMeta: {
           err: false,
-          loading: true,
+          loading: true
         }
       });
 
@@ -42,8 +42,8 @@ const searchReducer = (state = initialState, action) => {
         resultsMeta: Object.assign({}, state.resultsMeta, {
           totalResults: action.total,
           err: action.err,
-          loading: false,
-        }),
+          loading: false
+        })
       });
 
     case 'SET_SEARCH_RESULTS':

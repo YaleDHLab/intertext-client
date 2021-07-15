@@ -27,14 +27,13 @@ export const typeaheadRequestFailed = () => ({
 
 export function fetchTypeaheadResults() {
   return function (dispatch, getState) {
-    return dispatch(fetchTypeaheadFieldFile())
-      .then((dataMap) => {
-        dispatch({
-          type: 'RECEIVE_TYPEAHEAD_RESULTS',
-          file: dataMap,
-          results: Object.keys(dataMap)
-        });
+    return dispatch(fetchTypeaheadFieldFile()).then((dataMap) => {
+      dispatch({
+        type: 'RECEIVE_TYPEAHEAD_RESULTS',
+        file: dataMap,
+        results: Object.keys(dataMap)
       });
+    });
   };
 }
 

@@ -31,8 +31,8 @@ export const selectSortAttribute = (state) => {
 
 export const selectEarlierFileId = (state) => {
   return state.search.earlier;
-}
+};
 
 export const selectLaterFileId = (state) => {
   return state.search.later;
-}
+};

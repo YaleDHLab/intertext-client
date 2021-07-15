@@ -13,7 +13,7 @@ import {
   selectSortByIndex,
   selectSortAttribute,
   selectEarlierFileId,
-  selectLaterFileId,
+  selectLaterFileId
 } from '../selectors/search';
 import {
   selectTypeaheadFieldFile,
@@ -21,7 +21,7 @@ import {
 } from '../selectors/typeahead';
 import { fetchMatchFile } from './fetchJSONFile';
 import { addCacheRecord } from '../actions/cache';
-import { uniq } from 'lodash'
+import { uniq } from 'lodash';
 
 /**
  * Get a sorted list of match references
@@ -50,7 +50,7 @@ function getSortedMatchList(state) {
       // flatten [[file_id_1], [file_id_2]] to 1D array [file_id_1, file_id_2]
       .flat()
       // remove match file ids that don't match the earlier or later file ids
-      .filter(k => {
+      .filter((k) => {
         let fileIds = [];
         if (earlierFileId !== null) fileIds.push(earlierFileId);
         if (laterFileId !== null) fileIds.push(laterFileId);
@@ -61,11 +61,13 @@ function getSortedMatchList(state) {
 
   // filter the sorted list of matches according to search criteria
   let filteredSortIndex = sortIndex.filter((item) => {
-
-    const [ , matchEarlierFileId, matchLaterFileId, similarity] = item;
+    const [, matchEarlierFileId, matchLaterFileId, similarity] = item;
 
     // Drop if it's not in one of the author's match files
-    if (!matchFileIds.includes(matchEarlierFileId) && !matchFileIds.includes(matchLaterFileId)) {
+    if (
+      !matchFileIds.includes(matchEarlierFileId) &&
+      !matchFileIds.includes(matchLaterFileId)
+    ) {
       return false;
     }
 
@@ -75,7 +77,8 @@ function getSortedMatchList(state) {
     }
 
     // Drop if the source or earlier or later file id isn't right
-    if (earlierFileId !== null && earlierFileId !== matchEarlierFileId) return false;
+    if (earlierFileId !== null && earlierFileId !== matchEarlierFileId)
+      return false;
     if (laterFileId !== null && laterFileId !== matchLaterFileId) return false;
 
     return true;
@@ -104,7 +107,7 @@ export function flatFileStringSearch() {
     // get the match file contents
     return dispatch(getMatchFiles(matchFileIDs)).then((matchFiles) => {
       const matches = orderedIndex.reduce((arr, i) => {
-        const [ matchIndex, matchFileId, ] = i;
+        const [matchIndex, matchFileId] = i;
         arr.push(matchFiles[matchFileIDs.indexOf(matchFileId)][matchIndex]);
         return arr;
       }, []);

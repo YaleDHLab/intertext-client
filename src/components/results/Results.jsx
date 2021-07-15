@@ -50,7 +50,7 @@ const Results = (props) => {
         ) : loading ? (
           <Loader />
         ) : (
-          <span className='no-results'>Sorry, no results could be found</span>
+          <span className="no-results">Sorry, no results could be found</span>
         )}
       </div>
     </div>

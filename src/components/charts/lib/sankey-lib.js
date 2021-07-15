@@ -4,18 +4,19 @@ import {
   sankeyLinkHorizontal as d3sankeyLinkHorizontal,
   sankeyCenter as d3sankeyCenter
 } from 'd3-sankey';
-import { history } from '../../../store'
+import { history } from '../../../store';
 
 export const plot = (svg, data) => {
-
   // sort the nodes by how many edges they have
   let counts = {};
-  data.links.map(e => counts[e.source] = counts[e.source] ? counts[e.source] + 1 : 1)
+  data.links.map(
+    (e) => (counts[e.source] = counts[e.source] ? counts[e.source] + 1 : 1)
+  );
   data.nodes.sort((a, b) => {
     const ca = counts[a.sankeyId] || 0;
     const cb = counts[b.sankeyId] || 0;
     return cb - ca;
-  })
+  });
 
   const margin = { top: 10, right: 10, bottom: 10, left: 10 },
     width = 900 - margin.left - margin.right,
@@ -49,9 +50,9 @@ export const plot = (svg, data) => {
     links: data.links.map((d) => Object.assign({}, d))
   });
 
-  const handleLinkClick = d => {
-    history.push(`/?earlier=${d.source.id}&later=${d.target.id}`)
-  }
+  const handleLinkClick = (d) => {
+    history.push(`/?earlier=${d.source.id}&later=${d.target.id}`);
+  };
 
   const link = svg
     .append('g')
@@ -65,7 +66,7 @@ export const plot = (svg, data) => {
     .attr('d', d3sankeyLinkHorizontal())
     .style('stroke-width', (d) => Math.max(1, d.width))
     .attr('stroke', (d) => linkColor(d.similarity))
-    .on('click', d => handleLinkClick(d));
+    .on('click', (d) => handleLinkClick(d));
 
   link.append('title').text((d) => d.source.label + ' →\n' + d.target.label);
 
@@ -90,8 +91,10 @@ export const plot = (svg, data) => {
 
   node
     .append('text')
-    .attr('x', (d) => d.sankeyId.includes('earlier') ? 20 : -5)
-    .attr('y', (d) => (d.y1-d.y0 + 8)/2)
+    .attr('x', (d) => (d.sankeyId.includes('earlier') ? 20 : -5))
+    .attr('y', (d) => (d.y1 - d.y0 + 8) / 2)
     .text((d) => d.label)
-    .attr('text-anchor', d => d.sankeyId.includes('earlier') ? 'start' : 'end')
+    .attr('text-anchor', (d) =>
+      d.sankeyId.includes('earlier') ? 'start' : 'end'
+    );
 };

@@ -8,7 +8,7 @@ const Sankey = (props) => {
   const ref = useRef();
   const [initialized, setInitialized] = useState(false);
 
-  const {runInitialSearch} = {...props}
+  const { runInitialSearch } = { ...props };
 
   useEffect(() => {
     runInitialSearch();
@@ -37,7 +37,7 @@ const Sankey = (props) => {
       const nodes = {};
       const links = {};
       orderIndex.forEach((i) => {
-        const [ , matchEarlierFileId, matchLaterFileId, similarity] = i;
+        const [, matchEarlierFileId, matchLaterFileId, similarity] = i;
         const a = matchEarlierFileId;
         const b = matchLaterFileId;
         // create node labels
@@ -54,7 +54,10 @@ const Sankey = (props) => {
         nodes[sankeyIdB] = bNode;
         // update the edges
         links[sankeyIdA] = links[sankeyIdA] || {};
-        links[sankeyIdA][sankeyIdB] = links[sankeyIdA][sankeyIdB] || { count: 0, similarity: [] };
+        links[sankeyIdA][sankeyIdB] = links[sankeyIdA][sankeyIdB] || {
+          count: 0,
+          similarity: []
+        };
         links[sankeyIdA][sankeyIdB]['count'] += 1;
         links[sankeyIdA][sankeyIdB]['similarity'].push(similarity);
       });
