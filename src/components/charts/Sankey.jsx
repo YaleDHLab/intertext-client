@@ -10,40 +10,36 @@ const Sankey = (props) => {
 
   const {runInitialSearch} = {...props}
 
-  const getData = (orderIndex, labelToFileIds) => {
-    // wait for the match index to load before showing plot
-    if (!orderIndex || Object.values(orderIndex).length === 0) return;
-    if (!labelToFileIds || Object.values(labelToFileIds).length === 0) return;
-    // obtain a mapping from file id to label
-    let fileIdToLabel = {};
-    for (const [label, fileIds] of Object.entries(labelToFileIds)) {
-      fileIds.forEach((fileId) => {
-        fileIdToLabel[fileId] = label;
+  useEffect(() => {
+    runInitialSearch();
+  }, [runInitialSearch]);
+
+  useEffect(() => {
+    const getData = (orderIndex, labelToFileIds) => {
+      // wait for the match index to load before showing plot
+      if (!orderIndex || Object.values(orderIndex).length === 0) return;
+      if (!labelToFileIds || Object.values(labelToFileIds).length === 0) return;
+      // obtain a mapping from file id to label
+      let fileIdToLabel = {};
+      for (const [label, fileIds] of Object.entries(labelToFileIds)) {
+        fileIds.forEach((fileId) => {
+          fileIdToLabel[fileId] = label;
+        });
+      }
+      // obtain a mapping from match id to match objects
+      let matchIdMap = {};
+      orderIndex.forEach((i) => {
+        const [fileIdA, matchId, , ,] = i;
+        matchIdMap[matchId] = matchIdMap[matchId] || [];
+        matchIdMap[matchId].push(fileIdA);
       });
-    }
-    // obtain a mapping from match id to match objects
-    let matchIdMap = {};
-    orderIndex.forEach((i) => {
-      const [fileIdA, matchId, , ,] = i;
-      matchIdMap[matchId] = matchIdMap[matchId] || [];
-      matchIdMap[matchId].push(fileIdA);
-    });
-    // parse the data to be represented
-    const nodes = {};
-    const links = {};
-    const seenMatchids = new Set();
-    orderIndex.forEach((i) => {
-      const [fileId, matchId, , aIsEarlier, similarity] = i;
-      // process each matchid once
-      if (!(matchId in seenMatchids)) {
-        seenMatchids.add(matchId);
-        // determine which of _a or _b fileId is
-        const [_a, _b] = matchIdMap[matchId];
-        const fileIdA = _a === fileId ? _a : _b;
-        const fileIdB = _a === fileId ? _b : _a;
-        // set file ids based on which is earlier
-        const a = aIsEarlier ? fileIdA : fileIdB;
-        const b = aIsEarlier ? fileIdB : fileIdA;
+      // parse the data to be represented
+      const nodes = {};
+      const links = {};
+      orderIndex.forEach((i) => {
+        const [ , matchEarlierFileId, matchLaterFileId, similarity] = i;
+        const a = matchEarlierFileId;
+        const b = matchLaterFileId;
         // create node labels
         const aLabel = fileIdToLabel[a];
         const bLabel = fileIdToLabel[b];
@@ -61,38 +57,32 @@ const Sankey = (props) => {
         links[sankeyIdA][sankeyIdB] = links[sankeyIdA][sankeyIdB] || { count: 0, similarity: [] };
         links[sankeyIdA][sankeyIdB]['count'] += 1;
         links[sankeyIdA][sankeyIdB]['similarity'].push(similarity);
-      }
-    });
+      });
 
-    const l = [];
-    Object.keys(links).forEach((a) => {
-      Object.keys(links[a]).forEach((b) => {
-        l.push({
-          source: a,
-          target: b,
-          similarity: _.mean(links[a][b]['similarity']),
-          count: links[a][b]['count'],
-          value: links[a][b]['count']
+      const l = [];
+      Object.keys(links).forEach((a) => {
+        Object.keys(links[a]).forEach((b) => {
+          l.push({
+            source: a,
+            target: b,
+            similarity: _.mean(links[a][b]['similarity']),
+            count: links[a][b]['count'],
+            value: links[a][b]['count']
+          });
         });
       });
-    });
 
-    return {
-      nodes: Object.values(nodes),
-      links: l
+      return {
+        nodes: Object.values(nodes),
+        links: l
+      };
     };
-  };
 
-  useEffect(() => {
-    runInitialSearch();
-  }, [runInitialSearch]);
-
-  useEffect(() => {
     if (initialized || !props.orderIndex || !props.labelToFileIds) return;
     setInitialized(true);
     const data = getData(props.orderIndex, props.labelToFileIds);
     plot(ref.current, data);
-  }, [initialized, getData, props.orderIndex, props.labelToFileIds]);
+  }, [initialized, props.orderIndex, props.labelToFileIds]);
 
   return (
     <div className="sankey-wrap">

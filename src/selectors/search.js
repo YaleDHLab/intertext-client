@@ -24,3 +24,15 @@ export const selectSortAttribute = (state) => {
   console.warn('Invalid sort property string: ' + f);
   return 'similarity';
 };
+
+/**
+ * File Ids
+ **/
+
+export const selectEarlierFileId = (state) => {
+  return state.search.earlier;
+}
+
+export const selectLaterFileId = (state) => {
+  return state.search.later;
+}

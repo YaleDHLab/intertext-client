@@ -12,8 +12,8 @@ export const plot = (svg, data) => {
   let counts = {};
   data.links.map(e => counts[e.source] = counts[e.source] ? counts[e.source] + 1 : 1)
   data.nodes.sort((a, b) => {
-    const ca = counts[a.id] || 0;
-    const cb = counts[b.id] || 0;
+    const ca = counts[a.sankeyId] || 0;
+    const cb = counts[b.sankeyId] || 0;
     return cb - ca;
   })
 

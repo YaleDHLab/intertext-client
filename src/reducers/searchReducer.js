@@ -5,17 +5,17 @@ const initialState = {
   allResults: [],
   maxDisplayed: maxDisplayedStep,
 
-  // similarity range
-  similarity: [50, 100],
-  displayed: [50, 100],
-
-  // use types
-  earlier: true,
-  later: true,
+  // file ids
+  earlier: null,
+  later: null,
 
   // sort
   sortBy: 'similarity',
   sortByIndex: null,
+
+  // similarity range
+  similarity: [50, 100],
+  displayed: [50, 100],
 
   resultsMeta: {
     err: false,

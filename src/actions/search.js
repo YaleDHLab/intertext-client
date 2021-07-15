@@ -14,6 +14,7 @@ export const fetchSearchResults = () => {
   return (dispatch, getState) => {
     dispatch({ type: 'RESET_SEARCH' });
     dispatch(setTypeaheadIndex(0));
+    dispatch(loadSearchFromUrl());
     dispatch(fetchMoreSearchResults());
     window.scrollTo(0, 0);
   };
