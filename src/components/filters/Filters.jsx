@@ -3,6 +3,7 @@ import SortResults from './SortResults';
 import ResultCount from '../results/ResultCount';
 import Typeahead from '../typeahead/Typeahead';
 import TypeaheadSelect from '../typeahead/TypeaheadSelect';
+import filterIcon from '../../assets/images/icons/filter-icon.svg';
 
 class Filters extends React.Component {
   render() {
@@ -19,6 +20,7 @@ class Filters extends React.Component {
           <div className="row justify-end align-center filter-group">
             <ResultCount />
             <SortResults />
+            <img id='filters-icon' src={filterIcon} />
           </div>
         </div>
       </div>

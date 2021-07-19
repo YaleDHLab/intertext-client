@@ -47,6 +47,18 @@
   font-weight: 600;
 }
 
+#filters-icon {
+  height: 20px;
+  padding: 2px;
+  transform: rotate(90deg);
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+#filters-icon.active {
+  filter: invert(1) sepia(1) saturate(7) brightness(71%) hue-rotate(104deg);
+}
+
 /**
 * Button to close the compare view
 **/
