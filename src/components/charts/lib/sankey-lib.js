@@ -4,7 +4,7 @@ import {
   sankeyLinkHorizontal as d3sankeyLinkHorizontal,
   sankeyCenter as d3sankeyCenter
 } from 'd3-sankey';
-import { colors} from './color-lib'
+import { colors } from './color-lib';
 import { history } from '../../../store';
 
 export const plot = (svg, data) => {
@@ -23,10 +23,7 @@ export const plot = (svg, data) => {
     width = 900 - margin.left - margin.right,
     height = 600 - margin.top - margin.bottom;
 
-  const linkColor = d3
-    .scaleThreshold()
-    .domain([0, 60, 70, 80])
-    .range(colors);
+  const linkColor = d3.scaleThreshold().domain([0, 60, 70, 80]).range(colors);
 
   svg = d3
     .select(svg)
@@ -62,7 +59,7 @@ export const plot = (svg, data) => {
     .data(links.sort((b, a) => b.width - a.width))
     .enter()
     .append('path')
-    .attr('class', d => `link source-${d.source.id} target-${d.target.id}`)
+    .attr('class', (d) => `link source-${d.source.id} target-${d.target.id}`)
     .attr('fill', 'none')
     .attr('d', d3sankeyLinkHorizontal())
     .style('stroke-width', (d) => Math.max(1, d.width))
@@ -71,14 +68,16 @@ export const plot = (svg, data) => {
 
   link.append('title').text((d) => d.source.label + ' →\n' + d.target.label);
 
-  const activateLinks = d => {
-    if (d.sankeyId.includes('earlier')) d3.selectAll(`.link.source-${d.id}`).classed('active', true);
-    if (d.sankeyId.includes('later')) d3.selectAll(`.link.target-${d.id}`).classed('active', true);
-  }
+  const activateLinks = (d) => {
+    if (d.sankeyId.includes('earlier'))
+      d3.selectAll(`.link.source-${d.id}`).classed('active', true);
+    if (d.sankeyId.includes('later'))
+      d3.selectAll(`.link.target-${d.id}`).classed('active', true);
+  };
 
   const deactivateLinks = () => {
     d3.selectAll('.link').classed('active', false);
-  }
+  };
 
   const node = svg
     .append('g')
@@ -88,7 +87,7 @@ export const plot = (svg, data) => {
     .enter()
     .append('g')
     .attr('class', 'node')
-    .attr('transform', (d) => 'translate(' + d.x0  + ',' + d.y0 + ')');
+    .attr('transform', (d) => 'translate(' + d.x0 + ',' + d.y0 + ')');
 
   node
     .append('rect')
@@ -104,17 +103,19 @@ export const plot = (svg, data) => {
   node
     .append('foreignObject')
     .attr('x', (d) => (d.sankeyId.includes('earlier') ? -205 : 20))
-    .attr('y', (d) => d.y1 - d.y0 >= 20 ? 0 : -(20 - (d.y1-d.y0))/2)
+    .attr('y', (d) => (d.y1 - d.y0 >= 20 ? 0 : -(20 - (d.y1 - d.y0)) / 2))
     .attr('width', 200)
-    .attr('height', d => Math.max(d.y1 - d.y0, 20))
+    .attr('height', (d) => Math.max(d.y1 - d.y0, 20))
     .append('xhtml:div')
-    .attr('class', d => {
+    .attr('class', (d) => {
       return d.sankeyId.includes('earlier')
         ? 'sankey-label-container earlier'
-        : 'sankey-label-container later'
+        : 'sankey-label-container later';
     })
     .append('xhtml:div')
-    .text((d) => d.label.length < 30 ? d.label : d.label.substring(0, 30) + '...')
+    .text((d) =>
+      d.label.length < 30 ? d.label : d.label.substring(0, 30) + '...'
+    )
     .on('mouseenter', activateLinks)
-    .on('mouseout', deactivateLinks)
+    .on('mouseout', deactivateLinks);
 };
