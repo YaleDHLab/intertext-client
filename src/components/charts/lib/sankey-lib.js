@@ -4,6 +4,7 @@ import {
   sankeyLinkHorizontal as d3sankeyLinkHorizontal,
   sankeyCenter as d3sankeyCenter
 } from 'd3-sankey';
+import { colors} from './color-lib'
 import { history } from '../../../store';
 
 export const plot = (svg, data) => {
@@ -24,8 +25,8 @@ export const plot = (svg, data) => {
 
   const linkColor = d3
     .scaleThreshold()
-    .domain([0, 50, 60, 70, 80])
-    .range(['#EFECEC', '#F0E442', '#E69F00', '#D55E00']);
+    .domain([0, 60, 70, 80])
+    .range(colors);
 
   svg = d3
     .select(svg)

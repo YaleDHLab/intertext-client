@@ -2,14 +2,16 @@
   margin: 30px 0;
 }
 
-#sankey-plot g.links path {
-  opacity: 0.3;
+#sankey-plot .links path {
+  opacity: 0.2;
   cursor: pointer;
+  filter: grayscale(1);
 }
 
-#sankey-plot g.links path.active,
-#sankey-plot g.links path:hover {
-  opacity: 0.8;
+#sankey-plot .links path.active,
+#sankey-plot .links path:hover {
+  opacity: 0.9;
+  filter: none;
 }
 
 .sankey-label-container {
