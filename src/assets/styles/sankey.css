@@ -11,3 +11,23 @@
 #sankey-plot g.links path:hover {
   opacity: 0.8;
 }
+
+.sankey-label-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  justify-content: center;
+  font-size: 12px;
+  position: relative;
+  z-index: 10;
+  font-weight: 600;
+}
+
+.sankey-label-container.earlier {
+  text-align: right;
+}
+
+.sankey-label-container.later {
+  text-align: left;
+}
