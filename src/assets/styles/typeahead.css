@@ -95,7 +95,7 @@ input:focus + .typeahead-results {
 
 .typeahead-select-container {
   background: url(../images/icons/down-caret-gray.png);
-  background-size: 12px;
+  background-size: 9px;
   background-repeat: no-repeat;
   background-position: 83%;
   border-top-left-radius: 8px;
@@ -122,7 +122,7 @@ input:focus + .typeahead-results {
 }
 
 .typeahead-select-container select {
-  width: 80px;
+  width: 75px;
   height: 36px;
   font-size: 0.8em;
   font-weight: 600;

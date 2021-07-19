@@ -65,7 +65,7 @@
 **/
 
 .similarity-circle {
-  width: 80px;
+  width: 60px;
   height: 100%;
 }
 
@@ -153,7 +153,6 @@
 .result-title {
   font-size: 0.9em;
   color: #666666;
-  width: 450px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -235,7 +234,7 @@
 }
 
 .result-match {
-  font-size: 0.9em;
+  font-size: 0.85em;
   line-height: 1.6em;
   font-weight: 600;
 }
