@@ -3,7 +3,6 @@ import './main.css';
 import './filters.css';
 import './footer.css';
 import './header.css';
-import './home.css';
 import './legend.css';
 import './loader.css';
 import './nav.css';
