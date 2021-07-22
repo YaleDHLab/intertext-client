@@ -2,8 +2,7 @@
 * Basic search filters
 **/
 
-.filters-container {
-  width: 100%;
+#filters-container {
   text-align: center;
   box-sizing: border-box;
   background: #f9f9f9;
@@ -11,8 +10,8 @@
   margin-bottom: 2px;
 }
 
-.filters {
-  width: 1092px;
+#filters-inner {
+  width: 992px;
   position: relative;
   box-shadow: 0 0 4px #c7c7c7;
   white-space: nowrap;
@@ -47,7 +46,7 @@
   font-weight: 600;
 }
 
-#filters-icon {
+#advanced-filters-icon {
   height: 20px;
   padding: 2px;
   transform: rotate(90deg);
@@ -55,7 +54,7 @@
   cursor: pointer;
 }
 
-#filters-icon.active {
+#advanced-filters-icon.active {
   filter: invert(1) sepia(1) saturate(7) brightness(71%) hue-rotate(104deg);
 }
 
@@ -71,13 +70,40 @@
 }
 
 @media (max-width: 700px) {
-  .filters {
+  #filters-inner {
     padding: 8px;
     margin: 0;
     width: 100%;
   }
 
-  .filters .filter-group {
+  #filters-inner .filter-group {
     display: none;
   }
+}
+
+/**
+ * Advanced Search
+ **/
+
+.advanced-filter-column {
+      background: #ececec;
+    padding: 10px 40px;
+    font-size: 14px;
+}
+
+.advanced-filter-column .row {
+  margin: 10px 0;
+}
+
+.advanced-filter-column .row .label {
+      width: 45px;
+    text-align: right;
+    margin-right: 15px;
+    font-size: 12px;
+}
+
+.advanced-filter-column .row input {
+    padding: 4px 10px;
+    flex: 1;
+    border: 1px solid #aba9a9;
 }

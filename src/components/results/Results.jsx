@@ -42,9 +42,9 @@ const Results = (props) => {
   }, [loadSearchFromUrl, runInitialSearch]);
 
   return (
-    <div className="results-container col align-center">
+    <div id='results-container' className="col justify-center align-center">
       <Filters />
-      <div className="result-pair-container flex-1" ref={ref}>
+      <div id='result-pairs-container' className="flex-1" ref={ref}>
         {results && results.length ? (
           <ResultPairs results={results} />
         ) : loading ? (
@@ -59,10 +59,10 @@ const Results = (props) => {
 
 const ResultPairs = (props) => {
   return (
-    <div id="results-container">
+    <div>
       {props.results.map((result, idx) => (
         <div
-          className={`result-pair row justify-center align-center
+          className={`result-pair row
             ${
               result.source_author === 'Unknown' &&
               result.target_author === 'Unknown'

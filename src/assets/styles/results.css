@@ -1,8 +1,8 @@
 /**
-* Container for all results
+* Containers
 **/
 
-.results-container {
+#results-container {
   background: #f8f8f8;
   position: absolute;
   top: 60px;
@@ -12,33 +12,16 @@
   overflow: hidden;
 }
 
-/**
-* Container for result pairs
-**/
-
-.result-pair.hide-authors .result-author {
-  display: none;
-}
-
-.result-pair-container {
-  width: 1100px;
+#result-pairs-container {
+  width: 1000px;
   opacity: 1;
   transition: opacity 0.5s ease;
   overflow: auto;
 }
 
-.result-pair-container.fade-out {
+#result-pairs-container.fade-out {
   opacity: 0;
 }
-
-.no-results {
-  display: block;
-  margin-top: 30px;
-}
-
-/**
-* Container for each match pair
-**/
 
 .result-pair {
   text-align: left;
@@ -48,16 +31,21 @@
   margin: 14px 0;
 }
 
-/**
-* Result pair animations
-**/
-
 .result-pair.animated .result.source {
   transform: translateX(-2000px);
 }
 
 .result-pair.animated .result.target {
   transform: translateX(2000px);
+}
+
+.result-pair.hide-authors .result-author {
+  display: none;
+}
+
+.no-results {
+  display: block;
+  margin-top: 30px;
 }
 
 /**
@@ -67,18 +55,19 @@
 .similarity-circle {
   width: 60px;
   height: 100%;
+  align-self: center;
 }
 
 .similarity {
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   border-radius: 20px;
   opacity: 1;
   transition: opacity 1s;
   background: #bfbfbf;
   color: #fff;
   text-align: center;
-  font-size: 0.85em;
+  font-size: 11px;
 }
 
 .result-pair:hover .similarity {
@@ -99,13 +88,9 @@
   border: 1px solid lightgray;
   background: #fff;
   position: relative;
-  flex: 1;
   transition: transform 1s ease, height 0.3s ease;
   display: inline-block;
   text-align: left;
-  display: flex;
-  flex-direction: column;
-  align-self: stretch;
 }
 
 .result-pair:hover .result {
@@ -159,6 +144,7 @@
   line-height: 1.2em;
   font-family: 'Open Sans';
   font-style: italic;
+  max-width: 395px;
 }
 
 .result.waffle-chart-card {
@@ -222,9 +208,7 @@
 **/
 
 .result-body {
-  padding: 24px;
-  flex: 1;
-}
+  padding: 24px;}
 
 .result-author {
   font-size: 1.5em;
@@ -276,7 +260,6 @@
 }
 
 .result-footer {
-  display: table;
   width: 100%;
   text-align: center;
   background: #f8f8f8;
@@ -287,13 +270,12 @@
 
 .result-footer div,
 .result-footer a {
-  display: table-cell;
   font-size: 13px;
   color: #bababa;
   cursor: pointer;
   text-decoration: none;
   outline: none;
-  width: 25%;
+  flex: 1;
 }
 
 .result .result-footer div:hover,
