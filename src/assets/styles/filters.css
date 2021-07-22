@@ -86,9 +86,9 @@
  **/
 
 .advanced-filter-column {
-      background: #ececec;
-    padding: 10px 40px;
-    font-size: 14px;
+  background: #ececec;
+  padding: 10px 40px;
+  font-size: 14px;
 }
 
 .advanced-filter-column .row {
@@ -96,14 +96,14 @@
 }
 
 .advanced-filter-column .row .label {
-      width: 45px;
-    text-align: right;
-    margin-right: 15px;
-    font-size: 12px;
+  width: 45px;
+  text-align: right;
+  margin-right: 15px;
+  font-size: 12px;
 }
 
 .advanced-filter-column .row input {
-    padding: 4px 10px;
-    flex: 1;
-    border: 1px solid #aba9a9;
+  padding: 4px 10px;
+  flex: 1;
+  border: 1px solid #aba9a9;
 }

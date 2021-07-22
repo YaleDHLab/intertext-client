@@ -42,9 +42,9 @@ const Results = (props) => {
   }, [loadSearchFromUrl, runInitialSearch]);
 
   return (
-    <div id='results-container' className="col justify-center align-center">
+    <div id="results-container" className="col justify-center align-center">
       <Filters />
-      <div id='result-pairs-container' className="flex-1" ref={ref}>
+      <div id="result-pairs-container" className="flex-1" ref={ref}>
         {results && results.length ? (
           <ResultPairs results={results} />
         ) : loading ? (
