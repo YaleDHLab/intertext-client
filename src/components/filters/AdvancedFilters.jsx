@@ -35,7 +35,7 @@ const AdvancedFilterColumn = (props) => {
       {rows.map((r) => {
         const [label, onChange] = r;
         return (
-          <div className="row justify-start align-center">
+          <div key={label} className="row justify-start align-center">
             <div className="label">{label}</div>
             <input type="text"></input>
           </div>
