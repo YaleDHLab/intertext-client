@@ -7,7 +7,6 @@
   box-sizing: border-box;
   background: #f9f9f9;
   margin-top: 20px;
-  margin-bottom: 2px;
 }
 
 #filters-inner {
@@ -56,6 +55,10 @@
 
 #advanced-filters-icon.active {
   filter: invert(1) sepia(1) saturate(7) brightness(71%) hue-rotate(104deg);
+}
+
+#advanced-filters {
+  box-shadow: 0 2px 2px #d8d8d8;
 }
 
 /**

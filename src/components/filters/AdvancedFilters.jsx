@@ -3,8 +3,9 @@ import React from 'react';
 const AdvancedFilters = (props) => {
   return (
     <div id="advanced-filters" className="row space-between">
-      <AdvancedFilterColumn />
-      <AdvancedFilterColumn />
+      <AdvancedFilterColumn type='earlier' />
+      {/*<div className='similarity-circle opacity-0' />*/}
+      <AdvancedFilterColumn type='later' />
     </div>
   );
 };
@@ -31,7 +32,7 @@ const AdvancedFilterColumn = (props) => {
   ];
 
   return (
-    <div className="advanced-filter-column flex-1">
+    <div className={`advanced-filter-column flex-1 ${props.type}`}>
       {rows.map((r) => {
         const [label, onChange] = r;
         return (
