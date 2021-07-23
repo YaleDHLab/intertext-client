@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SortResults from './SortResults';
 import ResultCount from '../results/ResultCount';
 import Typeahead from '../typeahead/Typeahead';
@@ -7,10 +7,20 @@ import filterIcon from '../../assets/images/icons/filter-icon.svg';
 import AdvancedFilters from './AdvancedFilters';
 
 const Filters = (props) => {
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const ref = useRef();
 
-  const toggleShowAdvancedFilters = () => {
-    setShowAdvancedFilters(!showAdvancedFilters);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const onWindowClick = e => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    }
+    window.addEventListener('click', onWindowClick);
+    return () => { window.removeEventListener('click', onWindowClick); }
+  }, [open])
+
+  const toggleOpen = () => {
+    setOpen(!open);
   };
 
   return (
@@ -28,15 +38,16 @@ const Filters = (props) => {
           <ResultCount />
           <SortResults />
           <img
+            ref={ref}
             alt="Advanced filters icon"
-            className={showAdvancedFilters ? 'active' : ''}
+            className={open ? 'active' : ''}
             id="advanced-filters-icon"
             src={filterIcon}
-            onClick={toggleShowAdvancedFilters}
+            onClick={toggleOpen}
           />
         </div>
       </div>
-      {showAdvancedFilters ? <AdvancedFilters /> : null}
+      {open ? <AdvancedFilters /> : null}
     </div>
   );
 };
