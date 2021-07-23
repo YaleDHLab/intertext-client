@@ -28,6 +28,7 @@ const Filters = (props) => {
           <ResultCount />
           <SortResults />
           <img
+            alt='Advanced filters icon'
             className={showAdvancedFilters ? 'active' : ''}
             id="advanced-filters-icon"
             src={filterIcon}
