@@ -73,7 +73,7 @@ TypeaheadResults.propTypes = {
   query: PropTypes.string.isRequired,
   results: PropTypes.array.isRequired,
   setTypeaheadQuery: PropTypes.func.isRequired,
-  submitSearch: PropTypes.func.isRequired
+  submitSearch: PropTypes.func.isRequired,
 };
 
 const Result = (props) => (
@@ -90,18 +90,18 @@ Result.propTypes = {
   active: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
   submitSearch: PropTypes.func.isRequired,
-  val: PropTypes.string.isRequired
+  val: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   results: state.typeahead.results,
   query: state.typeahead.query,
-  index: state.typeahead.index
+  index: state.typeahead.index,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setTypeaheadQuery: (val) => dispatch(setTypeaheadQuery(val)),
-  fetchSearchResults: () => dispatch(fetchSearchResults())
+  fetchSearchResults: () => dispatch(fetchSearchResults()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TypeaheadResults);

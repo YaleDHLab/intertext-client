@@ -23,16 +23,16 @@ class TypeaheadSelect extends React.Component {
 
 TypeaheadSelect.propTypes = {
   field: PropTypes.string.isRequired,
-  setTypeaheadFieldAndFetch: PropTypes.func.isRequired
+  setTypeaheadFieldAndFetch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  field: state.typeahead.field
+  field: state.typeahead.field,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setTypeaheadFieldAndFetch: (event) =>
-    dispatch(setTypeaheadFieldAndFetch(event.target.value))
+    dispatch(setTypeaheadFieldAndFetch(event.target.value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TypeaheadSelect);

@@ -56,7 +56,7 @@ const Sankey = (props) => {
         links[sankeyIdA] = links[sankeyIdA] || {};
         links[sankeyIdA][sankeyIdB] = links[sankeyIdA][sankeyIdB] || {
           count: 0,
-          similarity: []
+          similarity: [],
         };
         links[sankeyIdA][sankeyIdB]['count'] += 1;
         links[sankeyIdA][sankeyIdB]['similarity'].push(similarity);
@@ -70,14 +70,14 @@ const Sankey = (props) => {
             target: b,
             similarity: _.mean(links[a][b]['similarity']),
             count: links[a][b]['count'],
-            value: links[a][b]['count']
+            value: links[a][b]['count'],
           });
         });
       });
 
       return {
         nodes: Object.values(nodes),
-        links: l
+        links: l,
       };
     };
 
@@ -97,11 +97,11 @@ const Sankey = (props) => {
 const mapStateToProps = (state) => ({
   typeaheadField: state.typeahead.field,
   labelToFileIds: state.typeahead.fieldFiles[state.typeahead.field],
-  orderIndex: state.search.sortByIndex
+  orderIndex: state.search.sortByIndex,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  runInitialSearch: () => dispatch(runInitialSearch())
+  runInitialSearch: () => dispatch(runInitialSearch()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sankey);

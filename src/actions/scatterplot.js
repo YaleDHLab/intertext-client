@@ -2,30 +2,30 @@ import * as d3 from 'd3';
 import { fetchScatterplotFile } from '../utils/fetchJSONFile';
 
 export const toggleJitter = () => ({
-  type: 'TOGGLE_JITTER'
+  type: 'TOGGLE_JITTER',
 });
 
 export const removeZoom = () => ({
-  type: 'REMOVE_ZOOM'
+  type: 'REMOVE_ZOOM',
 });
 
 export const setY = (y) => ({
   type: 'SET_Y',
-  y: y
+  y: y,
 });
 
 export const scatterplotRequestFailed = () => ({
-  type: 'SCATTERPLOT_REQUEST_FAILED'
+  type: 'SCATTERPLOT_REQUEST_FAILED',
 });
 
 export const receiveResults = (obj) => ({
   type: 'RECEIVE_SCATTERPLOT_RESULTS',
-  obj: obj
+  obj: obj,
 });
 
 export const setTooltip = (obj) => ({
   type: 'SET_TOOLTIP',
-  obj: obj
+  obj: obj,
 });
 
 export const setDomains = (domains) => {
@@ -102,7 +102,7 @@ const getScatterplotProps = (state) => {
   return {
     use: getUse(state.scatterplot.use),
     unit: getUnit(state.scatterplot.unit),
-    stat: state.scatterplot.statistic
+    stat: state.scatterplot.statistic,
   };
 };
 
@@ -119,7 +119,7 @@ const getUnit = (unit) => {
 const getDomains = (data, _state) => {
   return {
     x: d3.extent(data, (d) => d.similarity),
-    y: d3.extent(data, (d) => d[getUse(_state.use) + '_year'])
+    y: d3.extent(data, (d) => d[getUse(_state.use) + '_year']),
   };
 };
 
@@ -136,7 +136,7 @@ const parseResults = (data, options) => {
       data: data,
       xDomain: domains.x,
       yDomain: domains.y,
-      zoomed: false
+      zoomed: false,
     };
     dispatch(receiveResults(args));
   };

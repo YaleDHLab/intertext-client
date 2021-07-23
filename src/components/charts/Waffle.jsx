@@ -45,7 +45,7 @@ class Waffle extends React.Component {
                 <div
                   className="headshot"
                   style={{
-                    backgroundImage: 'url(' + getImage(this.props.image) + ')'
+                    backgroundImage: 'url(' + getImage(this.props.image) + ')',
                   }}
                 />
                 <div className="headshot-label">{this.props.author}</div>
@@ -101,7 +101,7 @@ const getImage = (image) => {
 const options = [
   { feature: 'author', label: 'Author' },
   { feature: 'segment_ids', label: 'Segment' },
-  { feature: 'year', label: 'Year' }
+  { feature: 'year', label: 'Year' },
 ];
 
 /**
@@ -148,11 +148,11 @@ let mapStateToProps = (state) => ({
   width: state.waffle.width,
   xDomain: state.waffle.xDomain,
   columnCounts: state.waffle.columnCounts,
-  maxColumn: state.waffle.maxColumn
+  maxColumn: state.waffle.maxColumn,
 });
 
 let mapDispatchToProps = (dispatch) => ({
-  getActive: (d, i) => dispatch(getWaffleActive(d, i))
+  getActive: (d, i) => dispatch(getWaffleActive(d, i)),
 });
 
 const WafflePlot = connect(
@@ -170,7 +170,7 @@ StatelessWafflePlot.propTypes = {
   maxColumn: PropTypes.number,
   width: PropTypes.number.isRequired,
   xDomain: PropTypes.arrayOf(PropTypes.string).isRequired,
-  getActive: PropTypes.func.isRequired
+  getActive: PropTypes.func.isRequired,
 };
 
 /**
@@ -183,14 +183,14 @@ Waffle.propTypes = {
   data: PropTypes.arrayOf(WaffleDataProps).isRequired,
   feature: PropTypes.string.isRequired,
   history: PropTypes.shape({
-    push: PropTypes.func.isRequired
+    push: PropTypes.func.isRequired,
   }),
   image: PropTypes.string,
   location: PropTypes.object,
   match: PropTypes.object,
   setFeature: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
 };
 
 mapStateToProps = (state) => ({
@@ -200,11 +200,11 @@ mapStateToProps = (state) => ({
   title: state.waffle.title,
   image: state.waffle.image,
   data: state.waffle.data,
-  active: state.waffle.active
+  active: state.waffle.active,
 });
 
 mapDispatchToProps = (dispatch) => ({
-  setFeature: (feature) => dispatch(setWaffleFeature(feature))
+  setFeature: (feature) => dispatch(setWaffleFeature(feature)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Waffle);

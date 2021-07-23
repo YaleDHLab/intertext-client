@@ -2,27 +2,27 @@ import { fetchTypeaheadFieldFile } from '../utils/fetchJSONFile';
 
 export const setTypeaheadField = (field) => ({
   type: 'SET_TYPEAHEAD_FIELD',
-  field
+  field,
 });
 
 export const setTypeaheadQuery = (query) => ({
   type: 'SET_TYPEAHEAD_QUERY',
-  query
+  query,
 });
 
 export const setTypeaheadIndex = (index) => ({
   type: 'SET_TYPEAHEAD_INDEX',
-  index
+  index,
 });
 
 export const receiveTypeaheadResults = (obj) => ({
   type: 'RECEIVE_TYPEAHEAD_RESULTS',
   results: obj.results,
-  fieldFile: obj.file
+  fieldFile: obj.file,
 });
 
 export const typeaheadRequestFailed = () => ({
-  type: 'TYPEAHEAD_REQUEST_FAILED'
+  type: 'TYPEAHEAD_REQUEST_FAILED',
 });
 
 export function fetchTypeaheadResults() {
@@ -31,7 +31,7 @@ export function fetchTypeaheadResults() {
       dispatch({
         type: 'RECEIVE_TYPEAHEAD_RESULTS',
         file: dataMap,
-        results: Object.keys(dataMap)
+        results: Object.keys(dataMap),
       });
     });
   };

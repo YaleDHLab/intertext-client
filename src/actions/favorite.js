@@ -15,12 +15,12 @@ export const toggleFavorite = (obj) => {
 
 export const addFavorite = (obj) => ({
   type: 'ADD_FAVORITE',
-  obj: obj
+  obj: obj,
 });
 
 export const removeFavorite = (obj) => ({
   type: 'REMOVE_FAVORITE',
-  obj: obj
+  obj: obj,
 });
 
 export const saveFavorites = () => {

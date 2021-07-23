@@ -14,7 +14,7 @@ import {
   setTooltip,
   setStatistic,
   toggleJitter,
-  setDomains
+  setDomains,
 } from '../../actions/scatterplot';
 
 const Scatterplot = (props) => {
@@ -117,7 +117,7 @@ const LeftChart = (props) => {
       y: mouseLocation[1],
       title: d.title,
       author: d.author,
-      year: d[props.y]
+      year: d[props.y],
     });
   };
 
@@ -127,7 +127,7 @@ const LeftChart = (props) => {
       y: null,
       title: '',
       author: '',
-      year: null
+      year: null,
     });
   };
 
@@ -143,11 +143,11 @@ const LeftChart = (props) => {
     // find min, max of each axis in axis units (not pixels)
     const x = [
       scales.x.invert(d3.event.selection[0][0]),
-      scales.x.invert(d3.event.selection[1][0])
+      scales.x.invert(d3.event.selection[1][0]),
     ];
     const y = [
       scales.y.invert(d3.event.selection[0][1]),
-      scales.y.invert(d3.event.selection[1][1])
+      scales.y.invert(d3.event.selection[1][1]),
     ];
     // only brush if there are observations in brushed area
     const selected = props.data.filter((d) => {
@@ -207,7 +207,7 @@ const Tooltip = (props) => {
       className="tooltip"
       style={{
         left: props.tooltip.x + 5,
-        top: props.tooltip.y + 30
+        top: props.tooltip.y + 30,
       }}
     >
       <div className="title">{props.tooltip.title}</div>
@@ -272,11 +272,11 @@ Scatterplot.propTypes = {
       similarity: PropTypes.number.isRequired,
       source_year: PropTypes.number.isRequired,
       target_year: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired
+      title: PropTypes.string.isRequired,
     })
   ),
   history: PropTypes.shape({
-    push: PropTypes.func.isRequired
+    push: PropTypes.func.isRequired,
   }),
   jitter: PropTypes.bool.isRequired,
   location: PropTypes.object,
@@ -292,13 +292,13 @@ Scatterplot.propTypes = {
     author: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     x: PropTypes.isRequired,
-    y: PropTypes.isRequired
+    y: PropTypes.isRequired,
   }),
   unit: PropTypes.string.isRequired,
   use: PropTypes.string.isRequired,
   xDomain: PropTypes.arrayOf(PropTypes.number).isRequired,
   y: PropTypes.string.isRequired,
-  yDomain: PropTypes.arrayOf(PropTypes.number).isRequired
+  yDomain: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -311,7 +311,7 @@ const mapStateToProps = (state) => ({
   tooltip: state.scatterplot.tooltip,
   xDomain: state.scatterplot.xDomain,
   yDomain: state.scatterplot.yDomain,
-  zoomed: state.scatterplot.zoomed
+  zoomed: state.scatterplot.zoomed,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -322,7 +322,7 @@ const mapDispatchToProps = (dispatch) => ({
   setTooltip: (obj) => dispatch(setTooltip(obj)),
   resetZoom: () => dispatch(resetZoom()),
   toggleJitter: () => dispatch(toggleJitter()),
-  setDomains: (obj) => dispatch(setDomains(obj))
+  setDomains: (obj) => dispatch(setDomains(obj)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Scatterplot);

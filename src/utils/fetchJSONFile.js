@@ -2,7 +2,7 @@ import fetch from 'isomorphic-fetch';
 import {
   selectTypeaheadField,
   typeaheadFieldTypes,
-  selectTypeaheadFieldFiles
+  selectTypeaheadFieldFiles,
 } from '../selectors/typeahead';
 
 /**

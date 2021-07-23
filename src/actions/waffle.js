@@ -3,26 +3,26 @@ import { fetchMatchFile } from '../utils/fetchJSONFile';
 
 export const setWaffleVisualized = (obj) => ({
   type: 'SET_WAFFLE_VISUALIZED',
-  obj: obj
+  obj: obj,
 });
 
 export const setWaffleData = (obj) => ({
   type: 'SET_WAFFLE_DATA',
-  obj: obj
+  obj: obj,
 });
 
 export const setActiveWaffle = (obj) => ({
   type: 'SET_WAFFLE_ACTIVE',
-  obj: obj
+  obj: obj,
 });
 
 export const waffleImageRequestFailed = () => ({
-  type: 'WAFFLE_IMAGE_REQUEST_FAILED'
+  type: 'WAFFLE_IMAGE_REQUEST_FAILED',
 });
 
 export const receiveWaffleImage = (url) => ({
   type: 'RECEIVE_WAFFLE_IMAGE',
-  url: url
+  url: url,
 });
 
 export const setWaffleFeature = (feature) => {
@@ -84,7 +84,7 @@ export const plotWaffle = () => {
           width: width,
           columnCounts: cols,
           maxColumn: cols[maxCol],
-          levelMargin: levelMargin
+          levelMargin: levelMargin,
         })
       );
     });
@@ -118,14 +118,14 @@ const getCellData = async (fileId, feature) => {
         column: col,
         xLevel: level.toString(),
         similarity: d.similarity,
-        _id: d._id
+        _id: d._id,
       });
       return null;
     });
     return {
       cells: data,
       cols: cols,
-      matches: matches
+      matches: matches,
     };
   });
 };

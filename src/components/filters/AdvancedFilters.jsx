@@ -3,9 +3,9 @@ import React from 'react';
 const AdvancedFilters = (props) => {
   return (
     <div id="advanced-filters" className="row space-between">
-      <AdvancedFilterColumn type='earlier' />
+      <AdvancedFilterColumn type="earlier" />
       {/*<div className='similarity-circle opacity-0' />*/}
-      <AdvancedFilterColumn type='later' />
+      <AdvancedFilterColumn type="later" />
     </div>
   );
 };
@@ -28,7 +28,7 @@ const AdvancedFilterColumn = (props) => {
     ['Author', setAuthor],
     ['Title', setTitle],
     ['Date', setDate],
-    ['Passage', setPassage]
+    ['Passage', setPassage],
   ];
 
   return (

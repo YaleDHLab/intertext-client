@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Slider from 'rc-slider';
 import {
   setSimilarityAndSearch,
-  setDisplayedSimilarity
+  setDisplayedSimilarity,
 } from '../../actions/search';
 
 const Range = Slider.createSliderWithTooltip(Slider.Range);
@@ -47,17 +47,17 @@ SimilaritySlider.propTypes = {
   displayed: PropTypes.arrayOf(PropTypes.number).isRequired,
   setDisplayedSimilarity: PropTypes.func.isRequired,
   setSimilarityAndSearch: PropTypes.func.isRequired,
-  similarity: PropTypes.arrayOf(PropTypes.number).isRequired
+  similarity: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 const mapStateToProps = (state) => ({
   similarity: state.search.similarity,
-  displayed: state.search.displayed
+  displayed: state.search.displayed,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setSimilarityAndSearch: (val) => dispatch(setSimilarityAndSearch(val)),
-  setDisplayedSimilarity: (val) => dispatch(setDisplayedSimilarity(val))
+  setDisplayedSimilarity: (val) => dispatch(setDisplayedSimilarity(val)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SimilaritySlider);

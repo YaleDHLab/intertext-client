@@ -7,7 +7,7 @@ import Loader from '../partials/Loader';
 import {
   loadSearchFromUrl,
   runInitialSearch,
-  displayMoreResults
+  displayMoreResults,
 } from '../../actions/search';
 import { throttle } from 'lodash';
 
@@ -17,9 +17,9 @@ const Results = (props) => {
     loading,
     loadSearchFromUrl,
     runInitialSearch,
-    displayMoreResults
+    displayMoreResults,
   } = {
-    ...props
+    ...props,
   };
 
   const ref = useRef();
@@ -86,23 +86,23 @@ const ResultPairs = (props) => {
 
 Results.propTypes = {
   history: PropTypes.shape({
-    push: PropTypes.func.isRequired
+    push: PropTypes.func.isRequired,
   }),
   loadSearchFromUrl: PropTypes.func.isRequired,
   location: PropTypes.object,
   match: PropTypes.object,
-  results: PropTypes.arrayOf(ResultProps)
+  results: PropTypes.arrayOf(ResultProps),
 };
 
 const mapStateToProps = (state) => ({
   results: state.search.results,
-  loading: state.search.resultsMeta.loading
+  loading: state.search.resultsMeta.loading,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   loadSearchFromUrl: (obj) => dispatch(loadSearchFromUrl(obj)),
   displayMoreResults: () => dispatch(displayMoreResults()),
-  runInitialSearch: () => dispatch(runInitialSearch())
+  runInitialSearch: () => dispatch(runInitialSearch()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Results);

@@ -11,29 +11,29 @@ const initialState = {
   author: '', // author of the selected passage
   title: '', // title of the selected passage
   image: null, // path to image of author of the selected passage
-  err: null
+  err: null,
 };
 
 const waffleReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_WAFFLE_VISIBILITY':
       return Object.assign({}, state, {
-        displayed: action.visible
+        displayed: action.visible,
       });
 
     case 'SET_WAFFLE_FEATURE':
       return Object.assign({}, state, {
-        feature: action.feature
+        feature: action.feature,
       });
 
     case 'WAFFLE_IMAGE_REQUEST_FAILED':
       return Object.assign({}, state, {
-        err: true
+        err: true,
       });
 
     case 'RECEIVE_WAFFLE_IMAGE':
       return Object.assign({}, state, {
-        image: action.url
+        image: action.url,
       });
 
     case 'SET_WAFFLE_VISUALIZED':
@@ -42,7 +42,7 @@ const waffleReducer = (state = initialState, action) => {
         title: action.obj[action.obj.type + '_title'],
         file_id: action.obj[action.obj.type + '_file_id'],
         author: action.obj[action.obj.type + '_author'],
-        active: null
+        active: null,
       });
 
     case 'SET_WAFFLE_DATA':
@@ -54,12 +54,12 @@ const waffleReducer = (state = initialState, action) => {
         columnCounts: action.obj.columnCounts,
         maxColumn: action.obj.maxColumn,
         levelMargin: action.obj.levelMargin,
-        matches: action.obj.matches
+        matches: action.obj.matches,
       });
 
     case 'SET_WAFFLE_ACTIVE':
       return Object.assign({}, state, {
-        active: action.obj
+        active: action.obj,
       });
 
     default:

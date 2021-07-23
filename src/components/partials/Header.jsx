@@ -6,12 +6,12 @@ import { connect } from 'react-redux';
 const routes = [
   {
     route: '/',
-    label: 'Cards'
+    label: 'Cards',
   },
   {
     route: '/sankey',
-    label: 'Sankey'
-  }
+    label: 'Sankey',
+  },
 ];
 
 const Header = (props) => {
@@ -40,7 +40,7 @@ const Header = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  route: state.router.location.pathname
+  route: state.router.location.pathname,
 });
 
 export default connect(mapStateToProps)(Header);

@@ -138,14 +138,14 @@ ChartLib.getGeoms = (props) => {
   if (props.pointData) {
     geoms.push({
       data: props.pointData,
-      draw: ChartLib.drawPoint
+      draw: ChartLib.drawPoint,
     });
   }
 
   if (props.waffleData) {
     geoms.push({
       data: props.waffleData,
-      draw: ChartLib.drawWaffle
+      draw: ChartLib.drawWaffle,
     });
   }
 
@@ -256,7 +256,7 @@ ChartLib.getAxes = (props, scales) => {
       .axisLeft(scales.y)
       .ticks(props.yTicks)
       .tickPadding(props.yTickPadding ? props.yTickPadding : 4)
-      .tickFormat(props.yTickFormat ? props.yTickFormat : d3.format('.1f'))
+      .tickFormat(props.yTickFormat ? props.yTickFormat : d3.format('.1f')),
   };
 };
 

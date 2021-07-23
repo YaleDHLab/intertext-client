@@ -29,7 +29,7 @@ class Result extends React.Component {
   favorite() {
     this.props.toggleFavorite({
       type: this.props.type,
-      result: this.props.result
+      result: this.props.result,
     });
   }
 
@@ -52,7 +52,7 @@ class Result extends React.Component {
   visualize() {
     this.props.visualize(
       Object.assign({}, this.props.result, {
-        type: this.props.type
+        type: this.props.type,
       })
     );
   }
@@ -218,35 +218,35 @@ export const ResultProps = PropTypes.shape({
   target_segment_ids: PropTypes.arrayOf(PropTypes.number.isRequired),
   target_title: PropTypes.string.isRequired,
   target_url: PropTypes.string,
-  target_year: PropTypes.string.isRequired
+  target_year: PropTypes.string.isRequired,
 });
 
 Result.propTypes = {
   compare: PropTypes.shape({
     file_id: PropTypes.number,
     segment_ids: PropTypes.string,
-    type: PropTypes.string
+    type: PropTypes.string,
   }),
   favorites: PropTypes.shape({
     source: PropTypes.arrayOf(PropTypes.number),
-    target: PropTypes.arrayOf(PropTypes.number)
+    target: PropTypes.arrayOf(PropTypes.number),
   }),
   result: ResultProps,
   toggleFavorite: PropTypes.func.isRequired,
   toggleCompare: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
-  visualize: PropTypes.func.isRequired
+  visualize: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   favorites: state.favorites,
-  compare: state.compare
+  compare: state.compare,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   toggleFavorite: (obj) => dispatch(toggleFavorite(obj)),
   toggleCompare: (obj) => dispatch(toggleCompare(obj)),
-  visualize: (obj) => dispatch(visualize(obj))
+  visualize: (obj) => dispatch(visualize(obj)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Result);

@@ -8,7 +8,7 @@ export const toggleCompare = (obj) => {
     const compare = {
       type: type,
       file_id: result[type + '_file_id'],
-      segment_ids: sort(result[type + '_segment_ids']).join('.')
+      segment_ids: sort(result[type + '_segment_ids']).join('.'),
     };
     if (
       compare.type === state.compare.type &&
@@ -25,7 +25,7 @@ export const toggleCompare = (obj) => {
 
 export const setCompare = (obj) => ({
   type: 'SET_COMPARE',
-  compare: obj
+  compare: obj,
 });
 
 export const filterResultsWithCompare = (results) => {

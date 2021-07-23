@@ -13,11 +13,11 @@ import {
   selectSortByIndex,
   selectSortAttribute,
   selectEarlierFileId,
-  selectLaterFileId
+  selectLaterFileId,
 } from '../selectors/search';
 import {
   selectTypeaheadFieldFile,
-  selectTypeaheadQuery
+  selectTypeaheadQuery,
 } from '../selectors/typeahead';
 import { fetchMatchFile } from './fetchJSONFile';
 import { addCacheRecord } from '../actions/cache';
@@ -113,7 +113,7 @@ export function flatFileStringSearch() {
       }, []);
       return {
         count: filteredOrderedIndex.length,
-        docs: matches
+        docs: matches,
       };
     });
   };

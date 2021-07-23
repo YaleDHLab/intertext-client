@@ -20,8 +20,8 @@ const initialState = {
   resultsMeta: {
     err: false,
     loading: true,
-    totalResults: 0
-  }
+    totalResults: 0,
+  },
 };
 
 const searchReducer = (state = initialState, action) => {
@@ -31,8 +31,8 @@ const searchReducer = (state = initialState, action) => {
         maxDisplayed: maxDisplayedStep,
         resultsMeta: {
           err: false,
-          loading: true
-        }
+          loading: true,
+        },
       });
 
     case 'SET_ALL_SEARCH_RESULTS':
@@ -42,13 +42,13 @@ const searchReducer = (state = initialState, action) => {
         resultsMeta: Object.assign({}, state.resultsMeta, {
           totalResults: action.total,
           err: action.err,
-          loading: false
-        })
+          loading: false,
+        }),
       });
 
     case 'SET_SEARCH_RESULTS':
       return Object.assign({}, state, {
-        results: action.results
+        results: action.results,
       });
 
     case 'LOAD_SEARCH_FROM_URL':
@@ -58,37 +58,37 @@ const searchReducer = (state = initialState, action) => {
       const newMax = state.maxDisplayed + maxDisplayedStep;
       return Object.assign({}, state, {
         maxDisplayed: newMax,
-        results: state.allResults.slice(0, newMax)
+        results: state.allResults.slice(0, newMax),
       });
 
     case 'RESET_MAX_DISPLAYED_SEARCH_RESULTS':
       return Object.assign({}, state, {
-        maxDisplayed: maxDisplayedStep
+        maxDisplayed: maxDisplayedStep,
       });
 
     case 'SET_SEARCH_LOADING':
       return Object.assign({}, state, {
-        loading: action.bool
+        loading: action.bool,
       });
 
     case 'SET_SIMILARITY':
       return Object.assign({}, state, {
-        similarity: action.val
+        similarity: action.val,
       });
 
     case 'SET_DISPLAYED':
       return Object.assign({}, state, {
-        displayed: action.val
+        displayed: action.val,
       });
 
     case 'SET_SORT':
       return Object.assign({}, state, {
-        sortBy: action.sortBy
+        sortBy: action.sortBy,
       });
 
     case 'SET_SORT_ORDER_INDEX':
       return Object.assign({}, state, {
-        sortByIndex: action.orderIndex
+        sortByIndex: action.orderIndex,
       });
 
     default:

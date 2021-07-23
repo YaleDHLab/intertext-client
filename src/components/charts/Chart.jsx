@@ -59,7 +59,7 @@ export const WaffleDataProps = PropTypes.shape({
   column: PropTypes.number.isRequired,
   row: PropTypes.number.isRequired,
   similarity: PropTypes.number.isRequired,
-  xLevel: PropTypes.string.isRequired
+  xLevel: PropTypes.string.isRequired,
 });
 
 Chart.propTypes = {
@@ -71,7 +71,7 @@ Chart.propTypes = {
     bottom: PropTypes.number.isRequired,
     left: PropTypes.number.isRequired,
     right: PropTypes.number.isRequired,
-    top: PropTypes.number.isRequired
+    top: PropTypes.number.isRequired,
   }).isRequired,
   maxColumns: PropTypes.number,
   onBrush: PropTypes.func,
@@ -89,5 +89,5 @@ Chart.propTypes = {
   xScale: PropTypes.string,
   yScale: PropTypes.string,
   xTickFormat: PropTypes.func,
-  yLabel: PropTypes.string
+  yLabel: PropTypes.string,
 };

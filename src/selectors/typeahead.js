@@ -1,6 +1,6 @@
 export const typeaheadFieldTypes = {
   Author: 'Author',
-  Title: 'Title'
+  Title: 'Title',
 };
 
 export const selectTypeaheadField = (state) => {

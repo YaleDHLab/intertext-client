@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import {
   sankey as d3sankey,
   sankeyLinkHorizontal as d3sankeyLinkHorizontal,
-  sankeyCenter as d3sankeyCenter
+  sankeyCenter as d3sankeyCenter,
 } from 'd3-sankey';
 import { colors } from './color-lib';
 import { history } from '../../../store';
@@ -40,12 +40,12 @@ export const plot = (svg, data) => {
     .nodePadding(10)
     .extent([
       [0, 5],
-      [width, height - 5]
+      [width, height - 5],
     ]);
 
   const { nodes, links } = sankey({
     nodes: data.nodes.map((d) => Object.assign({}, d)),
-    links: data.links.map((d) => Object.assign({}, d))
+    links: data.links.map((d) => Object.assign({}, d)),
   });
 
   const handleLinkClick = (d) => {

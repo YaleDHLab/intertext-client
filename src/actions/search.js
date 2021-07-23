@@ -4,7 +4,7 @@ import {
   setTypeaheadQuery,
   setTypeaheadIndex,
   setTypeaheadField,
-  fetchTypeaheadResults
+  fetchTypeaheadResults,
 } from './typeahead';
 import { flatFileStringSearch } from '../utils/flatFileStringSearch';
 import { fetchSortOrderFile } from '../utils/fetchJSONFile';
@@ -28,7 +28,7 @@ export const fetchMoreSearchResults = () => {
           type: 'SET_ALL_SEARCH_RESULTS',
           docs: dispatch(filterResultsWithCompare(docs)),
           total: count,
-          err: false
+          err: false,
         });
       },
       (err) => {
@@ -36,7 +36,7 @@ export const fetchMoreSearchResults = () => {
         dispatch({
           type: 'SET_ALL_SEARCH_RESULTS',
           docs: [],
-          err: true
+          err: true,
         });
       }
     );
@@ -44,7 +44,7 @@ export const fetchMoreSearchResults = () => {
 };
 
 export const resetMaxDisplayedSearchResults = () => ({
-  type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS'
+  type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS',
 });
 
 export const displayMoreResults = () => {
@@ -88,7 +88,7 @@ export const loadSearchFromUrl = () => {
         try {
           const split = arg.split('=');
           obj = Object.assign({}, obj, {
-            [split[0]]: JSON.parse(decodeURIComponent(split[1]))
+            [split[0]]: JSON.parse(decodeURIComponent(split[1])),
           });
         } catch (e) {
           console.warn(`Error parsing ${arg}: ${e}`);
@@ -96,7 +96,7 @@ export const loadSearchFromUrl = () => {
       });
     dispatch({
       type: 'LOAD_SEARCH_FROM_URL',
-      obj: obj
+      obj: obj,
     });
     if (obj.compare && Object.values(obj.compare).length)
       dispatch(setCompare(obj.compare));
@@ -110,7 +110,7 @@ export const runInitialSearch = () => {
     // we need both the sorted match ids and the typeahead to allow search
     Promise.all([
       dispatch(fetchSortedResults()),
-      dispatch(fetchTypeaheadResults())
+      dispatch(fetchTypeaheadResults()),
     ]).then((v) => {
       dispatch(fetchSearchResults());
     });
@@ -125,7 +125,7 @@ export const setDisplayedSimilarity = (val) => {
   return (dispatch, getState) => {
     dispatch({
       type: 'SET_DISPLAYED',
-      val: val
+      val: val,
     });
   };
 };
@@ -134,7 +134,7 @@ export const setSimilarity = (val) => {
   return (dispatch, getState) => {
     dispatch({
       type: 'SET_SIMILARITY',
-      val: val
+      val: val,
     });
     dispatch(resetMaxDisplayedSearchResults());
     window.scrollTo(0, 0);
@@ -154,7 +154,7 @@ export const setSimilarityAndSearch = (val) => {
 
 const setSortOrderIndex = (orderIndex) => ({
   type: 'SET_SORT_ORDER_INDEX',
-  orderIndex: orderIndex
+  orderIndex: orderIndex,
 });
 
 const fetchSortedResults = () => {

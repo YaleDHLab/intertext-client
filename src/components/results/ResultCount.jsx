@@ -16,12 +16,12 @@ const ResultCount = (props) => (
 );
 
 ResultCount.propTypes = {
-  totalResults: PropTypes.number
+  totalResults: PropTypes.number,
 };
 
 const mapStateToProps = (state) => ({
   loading: state.search.loading,
-  totalResults: state.search.resultsMeta.totalResults
+  totalResults: state.search.resultsMeta.totalResults,
 });
 
 export default connect(mapStateToProps)(ResultCount);

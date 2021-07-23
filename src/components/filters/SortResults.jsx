@@ -29,11 +29,11 @@ class SortResults extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  sortBy: state.search.sortBy
+  sortBy: state.search.sortBy,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setSortAndSearch: (field) => dispatch(setSortAndSearch(field))
+  setSortAndSearch: (field) => dispatch(setSortAndSearch(field)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SortResults);

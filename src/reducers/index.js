@@ -16,5 +16,5 @@ export const rootReducer = combineReducers({
   favorites: favoriteReducer,
   typeahead: typeaheadReducer,
   scatterplot: scatterplotReducer,
-  cache: cacheReducer
+  cache: cacheReducer,
 });
