@@ -14,8 +14,8 @@ const initialState = {
   sortByIndex: null,
 
   // similarity range
-  similarity: [50, 100],
-  displayed: [50, 100],
+  similarity: [0, 100],
+  displayed: [0, 100],
 
   resultsMeta: {
     err: false,
