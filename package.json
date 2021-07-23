@@ -62,5 +62,10 @@
   },
   "devDependencies": {
     "prettier": "^2.2.1"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "tabWidth": 2
   }
 }
