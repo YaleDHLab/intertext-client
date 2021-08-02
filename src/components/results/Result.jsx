@@ -77,7 +77,7 @@ class Result extends React.Component {
 
   render() {
     return (
-      <div className={`result row flex-1 ${this.props.type}`}>
+      <div className={`result col space-between flex-1 ${this.props.type}`}>
         <div className="result-top row space-between align-center">
           {this.props.type === 'source' ? (
             <>

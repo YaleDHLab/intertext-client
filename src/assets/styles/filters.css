@@ -58,7 +58,7 @@
 }
 
 #advanced-filters {
-  box-shadow: 0 2px 2px #d8d8d8;
+  box-shadow: 0 2px 3px #ccc;
 }
 
 /**
@@ -105,8 +105,39 @@
   font-size: 12px;
 }
 
-.advanced-filter-column .row input {
+.advanced-filter-column input,
+.advanced-filter-column button {
   padding: 4px 10px;
   flex: 1;
   border: 1px solid #aba9a9;
+}
+
+.advanced-filter-column-label {
+  text-align: left;
+  font-size: 12px;
+  color: #aaa;
+}
+
+.advanced-filter-footer button,
+.advanced-filter-footer .advanced-filter-clear {
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.advanced-filter-column button {
+  background: #fff;
+  padding: 3px 7px;
+  border: 1px solid #aba9a9;
+  border-radius: 4px;
+  margin-left: 10px;
+  flex: initial;
+}
+
+.advanced-filter-column button.disabled {
+  opacity: 0.4;
+  cursor: initial;
+}
+
+.advanced-filter-footer button.active {
+  cursor: pointer;
 }

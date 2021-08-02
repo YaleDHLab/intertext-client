@@ -5,17 +5,9 @@ const initialState = {
   allResults: [],
   maxDisplayed: maxDisplayedStep,
 
-  // file ids
-  earlier: null,
-  later: null,
-
   // sort
   sortBy: 'similarity',
   sortByIndex: null,
-
-  // similarity range
-  similarity: [0, 100],
-  displayed: [0, 100],
 
   resultsMeta: {
     err: false,
@@ -69,16 +61,6 @@ const searchReducer = (state = initialState, action) => {
     case 'SET_SEARCH_LOADING':
       return Object.assign({}, state, {
         loading: action.bool,
-      });
-
-    case 'SET_SIMILARITY':
-      return Object.assign({}, state, {
-        similarity: action.val,
-      });
-
-    case 'SET_DISPLAYED':
-      return Object.assign({}, state, {
-        displayed: action.val,
       });
 
     case 'SET_SORT':

@@ -1,4 +1,4 @@
-import { fetchTypeaheadFieldFile } from '../utils/fetchJSONFile';
+import { fetchTypeaheadFileIds } from '../utils/fetchJSONFile';
 
 export const setTypeaheadField = (field) => ({
   type: 'SET_TYPEAHEAD_FIELD',
@@ -15,23 +15,18 @@ export const setTypeaheadIndex = (index) => ({
   index,
 });
 
-export const receiveTypeaheadResults = (obj) => ({
-  type: 'RECEIVE_TYPEAHEAD_RESULTS',
-  results: obj.results,
-  fieldFile: obj.file,
-});
-
 export const typeaheadRequestFailed = () => ({
   type: 'TYPEAHEAD_REQUEST_FAILED',
 });
 
 export function fetchTypeaheadResults() {
   return function (dispatch, getState) {
-    return dispatch(fetchTypeaheadFieldFile()).then((dataMap) => {
+    const state = getState();
+    return dispatch(fetchTypeaheadFileIds()).then((fileIds) => {
       dispatch({
-        type: 'RECEIVE_TYPEAHEAD_RESULTS',
-        file: dataMap,
-        results: Object.keys(dataMap),
+        type: 'RECEIVE_TYPEAHEAD_FILE_IDS',
+        results: Object.keys(fileIds[state.typeahead.field]).sort(),
+        fileIds: fileIds,
       });
     });
   };

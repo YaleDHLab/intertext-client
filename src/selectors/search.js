@@ -1,10 +1,4 @@
 /**
- * Similarity
- **/
-
-export const selectSimilarity = (state) => state.search.similarity;
-
-/**
  * Sort
  **/
 
@@ -23,16 +17,4 @@ export const selectSortAttribute = (state) => {
   if (f === 'similarity') return 'similarity';
   console.warn('Invalid sort property string: ' + f);
   return 'similarity';
-};
-
-/**
- * File Ids
- **/
-
-export const selectEarlierFileId = (state) => {
-  return state.search.earlier;
-};
-
-export const selectLaterFileId = (state) => {
-  return state.search.later;
 };

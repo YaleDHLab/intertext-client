@@ -1,10 +1,10 @@
 const initialState = {
   query: '',
-  results: [],
   index: 0,
   err: null,
   field: 'Title',
-  fieldFiles: {},
+  fileIds: null,
+  results: [],
 };
 
 const typeaheadReducer = (state = initialState, action) => {
@@ -24,11 +24,9 @@ const typeaheadReducer = (state = initialState, action) => {
         index: action.index,
       });
 
-    case 'RECEIVE_TYPEAHEAD_RESULTS':
+    case 'RECEIVE_TYPEAHEAD_FILE_IDS':
       return Object.assign({}, state, {
-        fieldFiles: Object.assign({}, state.fieldFiles, {
-          [state.field]: action.file,
-        }),
+        fileIds: action.fileIds,
         results: action.results,
         err: null,
       });

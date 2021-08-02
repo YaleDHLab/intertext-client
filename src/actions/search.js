@@ -65,10 +65,9 @@ export const saveSearchInUrl = () => {
     hash += 'query=' + JSON.stringify(state.typeahead.query);
     hash += '&field=' + JSON.stringify(state.typeahead.field);
     hash += '&sort=' + JSON.stringify(state.search.sortBy);
-    hash += '&similarity=' + JSON.stringify(state.search.similarity);
-    hash += '&earlier=' + JSON.stringify(state.search.earlier);
-    hash += '&later=' + JSON.stringify(state.search.later);
-    hash += '&displayed=' + JSON.stringify(state.search.displayed);
+    hash += '&similarity=' + JSON.stringify(state.filters.similarity);
+    hash += '&earlier=' + JSON.stringify(state.filters.earlier);
+    hash += '&later=' + JSON.stringify(state.filters.later);
     hash += '&compare=' + JSON.stringify(state.compare);
     history.push(hash);
   };
@@ -114,37 +113,6 @@ export const runInitialSearch = () => {
     ]).then((v) => {
       dispatch(fetchSearchResults());
     });
-  };
-};
-
-/**
- * Similarity
- **/
-
-export const setDisplayedSimilarity = (val) => {
-  return (dispatch, getState) => {
-    dispatch({
-      type: 'SET_DISPLAYED',
-      val: val,
-    });
-  };
-};
-
-export const setSimilarity = (val) => {
-  return (dispatch, getState) => {
-    dispatch({
-      type: 'SET_SIMILARITY',
-      val: val,
-    });
-    dispatch(resetMaxDisplayedSearchResults());
-    window.scrollTo(0, 0);
-  };
-};
-
-export const setSimilarityAndSearch = (val) => {
-  return (dispatch) => {
-    dispatch(setSimilarity(val));
-    dispatch(fetchSearchResults());
   };
 };
 

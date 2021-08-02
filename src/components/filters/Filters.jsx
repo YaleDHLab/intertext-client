@@ -8,12 +8,15 @@ import AdvancedFilters from './AdvancedFilters';
 
 const Filters = (props) => {
   const ref = useRef();
-
+  const childRef = useRef();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const onWindowClick = e => {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+      const elem = e.target;
+      if (!childRef.current || childRef.current.contains(elem)) return;
+      if (!ref.current || ref.current.contains(elem)) return;
+      setOpen(false);
     }
     window.addEventListener('click', onWindowClick);
     return () => { window.removeEventListener('click', onWindowClick); }
@@ -24,7 +27,7 @@ const Filters = (props) => {
   };
 
   return (
-    <div id="filters-container" className="col justify-center">
+    <div id="filters-container" className="col justify-center" ref={ref}>
       <div
         id="filters-inner"
         className="row space-between justify-center align-center"
@@ -38,7 +41,6 @@ const Filters = (props) => {
           <ResultCount />
           <SortResults />
           <img
-            ref={ref}
             alt="Advanced filters icon"
             className={open ? 'active' : ''}
             id="advanced-filters-icon"
@@ -47,7 +49,7 @@ const Filters = (props) => {
           />
         </div>
       </div>
-      {open ? <AdvancedFilters /> : null}
+      {open ? <AdvancedFilters refProp={childRef} /> : null}
     </div>
   );
 };

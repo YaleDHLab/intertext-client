@@ -96,7 +96,7 @@ const Sankey = (props) => {
 
 const mapStateToProps = (state) => ({
   typeaheadField: state.typeahead.field,
-  labelToFileIds: state.typeahead.fieldFiles[state.typeahead.field],
+  labelToFileIds: state.typeahead.fileIds[state.typeahead.field],
   orderIndex: state.search.sortByIndex,
 });
 

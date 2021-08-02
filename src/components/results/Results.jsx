@@ -44,14 +44,19 @@ const Results = (props) => {
   return (
     <div id="results-container" className="col align-center">
       <Filters />
-      <div id="result-pairs-container" className="flex-1" ref={ref}>
-        {results && results.length ? (
-          <ResultPairs results={results} />
-        ) : loading ? (
-          <Loader />
-        ) : (
-          <span className="no-results">Sorry, no results could be found</span>
-        )}
+      <div
+        id="result-pairs-container"
+        ref={ref}
+        className={loading
+          ? 'flex-1 col justify-center'
+          : 'flex-1 col'
+        }>
+        {loading
+          ? <Loader />
+          : results && results.length
+          ? <ResultPairs results={results} />
+          : <span className="no-results">Sorry, no results could be found</span>
+        }
       </div>
     </div>
   );

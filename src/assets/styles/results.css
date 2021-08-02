@@ -89,8 +89,8 @@
   background: #fff;
   position: relative;
   transition: transform 1s ease, height 0.3s ease;
-  display: inline-block;
   text-align: left;
+  min-width: 460px;
 }
 
 .result-pair:hover .result {

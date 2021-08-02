@@ -81,6 +81,10 @@ body {
   flex: 1;
 }
 
+.disabled {
+  cursor: not-allowed;
+}
+
 /**
 * Elements
 **/

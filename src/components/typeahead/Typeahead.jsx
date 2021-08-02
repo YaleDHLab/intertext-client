@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Results from './TypeaheadResults';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -6,6 +6,8 @@ import { fetchSearchResults } from '../../actions/search';
 import { setTypeaheadQuery, setTypeaheadIndex } from '../../actions/typeahead';
 
 const Typeahead = (props) => {
+  const ref = useRef();
+
   const handleKeyUp = (e) => {
     var index = props.index;
     // up arrow
@@ -37,13 +39,14 @@ const Typeahead = (props) => {
     props.setTypeaheadQuery(phrase);
     // submit the search and remove focus from the input
     props.fetchSearchResults();
-    document.querySelector('.typeahead input').blur();
+    ref.current.blur();
   };
 
   return (
     <div className="typeahead">
       <div className="search-button" />
       <input
+        ref={ref}
         value={props.query}
         onKeyUp={handleKeyUp}
         onChange={handleChange}
@@ -57,7 +60,6 @@ Typeahead.propTypes = {
   fetchSearchResults: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
   query: PropTypes.string.isRequired,
-  results: PropTypes.arrayOf(PropTypes.string),
   setTypeaheadIndex: PropTypes.func.isRequired,
   setTypeaheadQuery: PropTypes.func.isRequired,
 };

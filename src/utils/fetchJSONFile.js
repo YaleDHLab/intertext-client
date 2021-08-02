@@ -1,9 +1,4 @@
 import fetch from 'isomorphic-fetch';
-import {
-  selectTypeaheadField,
-  typeaheadFieldTypes,
-  selectTypeaheadFieldFiles,
-} from '../selectors/typeahead';
 
 /**
  * Get a JSON file, throw an exception if response status is not 200
@@ -35,38 +30,23 @@ export const fetchSortOrderFile = (s) => {
   );
 };
 
-export const fetchTypeaheadFieldFile = () => {
-  return (dispatch, getState) => {
-    const state = getState();
-    const field = selectTypeaheadField(state);
-    const fieldFiles = selectTypeaheadFieldFiles(state);
-    // return cached field file if possible, else fetch the file
-    return field in fieldFiles
-      ? new Promise((resolve, reject) => {
-          return resolve(fieldFiles[field]).then((val) => val);
-        })
-      : field === typeaheadFieldTypes.Author
-      ? fetchAuthorsFile()
-      : field === typeaheadFieldTypes.Title
-      ? fetchTitlesFile()
-      : new Promise((resolve, reject) => {
-          reject();
-        });
-  };
-};
-
-export const fetchAuthorsFile = () => {
-  return fetchJSONFile('/api/authors.json');
-};
-
-export const fetchTitlesFile = () => {
-  return fetchJSONFile('/api/titles.json');
-};
-
-export const fetchMatchFile = (textID) =>
-  fetchJSONFile('/api/matches/' + String(textID) + '.json');
+export const fetchMatchFile = (textID) => {
+  return fetchJSONFile('/api/matches/' + String(textID) + '.json');
+}
 
 export const fetchScatterplotFile = (props) => {
   const { use, unit, stat } = props;
   return fetchJSONFile(`/api/scatterplots/${use}-${unit}-${stat}.json`);
+};
+
+export const fetchTypeaheadFileIds = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    // return cached field file if possible, else fetch the file
+    return state.typeahead.fileIds
+      ? new Promise((resolve, reject) => {
+          return resolve(state.typeahead.fileIds).then((val) => val);
+        })
+      : fetchJSONFile('/api/file_ids.json')
+  };
 };

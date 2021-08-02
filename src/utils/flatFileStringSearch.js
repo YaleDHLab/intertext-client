@@ -9,14 +9,15 @@
  */
 
 import {
-  selectSimilarity,
   selectSortByIndex,
   selectSortAttribute,
-  selectEarlierFileId,
-  selectLaterFileId,
 } from '../selectors/search';
 import {
-  selectTypeaheadFieldFile,
+  selectSimilarity,
+  selectEarlierFileId,
+  selectLaterFileId,
+} from '../selectors/filters';
+import {
   selectTypeaheadQuery,
 } from '../selectors/typeahead';
 import { fetchMatchFile } from './fetchJSONFile';
@@ -29,56 +30,82 @@ import { uniq } from 'lodash';
 
 function getSortedMatchList(state) {
   const searchTerm = selectTypeaheadQuery(state).trim().toLowerCase();
-  const fieldIndex = selectTypeaheadFieldFile(state);
   const sortIndex = selectSortByIndex(state);
   const [minSim, maxSim] = selectSimilarity(state);
   const sortBy = selectSortAttribute(state);
   const earlierFileId = selectEarlierFileId(state);
   const laterFileId = selectLaterFileId(state);
 
-  // get a list of match files based on the current typeahead query
-  const matchFileIds = uniq(
-    Object.keys(fieldIndex)
-      // filter to just those keys that match the typeahead query
-      .filter((k) =>
-        searchTerm.length < 1
-          ? true
-          : k.trim().toLowerCase().includes(searchTerm)
-      )
-      // expand from the key (author or title) to the array of match file IDs
-      .map((k) => fieldIndex[k])
-      // flatten [[file_id_1], [file_id_2]] to 1D array [file_id_1, file_id_2]
-      .flat()
-      // remove match file ids that don't match the earlier or later file ids
-      .filter((k) => {
-        let fileIds = [];
-        if (earlierFileId !== null) fileIds.push(earlierFileId);
-        if (laterFileId !== null) fileIds.push(laterFileId);
-        if (!fileIds.length) return true;
-        return fileIds.indexOf(k) > -1;
-      })
-  );
+  const getMatchingFileIds = (q, map) => {
+    // set of file ids that match the provided query
+    let s = new Set();
+    // if there's no query everything matches
+    const keys = Object.keys(map);
+    // filter the keys of the map
+    keys.map(k => {
+      // if there's no query add all values for this key
+      if (!q || !q.length) {
+        map[k].map(v => s.add(v));
+      } else {
+        // check if this key (string) matches the query
+        if (k.trim().toLowerCase().includes(q.toLowerCase())) {
+          // add all the values assigned to this matching key
+          map[k].map(v => s.add(v));
+        }
+      }
+      return null;
+    })
+    return s;
+  }
+
+  /**
+   * Typeahead file ids
+   **/
+
+  let typeaheadFileIds = getMatchingFileIds(searchTerm, state.typeahead.fileIds[state.typeahead.field]);
+
+  // if there are sankey file ids add them to the results
+  if (earlierFileId !== null) typeaheadFileIds.add(earlierFileId);
+  if (laterFileId !== null) typeaheadFileIds.add(laterFileId);
+
+  /**
+   * Advanced filter file ids
+   **/
+
+  // get the file ids for earlier and later files
+  let earlierFileIds = new Set([
+    getMatchingFileIds(state.filters.advanced.earlier.Title, state.typeahead.fileIds.Title),
+    getMatchingFileIds(state.filters.advanced.earlier.Author, state.typeahead.fileIds.Author),
+  ].reduce((a, b) => [...a].filter(c => b.has(c))))
+
+  let laterFileIds = new Set([
+    getMatchingFileIds(state.filters.advanced.later.Title, state.typeahead.fileIds.Title),
+    getMatchingFileIds(state.filters.advanced.later.Author, state.typeahead.fileIds.Author),
+  ].reduce((a, b) => [...a].filter(c => b.has(c))))
+
+  /**
+   * Filter matches
+   **/
 
   // filter the sorted list of matches according to search criteria
   let filteredSortIndex = sortIndex.filter((item) => {
     const [, matchEarlierFileId, matchLaterFileId, similarity] = item;
 
-    // Drop if it's not in one of the author's match files
+    // If neither the earlier or later files match the typeahead query, bail
     if (
-      !matchFileIds.includes(matchEarlierFileId) &&
-      !matchFileIds.includes(matchLaterFileId)
-    ) {
-      return false;
-    }
+      !typeaheadFileIds.has(matchEarlierFileId) &&
+      !typeaheadFileIds.has(matchLaterFileId)
+    ) return false;
+
+    // If we have earlierFileIds or laterFileIds filter
+    if (earlierFileIds.entries() && !earlierFileIds.has(matchEarlierFileId)) return false;
+    if (laterFileIds.entries() && !laterFileIds.has(matchLaterFileId)) return false;
 
     // Drop if simlarity is out of range
-    if (minSim > similarity || maxSim < similarity) {
-      return false;
-    }
+    if (minSim > similarity || maxSim < similarity) return false;
 
     // Drop if the source or earlier or later file id isn't right
-    if (earlierFileId !== null && earlierFileId !== matchEarlierFileId)
-      return false;
+    if (earlierFileId !== null && earlierFileId !== matchEarlierFileId) return false;
     if (laterFileId !== null && laterFileId !== matchLaterFileId) return false;
 
     return true;
