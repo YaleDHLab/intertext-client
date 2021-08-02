@@ -1,4 +1,4 @@
-import { resetMaxDisplayedSearchResults, fetchSearchResults } from './search'
+import { resetMaxDisplayedSearchResults, fetchSearchResults } from './search';
 
 /**
  * Similarity
@@ -37,16 +37,15 @@ export const setSimilarityAndSearch = (val) => {
 
 export const setAdvancedFilterField = (obj) => ({
   type: 'SET_ADVANCED_FILTER',
-  ...obj
-})
+  ...obj,
+});
 
 export const clearAdvancedFilterType = (type) => {
   return (dispatch) => {
     dispatch({
       type: 'CLEAR_ADVANCED_FILTER_TYPE',
       earlierLater: type,
-    })
+    });
     dispatch(fetchSearchResults());
-  }
-}
-
+  };
+};

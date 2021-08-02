@@ -32,7 +32,7 @@ export const fetchSortOrderFile = (s) => {
 
 export const fetchMatchFile = (textID) => {
   return fetchJSONFile('/api/matches/' + String(textID) + '.json');
-}
+};
 
 export const fetchScatterplotFile = (props) => {
   const { use, unit, stat } = props;
@@ -47,6 +47,6 @@ export const fetchTypeaheadFileIds = () => {
       ? new Promise((resolve, reject) => {
           return resolve(state.typeahead.fileIds).then((val) => val);
         })
-      : fetchJSONFile('/api/file_ids.json')
+      : fetchJSONFile('/api/file_ids.json');
   };
 };

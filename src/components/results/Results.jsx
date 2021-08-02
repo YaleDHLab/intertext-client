@@ -47,16 +47,15 @@ const Results = (props) => {
       <div
         id="result-pairs-container"
         ref={ref}
-        className={loading
-          ? 'flex-1 col justify-center'
-          : 'flex-1 col'
-        }>
-        {loading
-          ? <Loader />
-          : results && results.length
-          ? <ResultPairs results={results} />
-          : <span className="no-results">Sorry, no results could be found</span>
-        }
+        className={loading ? 'flex-1 col justify-center' : 'flex-1 col'}
+      >
+        {loading ? (
+          <Loader />
+        ) : results && results.length ? (
+          <ResultPairs results={results} />
+        ) : (
+          <span className="no-results">Sorry, no results could be found</span>
+        )}
       </div>
     </div>
   );

@@ -11,8 +11,8 @@ const initialState = {
   advanced: {
     earlier: {},
     later: {},
-  }
-}
+  },
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -29,22 +29,26 @@ const reducer = (state = initialState, action) => {
     case 'SET_ADVANCED_FILTER':
       return Object.assign({}, state, {
         advanced: Object.assign({}, state.advanced, {
-          [action.earlierLater]: Object.assign({}, state.advanced[action.type], {
-            [action.field]: action.value,
-          })
-        })
-      })
+          [action.earlierLater]: Object.assign(
+            {},
+            state.advanced[action.type],
+            {
+              [action.field]: action.value,
+            }
+          ),
+        }),
+      });
 
     case 'CLEAR_ADVANCED_FILTER_TYPE':
       return Object.assign({}, state, {
         advanced: Object.assign({}, state.advanced, {
           [action.earlierLater]: {},
-        })
-      })
+        }),
+      });
 
     default:
-      return state
+      return state;
   }
-}
+};
 
-export default reducer
+export default reducer;

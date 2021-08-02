@@ -12,15 +12,17 @@ const Filters = (props) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onWindowClick = e => {
+    const onWindowClick = (e) => {
       const elem = e.target;
       if (!childRef.current || childRef.current.contains(elem)) return;
       if (!ref.current || ref.current.contains(elem)) return;
       setOpen(false);
-    }
+    };
     window.addEventListener('click', onWindowClick);
-    return () => { window.removeEventListener('click', onWindowClick); }
-  }, [open])
+    return () => {
+      window.removeEventListener('click', onWindowClick);
+    };
+  }, [open]);
 
   const toggleOpen = () => {
     setOpen(!open);

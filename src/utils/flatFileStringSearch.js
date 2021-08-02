@@ -8,18 +8,13 @@
  *
  */
 
-import {
-  selectSortByIndex,
-  selectSortAttribute,
-} from '../selectors/search';
+import { selectSortByIndex, selectSortAttribute } from '../selectors/search';
 import {
   selectSimilarity,
   selectEarlierFileId,
   selectLaterFileId,
 } from '../selectors/filters';
-import {
-  selectTypeaheadQuery,
-} from '../selectors/typeahead';
+import { selectTypeaheadQuery } from '../selectors/typeahead';
 import { fetchMatchFile } from './fetchJSONFile';
 import { addCacheRecord } from '../actions/cache';
 import { uniq } from 'lodash';
@@ -42,27 +37,30 @@ function getSortedMatchList(state) {
     // if there's no query everything matches
     const keys = Object.keys(map);
     // filter the keys of the map
-    keys.map(k => {
+    keys.map((k) => {
       // if there's no query add all values for this key
       if (!q || !q.length) {
-        map[k].map(v => s.add(v));
+        map[k].map((v) => s.add(v));
       } else {
         // check if this key (string) matches the query
         if (k.trim().toLowerCase().includes(q.toLowerCase())) {
           // add all the values assigned to this matching key
-          map[k].map(v => s.add(v));
+          map[k].map((v) => s.add(v));
         }
       }
       return null;
-    })
+    });
     return s;
-  }
+  };
 
   /**
    * Typeahead file ids
    **/
 
-  let typeaheadFileIds = getMatchingFileIds(searchTerm, state.typeahead.fileIds[state.typeahead.field]);
+  let typeaheadFileIds = getMatchingFileIds(
+    searchTerm,
+    state.typeahead.fileIds[state.typeahead.field]
+  );
 
   // if there are sankey file ids add them to the results
   if (earlierFileId !== null) typeaheadFileIds.add(earlierFileId);
@@ -73,15 +71,31 @@ function getSortedMatchList(state) {
    **/
 
   // get the file ids for earlier and later files
-  let earlierFileIds = new Set([
-    getMatchingFileIds(state.filters.advanced.earlier.Title, state.typeahead.fileIds.Title),
-    getMatchingFileIds(state.filters.advanced.earlier.Author, state.typeahead.fileIds.Author),
-  ].reduce((a, b) => [...a].filter(c => b.has(c))))
+  let earlierFileIds = new Set(
+    [
+      getMatchingFileIds(
+        state.filters.advanced.earlier.Title,
+        state.typeahead.fileIds.Title
+      ),
+      getMatchingFileIds(
+        state.filters.advanced.earlier.Author,
+        state.typeahead.fileIds.Author
+      ),
+    ].reduce((a, b) => [...a].filter((c) => b.has(c)))
+  );
 
-  let laterFileIds = new Set([
-    getMatchingFileIds(state.filters.advanced.later.Title, state.typeahead.fileIds.Title),
-    getMatchingFileIds(state.filters.advanced.later.Author, state.typeahead.fileIds.Author),
-  ].reduce((a, b) => [...a].filter(c => b.has(c))))
+  let laterFileIds = new Set(
+    [
+      getMatchingFileIds(
+        state.filters.advanced.later.Title,
+        state.typeahead.fileIds.Title
+      ),
+      getMatchingFileIds(
+        state.filters.advanced.later.Author,
+        state.typeahead.fileIds.Author
+      ),
+    ].reduce((a, b) => [...a].filter((c) => b.has(c)))
+  );
 
   /**
    * Filter matches
@@ -95,17 +109,21 @@ function getSortedMatchList(state) {
     if (
       !typeaheadFileIds.has(matchEarlierFileId) &&
       !typeaheadFileIds.has(matchLaterFileId)
-    ) return false;
+    )
+      return false;
 
     // If we have earlierFileIds or laterFileIds filter
-    if (earlierFileIds.entries() && !earlierFileIds.has(matchEarlierFileId)) return false;
-    if (laterFileIds.entries() && !laterFileIds.has(matchLaterFileId)) return false;
+    if (earlierFileIds.entries() && !earlierFileIds.has(matchEarlierFileId))
+      return false;
+    if (laterFileIds.entries() && !laterFileIds.has(matchLaterFileId))
+      return false;
 
     // Drop if simlarity is out of range
     if (minSim > similarity || maxSim < similarity) return false;
 
     // Drop if the source or earlier or later file id isn't right
-    if (earlierFileId !== null && earlierFileId !== matchEarlierFileId) return false;
+    if (earlierFileId !== null && earlierFileId !== matchEarlierFileId)
+      return false;
     if (laterFileId !== null && laterFileId !== matchLaterFileId) return false;
 
     return true;
