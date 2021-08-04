@@ -24,17 +24,19 @@ export function fetchTypeaheadMetadata() {
     return fetchJSONFile('/api/metadata.json').then((metadata) => {
       // create a map from author/title to file ids that have that string in their metadata
       let fileIds = {
-        'author': {},
-        'title': {},
-      }
+        author: {},
+        title: {},
+      };
       metadata.forEach((m, fileIdx) => {
-        fileIds['author'][m.author] = m.author in fileIds['author']
-          ? fileIds['author'][m.author].concat(fileIdx)
-          : [fileIdx];
-        fileIds['title'][m.title] = m.title in fileIds['title']
-          ? fileIds['aitle'][m.title].concat(fileIdx)
-          : [fileIdx];
-      })
+        fileIds['author'][m.author] =
+          m.author in fileIds['author']
+            ? fileIds['author'][m.author].concat(fileIdx)
+            : [fileIdx];
+        fileIds['title'][m.title] =
+          m.title in fileIds['title']
+            ? fileIds['aitle'][m.title].concat(fileIdx)
+            : [fileIdx];
+      });
       dispatch({
         type: 'RECEIVE_TYPEAHEAD_FILE_IDS',
         fileIds: fileIds,

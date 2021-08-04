@@ -4,19 +4,11 @@ import { connect } from 'react-redux';
 import Filters from '../filters/Filters';
 import Result, { ResultProps } from './Result';
 import Loader from '../partials/Loader';
-import {
-  fetchSearchResults,
-  displayMoreResults,
-} from '../../actions/search';
+import { fetchSearchResults, displayMoreResults } from '../../actions/search';
 import { throttle } from 'lodash';
 
 const Results = (props) => {
-  const {
-    results,
-    loading,
-    displayMoreResults,
-    fetchSearchResults,
-  } = {
+  const { results, loading, displayMoreResults, fetchSearchResults } = {
     ...props,
   };
 
@@ -36,7 +28,7 @@ const Results = (props) => {
 
   useEffect(() => {
     fetchSearchResults();
-  }, [])
+  }, []);
 
   return (
     <div id="results-container" className="col align-center">

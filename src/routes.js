@@ -13,10 +13,10 @@ const routes = (
       <Route path="/sankey" component={Sankey} />
       <Route path="/waffle" component={Waffle} />
       <Route path="/scatterplot" component={Scatterplot} />
-      <Route path='/works' component={Works} />
+      <Route path="/works" component={Works} />
       <Route path="/cards" component={Results} />
-      <Route exact path='/' component={Results}>
-        <Redirect to='cards' />
+      <Route exact path="/" component={Results}>
+        <Redirect to="cards" />
       </Route>
     </Switch>
   </App>

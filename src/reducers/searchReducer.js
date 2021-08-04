@@ -82,10 +82,12 @@ const searchReducer = (state = initialState, action) => {
 
     case 'LOAD_SEARCH_FROM_URL':
       let update = Object.assign({}, state, {
-        'advanced': Object.assign({}, state.advanced, {
-          'earlier': action.obj.earlier ? action.obj.earlier : state.advanced.earlier,
-          'later': action.obj.later ? action.obj.later : state.advanced.later,
-        })
+        advanced: Object.assign({}, state.advanced, {
+          earlier: action.obj.earlier
+            ? action.obj.earlier
+            : state.advanced.earlier,
+          later: action.obj.later ? action.obj.later : state.advanced.later,
+        }),
       });
       return Object.assign({}, state, update);
 

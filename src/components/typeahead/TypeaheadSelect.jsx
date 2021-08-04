@@ -31,8 +31,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setTypeaheadField: (event) =>
-    dispatch(setTypeaheadField(event.target.value)),
+  setTypeaheadField: (event) => dispatch(setTypeaheadField(event.target.value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TypeaheadSelect);

@@ -17,7 +17,7 @@ import {
 export const setDisplayedSimilarity = (val) => ({
   type: 'SET_DISPLAYED_SIMILARITY',
   val: val,
-})
+});
 
 export const setSimilarityAndSearch = (val) => {
   return (dispatch) => {
@@ -38,16 +38,19 @@ export const setSimilarityAndSearch = (val) => {
 const fetchSortIndex = () => {
   return (dispatch, getState) => {
     const state = getState();
-    const url = `/api/indices/match-ids-by-${state.search.sortField.toLowerCase().trim()}.json`;
-    return fetchJSONFile(url).then((sortIndex) => {
-      dispatch({
-        type: 'SET_SORT_ORDER_INDEX',
-        sortIndex: sortIndex,
+    const url = `/api/indices/match-ids-by-${state.search.sortField
+      .toLowerCase()
+      .trim()}.json`;
+    return fetchJSONFile(url)
+      .then((sortIndex) => {
+        dispatch({
+          type: 'SET_SORT_ORDER_INDEX',
+          sortIndex: sortIndex,
+        });
+      })
+      .catch((e) => {
+        console.warn('Could not fetch sort order: ' + e);
       });
-    })
-    .catch((e) => {
-      console.warn('Could not fetch sort order: ' + e);
-    });
   };
 };
 
@@ -56,7 +59,7 @@ export const setSortAndSearch = (field) => {
     dispatch({ type: 'SET_SORT_FIELD', sortField: field });
     dispatch(fetchSortIndex()).then(() => {
       dispatch(fetchSearchResults());
-    })
+    });
   };
 };
 
@@ -115,13 +118,14 @@ export const loadSearchFromUrl = () => {
       });
     // prepare the update object
     let update = {};
-    if ('earlier' in obj) update['earlier'] = {'fileId': obj.earlier};
-    if ('later' in obj) update['later'] = {'fileId': obj.later};
+    if ('earlier' in obj) update['earlier'] = { fileId: obj.earlier };
+    if ('later' in obj) update['later'] = { fileId: obj.later };
     dispatch({
       type: 'LOAD_SEARCH_FROM_URL',
       obj: update,
     });
-    if (obj.compare && Object.values(obj.compare).length) dispatch(setCompare(obj.compare));
+    if (obj.compare && Object.values(obj.compare).length)
+      dispatch(setCompare(obj.compare));
     if (obj.query && obj.query.length) dispatch(setTypeaheadQuery(obj.query));
     if (obj.field && obj.field.length) dispatch(setTypeaheadField(obj.field));
   };
@@ -139,7 +143,7 @@ export const fetchSearchResults = () => {
       dispatch(loadSearchFromUrl());
       window.scrollTo(0, 0);
       dispatch(fetchMoreSearchResults());
-    }
+    };
     // check to see if we need to run the first search result
     state.search.sortIndex && state.typeahead.metadata
       ? runSearch()
@@ -148,9 +152,8 @@ export const fetchSearchResults = () => {
           dispatch(fetchTypeaheadMetadata()),
         ]).then((v) => {
           runSearch();
-        })
-
-    }
+        });
+  };
 };
 
 /**
@@ -161,8 +164,9 @@ export const fetchSearchResults = () => {
 export const displayMoreResults = () => {
   return (dispatch, getState) => {
     const state = getState();
-    if (state.search.maxDisplayed >= state.search.resultsMeta.totalResults) return;
-    dispatch({type: 'DISPLAY_MORE_SEARCH_RESULTS'});
+    if (state.search.maxDisplayed >= state.search.resultsMeta.totalResults)
+      return;
+    dispatch({ type: 'DISPLAY_MORE_SEARCH_RESULTS' });
     dispatch(fetchMoreSearchResults());
   };
 };
@@ -178,30 +182,33 @@ const fetchMoreSearchResults = () => {
     // get the unique match file ids for which we need to extract matches
     const matchFileIDs = uniq(orderedIndex.map((d) => d[1]));
     // get the match file contents
-    dispatch(getMatchFiles(matchFileIDs)).then((matchFiles) => {
-      const matches = orderedIndex.reduce((arr, i) => {
-        const [matchIndex, matchFileId] = i;
-        arr.push(matchFiles[matchFileIDs.indexOf(matchFileId)][matchIndex]);
-        return arr;
-      }, []);
-      return {
-        count: filteredSortIndex.length,
-        docs: matches,
-      };
-    }).then(({ count, docs }) => {
-      dispatch({
-        type: 'SET_ALL_SEARCH_RESULTS',
-        docs: dispatch(filterResultsWithCompare(docs)),
-        total: count,
-        err: false,
+    dispatch(getMatchFiles(matchFileIDs))
+      .then((matchFiles) => {
+        const matches = orderedIndex.reduce((arr, i) => {
+          const [matchIndex, matchFileId] = i;
+          arr.push(matchFiles[matchFileIDs.indexOf(matchFileId)][matchIndex]);
+          return arr;
+        }, []);
+        return {
+          count: filteredSortIndex.length,
+          docs: matches,
+        };
+      })
+      .then(({ count, docs }) => {
+        dispatch({
+          type: 'SET_ALL_SEARCH_RESULTS',
+          docs: dispatch(filterResultsWithCompare(docs)),
+          total: count,
+          err: false,
+        });
+      })
+      .catch((err) => {
+        dispatch({
+          type: 'SET_ALL_SEARCH_RESULTS',
+          docs: [],
+          err: err,
+        });
       });
-    }).catch((err) => {
-      dispatch({
-        type: 'SET_ALL_SEARCH_RESULTS',
-        docs: [],
-        err: err,
-      });
-    })
   };
 };
 
@@ -214,8 +221,8 @@ const resetMaxDisplayedSearchResults = () => ({
  */
 
 const getFilteredSortIndex = (state) => {
-  const { sortIndex, advanced, similarity } = {...state.search};
-  const { fileIds, field, query } = {...state.typeahead};
+  const { sortIndex, advanced, similarity } = { ...state.search };
+  const { fileIds, field, query } = { ...state.typeahead };
   // handle case where Results.jsx runs first search instead of '../store.js'
   if (!fileIds) return;
   // given a query and a map from strings to lists of values, return values that match the query
@@ -244,13 +251,13 @@ const getFilteredSortIndex = (state) => {
       : getSetIntersection([
           getValuesOfMatchingKeys(advanced[field].title, map.title),
           getValuesOfMatchingKeys(advanced[field].author, map.author),
-        ])
-  }
+        ]);
+  };
 
   // given a list of sets, return a set with the intersection of all sets
-  const getSetIntersection = sets => {
-    return new Set(sets.reduce((a, b) => [...a].filter((c) => b.has(c))))
-  }
+  const getSetIntersection = (sets) => {
+    return new Set(sets.reduce((a, b) => [...a].filter((c) => b.has(c))));
+  };
 
   /**
    * Get the file ids that are valid for the earlier, later, or either column
@@ -259,20 +266,25 @@ const getFilteredSortIndex = (state) => {
   const filterFileIds = {
     either: getValuesOfMatchingKeys(query, fileIds[field]), // from typeahead
     earlier: getEarlierOrLaterFileIds('earlier', fileIds), // from filters
-    later: getEarlierOrLaterFileIds('later', fileIds),  // from filters
-  }
+    later: getEarlierOrLaterFileIds('later', fileIds), // from filters
+  };
 
   // return the filtered sort index
   return sortIndex.filter((item) => {
     // destructure a single row from the sorted match index
     const [, matchEarlierFileId, matchLaterFileId, matchSimilarity] = item;
-    if (matchSimilarity < similarity[0] || matchSimilarity > similarity[1]) return false;
-    if (!(filterFileIds.earlier.has(matchEarlierFileId))) return false;
-    if (!(filterFileIds.later.has(matchLaterFileId))) return false;
-    if (!(filterFileIds.either.has(matchEarlierFileId)) && (!(filterFileIds.either.has(matchLaterFileId)))) return false;
+    if (matchSimilarity < similarity[0] || matchSimilarity > similarity[1])
+      return false;
+    if (!filterFileIds.earlier.has(matchEarlierFileId)) return false;
+    if (!filterFileIds.later.has(matchLaterFileId)) return false;
+    if (
+      !filterFileIds.either.has(matchEarlierFileId) &&
+      !filterFileIds.either.has(matchLaterFileId)
+    )
+      return false;
     return true;
   });
-}
+};
 
 /**
  * Match file loading

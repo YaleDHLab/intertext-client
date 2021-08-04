@@ -15,7 +15,7 @@ const routes = [
   {
     route: '/works',
     label: 'Works',
-  }
+  },
 ];
 
 const Header = (props) => {

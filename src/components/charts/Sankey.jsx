@@ -95,8 +95,6 @@ const mapStateToProps = (state) => ({
   sortIndex: state.search.sortIndex,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-
-});
+const mapDispatchToProps = (dispatch) => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sankey);
