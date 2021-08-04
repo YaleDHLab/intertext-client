@@ -78,7 +78,7 @@ const Button = (props) => {
 const WaffleResults = (props) => {
   return (
     <div className="waffle-card-result-container results-container">
-      <div className="result-pair">
+      <div className="result-pair row">
         <Result key="key-source" type={props.type} result={props.active} />
         <Result
           key="key-target"
