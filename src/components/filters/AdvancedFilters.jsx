@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
-import * as filterActions from '../../actions/filters';
 import * as searchActions from '../../actions/search';
 
 class AdvancedFilters extends React.Component {
@@ -88,8 +87,8 @@ const titleCase = (s) => {
 const mapStateToProps = (state) => ({});
 
 const mapDispatchToProps = (dispatch) => ({
-  setField: (obj) => dispatch(filterActions.setAdvancedFilterField(obj)),
-  clear: (type) => dispatch(filterActions.clearAdvancedFilterType(type)),
+  setField: (obj) => dispatch(searchActions.setAdvancedFilterField(obj)),
+  clear: (type) => dispatch(searchActions.clearAdvancedFilterType(type)),
   search: () => dispatch(searchActions.fetchSearchResults()),
 });
 

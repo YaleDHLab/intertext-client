@@ -32,7 +32,7 @@ class Waffle extends React.Component {
             </Link>
           </div>
           <div className="result waffle-chart-card">
-            <div className="result-top">
+            <div className="result-top row align-center">
               <div className="result-title">
                 <span>All passages similar to </span>
                 <span>
@@ -40,8 +40,8 @@ class Waffle extends React.Component {
                 </span>
               </div>
             </div>
-            <div className="result-body">
-              <div className="headshot-container">
+            <div className="result-body row">
+              <div className="headshot-container col justify-center align-center">
                 <div
                   className="headshot"
                   style={{

@@ -5,6 +5,7 @@ import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import { rootReducer } from './reducers/index';
 import { loadFavorites } from './actions/favorite';
+import { fetchSearchResults } from './actions/search';
 import freeze from 'redux-freeze';
 
 const history = createHashHistory();
@@ -26,5 +27,8 @@ const store = createStore(connectRouter(history)(rootReducer), middleware);
 
 // load the favorites saved in clientside storage
 store.dispatch(loadFavorites());
+
+// load the initial search results
+store.dispatch(fetchSearchResults());
 
 export { store, history };

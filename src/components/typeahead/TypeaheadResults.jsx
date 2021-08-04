@@ -71,7 +71,6 @@ TypeaheadResults.propTypes = {
   fetchSearchResults: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
   query: PropTypes.string.isRequired,
-  results: PropTypes.array.isRequired,
   setTypeaheadQuery: PropTypes.func.isRequired,
   submitSearch: PropTypes.func.isRequired,
 };
@@ -94,7 +93,9 @@ Result.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  results: state.typeahead.results,
+  results: state.typeahead.fileIds
+    ? Object.keys(state.typeahead.fileIds[state.typeahead.field])
+    : [],
   query: state.typeahead.query,
   index: state.typeahead.index,
 });

@@ -1,17 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import brand from '../../assets/images/intertext.png';
 import { connect } from 'react-redux';
+import brand from '../../assets/images/intertext.png';
 
 const routes = [
   {
-    route: '/',
+    route: '/cards',
     label: 'Cards',
   },
   {
     route: '/sankey',
     label: 'Sankey',
   },
+  {
+    route: '/works',
+    label: 'Works',
+  }
 ];
 
 const Header = (props) => {

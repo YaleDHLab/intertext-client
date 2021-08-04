@@ -1,23 +1,16 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { plot } from './lib/sankey-lib';
 import { connect } from 'react-redux';
-import { runInitialSearch } from '../../actions/search';
 import * as _ from 'lodash';
 
 const Sankey = (props) => {
   const ref = useRef();
   const [initialized, setInitialized] = useState(false);
 
-  const { runInitialSearch } = { ...props };
-
   useEffect(() => {
-    runInitialSearch();
-  }, [runInitialSearch]);
-
-  useEffect(() => {
-    const getData = (orderIndex, labelToFileIds) => {
+    const getData = (sortIndex, labelToFileIds) => {
       // wait for the match index to load before showing plot
-      if (!orderIndex || Object.values(orderIndex).length === 0) return;
+      if (!sortIndex || Object.values(sortIndex).length === 0) return;
       if (!labelToFileIds || Object.values(labelToFileIds).length === 0) return;
       // obtain a mapping from file id to label
       let fileIdToLabel = {};
@@ -28,7 +21,7 @@ const Sankey = (props) => {
       }
       // obtain a mapping from match id to match objects
       let matchIdMap = {};
-      orderIndex.forEach((i) => {
+      sortIndex.forEach((i) => {
         const [fileIdA, matchId, , ,] = i;
         matchIdMap[matchId] = matchIdMap[matchId] || [];
         matchIdMap[matchId].push(fileIdA);
@@ -36,7 +29,7 @@ const Sankey = (props) => {
       // parse the data to be represented
       const nodes = {};
       const links = {};
-      orderIndex.forEach((i) => {
+      sortIndex.forEach((i) => {
         const [, matchEarlierFileId, matchLaterFileId, similarity] = i;
         const a = matchEarlierFileId;
         const b = matchLaterFileId;
@@ -81,11 +74,11 @@ const Sankey = (props) => {
       };
     };
 
-    if (initialized || !props.orderIndex || !props.labelToFileIds) return;
+    if (initialized || !props.sortIndex || !props.labelToFileIds) return;
     setInitialized(true);
-    const data = getData(props.orderIndex, props.labelToFileIds);
+    const data = getData(props.sortIndex, props.labelToFileIds);
     plot(ref.current, data);
-  }, [initialized, props.orderIndex, props.labelToFileIds]);
+  }, [initialized, props.sortIndex, props.labelToFileIds]);
 
   return (
     <div className="sankey-wrap">
@@ -96,12 +89,14 @@ const Sankey = (props) => {
 
 const mapStateToProps = (state) => ({
   typeaheadField: state.typeahead.field,
-  labelToFileIds: state.typeahead.fileIds[state.typeahead.field],
-  orderIndex: state.search.sortByIndex,
+  labelToFileIds: state.typeahead.fileIds
+    ? state.typeahead.fileIds[state.typeahead.field]
+    : null,
+  sortIndex: state.search.sortIndex,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  runInitialSearch: () => dispatch(runInitialSearch()),
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sankey);

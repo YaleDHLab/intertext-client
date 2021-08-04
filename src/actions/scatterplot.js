@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { fetchScatterplotFile } from '../utils/fetchJSONFile';
+import { fetchJSONFile } from './ajax';
 
 export const toggleJitter = () => ({
   type: 'TOGGLE_JITTER',
@@ -65,7 +65,9 @@ export const setUse = (use) => {
 export const fetchScatterplotResults = () => {
   return (dispatch, getState) => {
     dispatch({ type: 'FETCH_SCATTERPLOT_RESULTS' });
-    fetchScatterplotFile(getScatterplotProps(getState()))
+    const props = getScatterplotProps(getState());
+    const { use, unit, stat } = props;
+    return fetchJSONFile(`/api/scatterplots/${use}-${unit}-${stat}.json`)
       .then((json) => {
         const state = getState();
         const yDomain = state.scatterplot.yDomains;

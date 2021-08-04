@@ -5,7 +5,7 @@ import Slider from 'rc-slider';
 import {
   setSimilarityAndSearch,
   setDisplayedSimilarity,
-} from '../../actions/filters';
+} from '../../actions/search';
 
 const Range = Slider.createSliderWithTooltip(Slider.Range);
 
@@ -52,7 +52,7 @@ SimilaritySlider.propTypes = {
 
 const mapStateToProps = (state) => ({
   similarity: state.filters.similarity,
-  displayed: state.filters.displayed,
+  displayed: state.filters.displayedSimilarity,
 });
 
 const mapDispatchToProps = (dispatch) => ({

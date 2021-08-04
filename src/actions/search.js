@@ -1,74 +1,93 @@
 import { history } from '../store';
 import { setCompare, filterResultsWithCompare } from './compare';
+import { fetchJSONFile } from './ajax';
+import { addCacheRecord } from '../actions/cache';
+import { uniq } from 'lodash';
 import {
   setTypeaheadQuery,
   setTypeaheadIndex,
   setTypeaheadField,
-  fetchTypeaheadResults,
+  fetchTypeaheadMetadata,
 } from './typeahead';
-import { flatFileStringSearch } from '../utils/flatFileStringSearch';
-import { fetchSortOrderFile } from '../utils/fetchJSONFile';
-import { selectSortBy } from '../selectors/search';
 
-export const fetchSearchResults = () => {
-  return (dispatch, getState) => {
-    dispatch({ type: 'RESET_SEARCH' });
-    dispatch(setTypeaheadIndex(0));
-    dispatch(loadSearchFromUrl());
-    dispatch(fetchMoreSearchResults());
+/**
+ * Similarity
+ **/
+
+export const setDisplayedSimilarity = (val) => ({
+  type: 'SET_DISPLAYED_SIMILARITY',
+  val: val,
+})
+
+export const setSimilarityAndSearch = (val) => {
+  return (dispatch) => {
+    dispatch({
+      type: 'SET_SIMILARITY',
+      val: val,
+    });
+    dispatch(resetMaxDisplayedSearchResults());
     window.scrollTo(0, 0);
+    dispatch(fetchSearchResults());
   };
 };
 
-export const fetchMoreSearchResults = () => {
-  return (dispatch, getState) => {
-    return dispatch(flatFileStringSearch()).then(
-      ({ count, docs }) => {
-        dispatch({
-          type: 'SET_ALL_SEARCH_RESULTS',
-          docs: dispatch(filterResultsWithCompare(docs)),
-          total: count,
-          err: false,
-        });
-      },
-      (err) => {
-        console.warn(err);
-        dispatch({
-          type: 'SET_ALL_SEARCH_RESULTS',
-          docs: [],
-          err: true,
-        });
-      }
-    );
-  };
-};
+/**
+ * Sort
+ **/
 
-export const resetMaxDisplayedSearchResults = () => ({
-  type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS',
-});
-
-export const displayMoreResults = () => {
+const fetchSortIndex = () => {
   return (dispatch, getState) => {
     const state = getState();
-    if (state.search.maxDisplayed >= state.search.resultsMeta.totalResults) {
-      return;
-    }
-    dispatch({ type: 'DISPLAY_MORE_SEARCH_RESULTS' });
-    dispatch(fetchMoreSearchResults());
+    const url = `/api/indices/match-ids-by-${state.search.sortField.toLowerCase().trim()}.json`;
+    return fetchJSONFile(url).then((sortIndex) => {
+      dispatch({
+        type: 'SET_SORT_ORDER_INDEX',
+        sortIndex: sortIndex,
+      });
+    })
+    .catch((e) => {
+      console.warn('Could not fetch sort order: ' + e);
+    });
   };
 };
+
+export const setSortAndSearch = (field) => {
+  return (dispatch) => {
+    dispatch({ type: 'SET_SORT_FIELD', sortField: field });
+    dispatch(fetchSortIndex()).then(() => {
+      dispatch(fetchSearchResults());
+    })
+  };
+};
+
+/**
+ * Advanced Filters
+ **/
+
+export const setAdvancedFilterField = (obj) => ({
+  type: 'SET_ADVANCED_FILTER',
+  ...obj,
+});
+
+export const clearAdvancedFilterType = (type) => {
+  return (dispatch) => {
+    dispatch({
+      type: 'CLEAR_ADVANCED_FILTER_TYPE',
+      earlierLater: type,
+    });
+    dispatch(fetchSearchResults());
+  };
+};
+
+/**
+ * Search + URL interactions
+ **/
 
 export const saveSearchInUrl = () => {
   return (dispatch, getState) => {
     const state = getState();
     let hash = '?';
     hash += 'query=' + JSON.stringify(state.typeahead.query);
-    hash += '&field=' + JSON.stringify(state.typeahead.field);
-    hash += '&sort=' + JSON.stringify(state.search.sortBy);
-    hash += '&similarity=' + JSON.stringify(state.filters.similarity);
-    hash += '&earlier=' + JSON.stringify(state.filters.earlier);
-    hash += '&later=' + JSON.stringify(state.filters.later);
-    hash += '&compare=' + JSON.stringify(state.compare);
     history.push(hash);
   };
 };
@@ -77,6 +96,7 @@ export const loadSearchFromUrl = () => {
   return (dispatch, getState) => {
     if (window.location.hash.includes('sankey')) return;
     let search = window.location.hash.split('#/')[1];
+    search = search.replace('cards', '');
     if (search.includes('?')) search = search.split('?')[1];
     if (!search) return;
     let obj = {};
@@ -93,66 +113,193 @@ export const loadSearchFromUrl = () => {
           console.warn(`Error parsing ${arg}: ${e}`);
         }
       });
+    // prepare the update object
+    let update = {};
+    if ('earlier' in obj) update['earlier'] = {'fileId': obj.earlier};
+    if ('later' in obj) update['later'] = {'fileId': obj.later};
     dispatch({
       type: 'LOAD_SEARCH_FROM_URL',
-      obj: obj,
+      obj: update,
     });
-    if (obj.compare && Object.values(obj.compare).length)
-      dispatch(setCompare(obj.compare));
+    if (obj.compare && Object.values(obj.compare).length) dispatch(setCompare(obj.compare));
     if (obj.query && obj.query.length) dispatch(setTypeaheadQuery(obj.query));
     if (obj.field && obj.field.length) dispatch(setTypeaheadField(obj.field));
   };
 };
 
-export const runInitialSearch = () => {
-  return (dispatch) => {
-    // we need both the sorted match ids and the typeahead to allow search
-    Promise.all([
-      dispatch(fetchSortedResults()),
-      dispatch(fetchTypeaheadResults()),
-    ]).then((v) => {
-      dispatch(fetchSearchResults());
-    });
-  };
+/**
+ * Search
+ **/
+
+export const fetchSearchResults = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const runSearch = () => {
+      dispatch(setTypeaheadIndex(0));
+      dispatch(loadSearchFromUrl());
+      window.scrollTo(0, 0);
+      dispatch(fetchMoreSearchResults());
+    }
+    // check to see if we need to run the first search result
+    state.search.sortIndex && state.typeahead.metadata
+      ? runSearch()
+      : Promise.all([
+          dispatch(fetchSortIndex()),
+          dispatch(fetchTypeaheadMetadata()),
+        ]).then((v) => {
+          runSearch();
+        })
+
+    }
 };
 
 /**
- * Sort
+ * Search Pagination
  **/
 
-const setSortOrderIndex = (orderIndex) => ({
-  type: 'SET_SORT_ORDER_INDEX',
-  orderIndex: orderIndex,
-});
-
-const fetchSortedResults = () => {
+// called by client to load more matches into the DOM without running a new search
+export const displayMoreResults = () => {
   return (dispatch, getState) => {
     const state = getState();
-    return fetchSortOrderFile(selectSortBy(state))
-      .then((orderIndex) => {
-        try {
-          dispatch(setSortOrderIndex(orderIndex));
-        } catch (err) {
-          console.log(err);
-        }
-      })
-      .catch((e) => {
-        console.warn('Could not fetch sort order: ' + e);
-      });
+    if (state.search.maxDisplayed >= state.search.resultsMeta.totalResults) return;
+    dispatch({type: 'DISPLAY_MORE_SEARCH_RESULTS'});
+    dispatch(fetchMoreSearchResults());
   };
 };
 
-export const setSort = (s) => {
+// load the match files for the set of displayed search results
+const fetchMoreSearchResults = () => {
   return (dispatch, getState) => {
-    dispatch({ type: 'SET_SORT', sortBy: s });
-    return dispatch(fetchSortedResults());
+    const state = getState();
+    // get the full list of match metadata vals for the search params
+    const filteredSortIndex = getFilteredSortIndex(state);
+    // slice off a page
+    const orderedIndex = filteredSortIndex.slice(0, state.search.maxDisplayed);
+    // get the unique match file ids for which we need to extract matches
+    const matchFileIDs = uniq(orderedIndex.map((d) => d[1]));
+    // get the match file contents
+    dispatch(getMatchFiles(matchFileIDs)).then((matchFiles) => {
+      const matches = orderedIndex.reduce((arr, i) => {
+        const [matchIndex, matchFileId] = i;
+        arr.push(matchFiles[matchFileIDs.indexOf(matchFileId)][matchIndex]);
+        return arr;
+      }, []);
+      return {
+        count: filteredSortIndex.length,
+        docs: matches,
+      };
+    }).then(({ count, docs }) => {
+      dispatch({
+        type: 'SET_ALL_SEARCH_RESULTS',
+        docs: dispatch(filterResultsWithCompare(docs)),
+        total: count,
+        err: false,
+      });
+    }).catch((err) => {
+      dispatch({
+        type: 'SET_ALL_SEARCH_RESULTS',
+        docs: [],
+        err: err,
+      });
+    })
   };
 };
 
-export const setSortAndSearch = (field) => {
-  return (dispatch) => {
-    dispatch(setSort(field)).then(() => {
-      dispatch(fetchSearchResults());
+const resetMaxDisplayedSearchResults = () => ({
+  type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS',
+});
+
+/**
+ * Main search function that filters the sorted match index to find suitable matches
+ */
+
+const getFilteredSortIndex = (state) => {
+  const { sortIndex, advanced, similarity } = {...state.search};
+  const { fileIds, field, query } = {...state.typeahead};
+  // handle case where Results.jsx runs first search instead of '../store.js'
+  if (!fileIds) return;
+  // given a query and a map from strings to lists of values, return values that match the query
+  const getValuesOfMatchingKeys = (q, map) => {
+    let s = new Set();
+    // filter the keys of the map
+    Object.keys(map).map((k) => {
+      // if there's no query add all values for this key
+      if (!q || !q.length) {
+        map[k].map((v) => s.add(v));
+      } else {
+        // check if this key (string) matches the query
+        if (k.trim().toLowerCase().includes(q.trim().toLowerCase())) {
+          // add all the values assigned to this matching key
+          map[k].map((v) => s.add(v));
+        }
+      }
+      return null;
     });
+    return s;
   };
+
+  const getEarlierOrLaterFileIds = (field, map) => {
+    return Number.isInteger(advanced[field].fileId)
+      ? new Set([advanced[field].fileId])
+      : getSetIntersection([
+          getValuesOfMatchingKeys(advanced[field].title, map.title),
+          getValuesOfMatchingKeys(advanced[field].author, map.author),
+        ])
+  }
+
+  // given a list of sets, return a set with the intersection of all sets
+  const getSetIntersection = sets => {
+    return new Set(sets.reduce((a, b) => [...a].filter((c) => b.has(c))))
+  }
+
+  /**
+   * Get the file ids that are valid for the earlier, later, or either column
+   **/
+
+  const filterFileIds = {
+    either: getValuesOfMatchingKeys(query, fileIds[field]), // from typeahead
+    earlier: getEarlierOrLaterFileIds('earlier', fileIds), // from filters
+    later: getEarlierOrLaterFileIds('later', fileIds),  // from filters
+  }
+
+  // return the filtered sort index
+  return sortIndex.filter((item) => {
+    // destructure a single row from the sorted match index
+    const [, matchEarlierFileId, matchLaterFileId, matchSimilarity] = item;
+    if (matchSimilarity < similarity[0] || matchSimilarity > similarity[1]) return false;
+    if (!(filterFileIds.earlier.has(matchEarlierFileId))) return false;
+    if (!(filterFileIds.later.has(matchLaterFileId))) return false;
+    if (!(filterFileIds.either.has(matchEarlierFileId)) && (!(filterFileIds.either.has(matchLaterFileId)))) return false;
+    return true;
+  });
+}
+
+/**
+ * Match file loading
+ **/
+
+const getMatchFiles = (matchFileIDs) => {
+  return (dispatch, getState) => {
+    return Promise.all(
+      matchFileIDs.map((matchFileID) => dispatch(getMatchFile(matchFileID)))
+    );
+  };
+};
+
+// Helper to fetch match file from memory or network
+const getMatchFile = (matchFileID) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const cacheKey = `matches/${matchFileID}.json`;
+    return cacheKey in state.cache
+      ? new Promise((resolve, reject) => resolve(state.cache[cacheKey]))
+      : fetchMatchFile(matchFileID.toString()).then((match) => {
+          dispatch(addCacheRecord(cacheKey, match));
+          return match;
+        });
+  };
+};
+
+export const fetchMatchFile = (textID) => {
+  return fetchJSONFile('/api/matches/' + String(textID) + '.json');
 };

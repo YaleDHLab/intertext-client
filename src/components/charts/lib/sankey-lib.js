@@ -49,7 +49,7 @@ export const plot = (svg, data) => {
   });
 
   const handleLinkClick = (d) => {
-    history.push(`/?earlier=${d.source.id}&later=${d.target.id}`);
+    history.push(`/cards?earlier=${d.source.id}&later=${d.target.id}`);
   };
 
   const link = svg

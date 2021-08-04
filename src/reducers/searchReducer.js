@@ -6,9 +6,28 @@ const initialState = {
   maxDisplayed: maxDisplayedStep,
 
   // sort
-  sortBy: 'similarity',
-  sortByIndex: null,
+  sortField: 'similarity',
+  sortIndex: null,
 
+  // similarity range
+  similarity: [0, 100],
+  displayedSimilarity: [0, 100],
+
+  // advanced filters
+  advanced: {
+    earlier: {
+      title: false,
+      author: false,
+      fileId: false,
+    },
+    later: {
+      title: false,
+      author: false,
+      fileId: false,
+    },
+  },
+
+  // metadata associated with search results
   resultsMeta: {
     err: false,
     loading: true,
@@ -19,32 +38,56 @@ const initialState = {
 const searchReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'RESET_SEARCH':
+      return Object.assign({}, state, initialState);
+
+    case 'SET_SORT_FIELD':
       return Object.assign({}, state, {
-        maxDisplayed: maxDisplayedStep,
-        resultsMeta: {
-          err: false,
-          loading: true,
-        },
+        sortField: action.sortField,
       });
 
-    case 'SET_ALL_SEARCH_RESULTS':
+    case 'SET_SORT_ORDER_INDEX':
       return Object.assign({}, state, {
-        results: action.docs,
-        allResults: action.docs,
-        resultsMeta: Object.assign({}, state.resultsMeta, {
-          totalResults: action.total,
-          err: action.err,
-          loading: false,
+        sortIndex: action.sortIndex,
+      });
+
+    case 'SET_SIMILARITY':
+      return Object.assign({}, state, {
+        similarity: action.val,
+      });
+
+    case 'SET_DISPLAYED_SIMILARITY':
+      return Object.assign({}, state, {
+        displayedSimilarity: action.val,
+      });
+
+    case 'SET_ADVANCED_FILTER':
+      return Object.assign({}, state, {
+        advanced: Object.assign({}, state.advanced, {
+          [action.earlierLater]: Object.assign(
+            {},
+            state.advanced[action.type.toLowerCase()],
+            {
+              [action.field.toLowerCase()]: action.value,
+            }
+          ),
         }),
       });
 
-    case 'SET_SEARCH_RESULTS':
+    case 'CLEAR_ADVANCED_FILTER_TYPE':
       return Object.assign({}, state, {
-        results: action.results,
+        advanced: Object.assign({}, state.advanced, {
+          [action.earlierLater.toLowerCase()]: {},
+        }),
       });
 
     case 'LOAD_SEARCH_FROM_URL':
-      return Object.assign({}, state, action.obj);
+      let update = Object.assign({}, state, {
+        'advanced': Object.assign({}, state.advanced, {
+          'earlier': action.obj.earlier ? action.obj.earlier : state.advanced.earlier,
+          'later': action.obj.later ? action.obj.later : state.advanced.later,
+        })
+      });
+      return Object.assign({}, state, update);
 
     case 'DISPLAY_MORE_SEARCH_RESULTS':
       const newMax = state.maxDisplayed + maxDisplayedStep;
@@ -63,14 +106,20 @@ const searchReducer = (state = initialState, action) => {
         loading: action.bool,
       });
 
-    case 'SET_SORT':
+    case 'SET_ALL_SEARCH_RESULTS':
       return Object.assign({}, state, {
-        sortBy: action.sortBy,
+        results: action.docs,
+        allResults: action.docs,
+        resultsMeta: Object.assign({}, state.resultsMeta, {
+          totalResults: action.total,
+          err: action.err,
+          loading: false,
+        }),
       });
 
-    case 'SET_SORT_ORDER_INDEX':
+    case 'SET_SEARCH_RESULTS':
       return Object.assign({}, state, {
-        sortByIndex: action.orderIndex,
+        results: action.results,
       });
 
     default:

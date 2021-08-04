@@ -1,5 +1,5 @@
 import { history } from '../store';
-import { fetchMatchFile } from '../utils/fetchJSONFile';
+import { fetchMatchFile } from './search';
 
 export const setWaffleVisualized = (obj) => ({
   type: 'SET_WAFFLE_VISUALIZED',

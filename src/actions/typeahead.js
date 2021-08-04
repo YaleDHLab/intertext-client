@@ -1,4 +1,4 @@
-import { fetchTypeaheadFileIds } from '../utils/fetchJSONFile';
+import { fetchJSONFile } from './ajax';
 
 export const setTypeaheadField = (field) => ({
   type: 'SET_TYPEAHEAD_FIELD',
@@ -19,22 +19,27 @@ export const typeaheadRequestFailed = () => ({
   type: 'TYPEAHEAD_REQUEST_FAILED',
 });
 
-export function fetchTypeaheadResults() {
+export function fetchTypeaheadMetadata() {
   return function (dispatch, getState) {
-    const state = getState();
-    return dispatch(fetchTypeaheadFileIds()).then((fileIds) => {
+    return fetchJSONFile('/api/metadata.json').then((metadata) => {
+      // create a map from author/title to file ids that have that string in their metadata
+      let fileIds = {
+        'author': {},
+        'title': {},
+      }
+      metadata.forEach((m, fileIdx) => {
+        fileIds['author'][m.author] = m.author in fileIds['author']
+          ? fileIds['author'][m.author].concat(fileIdx)
+          : [fileIdx];
+        fileIds['title'][m.title] = m.title in fileIds['title']
+          ? fileIds['aitle'][m.title].concat(fileIdx)
+          : [fileIdx];
+      })
       dispatch({
         type: 'RECEIVE_TYPEAHEAD_FILE_IDS',
-        results: Object.keys(fileIds[state.typeahead.field]).sort(),
         fileIds: fileIds,
+        metadata: metadata,
       });
     });
   };
 }
-
-export const setTypeaheadFieldAndFetch = (field) => {
-  return (dispatch) => {
-    dispatch(setTypeaheadField(field));
-    dispatch(fetchTypeaheadResults());
-  };
-};

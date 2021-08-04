@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { setTypeaheadFieldAndFetch } from '../../actions/typeahead';
+import { setTypeaheadField } from '../../actions/typeahead';
 
 class TypeaheadSelect extends React.Component {
   render() {
@@ -9,12 +9,12 @@ class TypeaheadSelect extends React.Component {
       <div className="typeahead-select-container">
         <select
           className="custom-select"
-          onChange={this.props.setTypeaheadFieldAndFetch}
+          onChange={this.props.setTypeaheadField}
           value={this.props.field}
         >
           <option disabled>Search By</option>
-          <option value="Author">Author</option>
-          <option value="Title">Title</option>
+          <option value="author">Author</option>
+          <option value="title">Title</option>
         </select>
       </div>
     );
@@ -23,7 +23,7 @@ class TypeaheadSelect extends React.Component {
 
 TypeaheadSelect.propTypes = {
   field: PropTypes.string.isRequired,
-  setTypeaheadFieldAndFetch: PropTypes.func.isRequired,
+  setTypeaheadField: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -31,8 +31,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setTypeaheadFieldAndFetch: (event) =>
-    dispatch(setTypeaheadFieldAndFetch(event.target.value)),
+  setTypeaheadField: (event) =>
+    dispatch(setTypeaheadField(event.target.value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TypeaheadSelect);

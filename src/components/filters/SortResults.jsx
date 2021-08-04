@@ -16,7 +16,7 @@ class SortResults extends React.Component {
     return (
       <select
         className="sort-results"
-        value={this.props.sortBy}
+        value={this.props.sortField}
         onChange={this.handleChange}
       >
         <option disabled>Sort By</option>
@@ -29,7 +29,7 @@ class SortResults extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  sortBy: state.search.sortBy,
+  sortField: state.search.sortField,
 });
 
 const mapDispatchToProps = (dispatch) => ({

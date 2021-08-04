@@ -5,8 +5,7 @@ import Filters from '../filters/Filters';
 import Result, { ResultProps } from './Result';
 import Loader from '../partials/Loader';
 import {
-  loadSearchFromUrl,
-  runInitialSearch,
+  fetchSearchResults,
   displayMoreResults,
 } from '../../actions/search';
 import { throttle } from 'lodash';
@@ -15,9 +14,8 @@ const Results = (props) => {
   const {
     results,
     loading,
-    loadSearchFromUrl,
-    runInitialSearch,
     displayMoreResults,
+    fetchSearchResults,
   } = {
     ...props,
   };
@@ -37,9 +35,8 @@ const Results = (props) => {
   }, [displayMoreResults]);
 
   useEffect(() => {
-    loadSearchFromUrl();
-    runInitialSearch();
-  }, [loadSearchFromUrl, runInitialSearch]);
+    fetchSearchResults();
+  }, [])
 
   return (
     <div id="results-container" className="col align-center">
@@ -92,7 +89,6 @@ Results.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }),
-  loadSearchFromUrl: PropTypes.func.isRequired,
   location: PropTypes.object,
   match: PropTypes.object,
   results: PropTypes.arrayOf(ResultProps),
@@ -104,9 +100,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  loadSearchFromUrl: (obj) => dispatch(loadSearchFromUrl(obj)),
   displayMoreResults: () => dispatch(displayMoreResults()),
-  runInitialSearch: () => dispatch(runInitialSearch()),
+  fetchSearchResults: () => dispatch(fetchSearchResults()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Results);
