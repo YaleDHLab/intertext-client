@@ -31,7 +31,7 @@ export function fetchTypeaheadMetadata() {
         fileIds['author'][m.author] =
           m.author in fileIds['author'] ? fileIds['author'][m.author].concat(fileIdx) : [fileIdx];
         fileIds['title'][m.title] =
-          m.title in fileIds['title'] ? fileIds['aitle'][m.title].concat(fileIdx) : [fileIdx];
+          m.title in fileIds['title'] ? fileIds['title'][m.title].concat(fileIdx) : [fileIdx];
       });
       dispatch({
         type: 'RECEIVE_TYPEAHEAD_FILE_IDS',
