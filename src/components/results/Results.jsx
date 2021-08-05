@@ -3,82 +3,73 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Filters from '../filters/Filters';
 import Result, { ResultProps } from './Result';
-import Loader from '../Loader';
-import {
-  loadSearchFromUrl,
-  runInitialSearch,
-  displayMoreResults
-} from '../../actions/search';
+import Loader from '../partials/Loader';
+import { fetchSearchResults, displayMoreResults } from '../../actions/search';
 import { throttle } from 'lodash';
 
-const Results = (props) => {
-  const {
-    results,
-    loading,
-    loadSearchFromUrl,
-    runInitialSearch,
-    displayMoreResults
-  } = {
-    ...props
+const Results = props => {
+  const { results, loading, displayMoreResults, fetchSearchResults } = {
+    ...props,
   };
 
-  const containerRef = useRef();
+  const ref = useRef();
 
   useEffect(() => {
+    const elem = ref.current;
+    if (!elem) return;
     const onScroll = throttle(() => {
-      const elem = containerRef.current;
-      if (elem && window.scrollY / elem.clientHeight > 0.75) {
-        displayMoreResults();
-      }
-    }, 100);
-    window.addEventListener('scroll', onScroll);
+      if (elem.scrollTop / elem.clientHeight > 0.75) displayMoreResults();
+    }, 500);
+    ref.current.addEventListener('scroll', onScroll);
     return () => {
-      window.removeEventListener('scroll', onScroll);
+      if (elem) elem.removeEventListener('scroll', onScroll);
     };
   }, [displayMoreResults]);
 
   useEffect(() => {
-    loadSearchFromUrl();
-    runInitialSearch();
-  }, [loadSearchFromUrl, runInitialSearch]);
+    fetchSearchResults();
+  }, []);
 
   return (
-    <div className="results">
+    <div id='results-container' className='col align-center'>
       <Filters />
-      <div className="result-pair-container" ref={containerRef}>
-        {results && results.length ? (
-          <ResultPairs results={results} />
-        ) : loading ? (
+      <div
+        id='result-pairs-container'
+        ref={ref}
+        className={loading ? 'flex-1 col justify-center' : 'flex-1 col'}
+      >
+        {loading ? (
           <Loader />
+        ) : results && results.length ? (
+          <ResultPairs results={results} />
         ) : (
-          <span>Sorry, no results could be found</span>
+          <span className='no-results'>Sorry, no results could be found</span>
         )}
       </div>
     </div>
   );
 };
 
-const ResultPairs = (props) => {
+const ResultPairs = props => {
   return (
-    <div id="results-container">
+    <div>
       {props.results.map((result, idx) => (
         <div
-          className={`result-pair
+          className={`result-pair row
             ${
-              result.source_author === 'Unknown' &&
-              result.target_author === 'Unknown'
+              result.source_author === 'Unknown' && result.target_author === 'Unknown'
                 ? 'hide-authors'
                 : ''
             }`}
           key={idx}
         >
-          <Result result={result} type="source" />
-          <div className="similarity-circle">
-            <div className="similarity">
-              {Math.round(result.similarity) + '%'}
+          <Result result={result} type='source' />
+          <div className='similarity-circle row justify-center align-center'>
+            <div className='similarity row justify-center align-center'>
+              <span>{Math.round(result.similarity) + '%'}</span>
             </div>
           </div>
-          <Result result={result} type="target" />
+          <Result result={result} type='target' />
         </div>
       ))}
     </div>
@@ -87,23 +78,21 @@ const ResultPairs = (props) => {
 
 Results.propTypes = {
   history: PropTypes.shape({
-    push: PropTypes.func.isRequired
+    push: PropTypes.func.isRequired,
   }),
-  loadSearchFromUrl: PropTypes.func.isRequired,
   location: PropTypes.object,
   match: PropTypes.object,
-  results: PropTypes.arrayOf(ResultProps)
+  results: PropTypes.arrayOf(ResultProps),
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   results: state.search.results,
-  loading: state.search.loading
+  loading: state.search.resultsMeta.loading,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  loadSearchFromUrl: (obj) => dispatch(loadSearchFromUrl(obj)),
+const mapDispatchToProps = dispatch => ({
   displayMoreResults: () => dispatch(displayMoreResults()),
-  runInitialSearch: () => dispatch(runInitialSearch())
+  fetchSearchResults: () => dispatch(fetchSearchResults()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Results);

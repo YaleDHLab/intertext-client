@@ -1,16 +1,16 @@
 import React from 'react';
-import { colors } from './colors';
+import { colors } from './lib/color-lib';
 
-const Legend = (props) => {
+const Legend = props => {
   const min = props.domain && props.domain[0] ? props.domain[0] : 50;
   const max = props.domain && props.domain[1] ? props.domain[1] : 100;
   const percents = 'percents' in props ? props.percents : true;
   return (
-    <div className="chart-legend">
+    <div className='chart-legend'>
       <span>{parse(min, percents)}</span>
-      <div className="swatches">
-        {colors.map((c) => (
-          <div key={c} className="swatch" style={{ background: c }} />
+      <div className='swatches'>
+        {colors.map(c => (
+          <div key={c} className='swatch' style={{ background: c }} />
         ))}
       </div>
       <span>{parse(max, percents)}</span>

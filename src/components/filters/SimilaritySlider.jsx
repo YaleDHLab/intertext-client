@@ -2,10 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Slider from 'rc-slider';
-import {
-  setSimilarityAndSearch,
-  setDisplayedSimilarity
-} from '../../actions/search';
+import { setSimilarityAndSearch, setDisplayedSimilarity } from '../../actions/search';
 
 const Range = Slider.createSliderWithTooltip(Slider.Range);
 
@@ -26,9 +23,9 @@ class SimilaritySlider extends React.Component {
 
   render() {
     return (
-      <div className="slider">
-        <div className="filter-label">Similarity</div>
-        <div className="slider-label">MIN</div>
+      <div className='slider'>
+        <div className='filter-label'>Similarity</div>
+        <div className='slider-label'>MIN</div>
         <Range
           min={50}
           max={100}
@@ -37,7 +34,7 @@ class SimilaritySlider extends React.Component {
           onChange={this.setDisplayedSimilarity}
           onAfterChange={this.setSimilarity}
         />
-        <div className="slider-label">MAX</div>
+        <div className='slider-label'>MAX</div>
       </div>
     );
   }
@@ -47,17 +44,17 @@ SimilaritySlider.propTypes = {
   displayed: PropTypes.arrayOf(PropTypes.number).isRequired,
   setDisplayedSimilarity: PropTypes.func.isRequired,
   setSimilarityAndSearch: PropTypes.func.isRequired,
-  similarity: PropTypes.arrayOf(PropTypes.number).isRequired
+  similarity: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  similarity: state.search.similarity,
-  displayed: state.search.displayed
+const mapStateToProps = state => ({
+  similarity: state.filters.similarity,
+  displayed: state.filters.displayedSimilarity,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  setSimilarityAndSearch: (val) => dispatch(setSimilarityAndSearch(val)),
-  setDisplayedSimilarity: (val) => dispatch(setDisplayedSimilarity(val))
+const mapDispatchToProps = dispatch => ({
+  setSimilarityAndSearch: val => dispatch(setSimilarityAndSearch(val)),
+  setDisplayedSimilarity: val => dispatch(setDisplayedSimilarity(val)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SimilaritySlider);

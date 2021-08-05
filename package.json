@@ -9,6 +9,7 @@
     "babel-polyfill": "^6.26.0",
     "connected-react-router": "^4.2.3",
     "d3": "^4.12.2",
+    "d3-sankey": "^0.12.3",
     "fs-extra": "^9.1.0",
     "isomorphic-fetch": "^3.0.0",
     "lodash": "^4.17.20",
@@ -38,7 +39,8 @@
     "prettify": "prettier --write src",
     "fetch-sample-data": "node scripts/fetch-sample-data.js",
     "build:demo": "npm run build && npm run fetch-sample-data",
-    "upload": "npm run build && rm -rf build/api && zip client.zip -r build && aws s3 cp client.zip s3://lab-apps/intertext-builds/intertext-client-${INTERTEXT_CLIENT_VERSION:=0.0.1a}.zip --acl public-read --profile yale-admin && rm client.zip"
+    "upload": "npm run build && rm -rf build/api && zip client.zip -r build && aws s3 cp client.zip s3://lab-apps/intertext-builds/intertext-client-${INTERTEXT_CLIENT_VERSION:=0.0.1a}.zip --acl public-read --profile yale-admin && rm client.zip",
+    "redesign": "npm run build && aws s3 cp build/ s3://lab-apps/intertext/redesign/ --recursive --acl public-read --profile yale-admin"
   },
   "eslintConfig": {
     "extends": [
@@ -60,5 +62,13 @@
   },
   "devDependencies": {
     "prettier": "^2.2.1"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "jsxSingleQuote": true,
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "printWidth": 100,
+    "arrowParens": "avoid"
   }
 }

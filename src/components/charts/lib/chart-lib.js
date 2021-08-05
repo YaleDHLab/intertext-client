@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 
 let ChartLib = {};
 
-const curateProps = (_props) => {
+const curateProps = _props => {
   let props = Object.assign({}, _props);
   props.margin = props.margin || { top: 0, right: 0, bottom: 0, left: 0 };
   props.height = props.height || 400;
@@ -82,10 +82,7 @@ const setSvgSize = (svg, props) => {
 const transformGroupContainer = (svg, props) => {
   svg
     .select('.group-container')
-    .attr(
-      'transform',
-      'translate(' + props.margin.left + ',' + props.margin.top + ')'
-    );
+    .attr('transform', 'translate(' + props.margin.left + ',' + props.margin.top + ')');
 };
 
 const transformXAxis = (svg, props) => {
@@ -93,13 +90,11 @@ const transformXAxis = (svg, props) => {
     .select('.x.axis')
     .attr(
       'transform',
-      'translate(0,' +
-        (props.height - props.margin.top - props.margin.bottom) +
-        ')'
+      'translate(0,' + (props.height - props.margin.top - props.margin.bottom) + ')'
     );
 };
 
-const addGrid = (props) => {
+const addGrid = props => {
   d3.select('.group-container')
     .select('rect.grid')
     .attr('class', 'grid')
@@ -132,20 +127,20 @@ const addYLabel = (svg, props) => {
  * Get the geoms to be drawn
  **/
 
-ChartLib.getGeoms = (props) => {
+ChartLib.getGeoms = props => {
   let geoms = [];
 
   if (props.pointData) {
     geoms.push({
       data: props.pointData,
-      draw: ChartLib.drawPoint
+      draw: ChartLib.drawPoint,
     });
   }
 
   if (props.waffleData) {
     geoms.push({
       data: props.waffleData,
-      draw: ChartLib.drawWaffle
+      draw: ChartLib.drawWaffle,
     });
   }
 
@@ -158,8 +153,8 @@ ChartLib.getGeoms = (props) => {
 
 ChartLib.getDomain = (data, props) => {
   let domain = {};
-  domain.x = d3.extent(data, (d) => d[props.x || 'x']);
-  domain.y = d3.extent(data, (d) => d[props.y || 'y']);
+  domain.x = d3.extent(data, d => d[props.x || 'x']);
+  domain.y = d3.extent(data, d => d[props.y || 'y']);
   if (props.xDomain) domain.x = props.xDomain;
   if (props.yDomain) domain.y = props.yDomain;
   return domain;
@@ -176,7 +171,7 @@ ChartLib.getScales = (elem, _props, domain) => {
   const w = props.width - props.margin.right - props.margin.left;
   const h = props.height - props.margin.top - props.margin.bottom;
   const axes = { x: [0, w], y: [h, 0] };
-  Object.keys(axes).map((a) => {
+  Object.keys(axes).map(a => {
     if (props[a + 'Scale']) {
       switch (props[a + 'Scale']) {
         case 'ordinal':
@@ -188,10 +183,7 @@ ChartLib.getScales = (elem, _props, domain) => {
           return null;
 
         case 'inverse':
-          scales[a] = d3
-            .scaleLinear()
-            .domain(domain[a])
-            .range([axes[a][1], axes[a][0]]);
+          scales[a] = d3.scaleLinear().domain(domain[a]).range([axes[a][1], axes[a][0]]);
           return null;
 
         default:
@@ -226,11 +218,7 @@ ChartLib.updateAxes = (elem, props, scales, brush, brushElem) => {
       props.xLabelRotate ? 'rotate(' + props.xLabelRotate + ')' : 'rotate(0)'
     );
 
-  d3.select(elem)
-    .selectAll('g.y.axis')
-    .transition()
-    .duration(1000)
-    .call(axes.y);
+  d3.select(elem).selectAll('g.y.axis').transition().duration(1000).call(axes.y);
 
   if (brush && brushElem) {
     brushElem.call(brush);
@@ -256,7 +244,7 @@ ChartLib.getAxes = (props, scales) => {
       .axisLeft(scales.y)
       .ticks(props.yTicks)
       .tickPadding(props.yTickPadding ? props.yTickPadding : 4)
-      .tickFormat(props.yTickFormat ? props.yTickFormat : d3.format('.1f'))
+      .tickFormat(props.yTickFormat ? props.yTickFormat : d3.format('.1f')),
   };
 };
 
@@ -265,8 +253,8 @@ ChartLib.getAxes = (props, scales) => {
  **/
 
 ChartLib.drawGrid = (elem, props, scales) => {
-  const gridX = (props) => d3.axisBottom(scales.x).ticks(props.xTicks || 8);
-  const gridY = (props) => d3.axisLeft(scales.y).ticks(props.yTicks || 8);
+  const gridX = props => d3.axisBottom(scales.x).ticks(props.xTicks || 8);
+  const gridY = props => d3.axisLeft(scales.y).ticks(props.yTicks || 8);
 
   d3.select(elem)
     .select('.x.grid')
@@ -303,10 +291,8 @@ ChartLib.drawPoint = (elem, props, domain, scales, jitters) => {
   if (!j) window.chartLib.jitters = { x: [], y: [] };
 
   const dataKey = (d, i) => i;
-  const x = (d, i) =>
-    j ? jitter(scales.x(d[xKey]), i, 'x') : scales.x(d[xKey]);
-  const y = (d, i) =>
-    j ? jitter(scales.y(d[yKey]), i, 'y') : scales.y(d[yKey]);
+  const x = (d, i) => (j ? jitter(scales.x(d[xKey]), i, 'x') : scales.x(d[xKey]));
+  const y = (d, i) => (j ? jitter(scales.y(d[yKey]), i, 'y') : scales.y(d[yKey]));
   const jitter = (val, idx, dim) => {
     if (!window.chartLib.jitters[dim][idx]) {
       window.chartLib.jitters[dim][idx] = Math.random() * 30 - 15;
@@ -317,19 +303,15 @@ ChartLib.drawPoint = (elem, props, domain, scales, jitters) => {
   // enter
   const g = d3.select(elem).select('.point-container');
 
-  const points = g
-    .selectAll('.point-group')
-    .data(props.pointData, props.pointKey || dataKey);
+  const points = g.selectAll('.point-group').data(props.pointData, props.pointKey || dataKey);
 
   const pointsEnter = points
     .enter()
     .append('g')
     .attr('class', 'point-group')
-    .on('mouseout', (d) => (props.onMouseout ? props.onMouseout(d) : null))
-    .on('mouseover', (d) => (props.onMouseover ? props.onMouseover(d) : null))
-    .on('mouseenter', (d) =>
-      props.onMouseenter ? props.onMouseenter(d) : null
-    );
+    .on('mouseout', d => (props.onMouseout ? props.onMouseout(d) : null))
+    .on('mouseover', d => (props.onMouseover ? props.onMouseover(d) : null))
+    .on('mouseenter', d => (props.onMouseenter ? props.onMouseenter(d) : null));
 
   pointsEnter.append('circle').attr('class', 'point');
   pointsEnter.append('text').attr('class', 'label').attr('stroke', '#000');
@@ -343,12 +325,10 @@ ChartLib.drawPoint = (elem, props, domain, scales, jitters) => {
     .delay((d, i) => i * 2)
     .attr('cx', x)
     .attr('cy', y)
-    .attr('r', (d) => (props.r ? props.r : 3))
+    .attr('r', d => (props.r ? props.r : 3))
     .attr('data-key', props.pointKey || dataKey)
-    .style('fill', (d) => (props.pointFill ? props.pointFill(d) : color(d.key)))
-    .style('stroke', (d) =>
-      props.pointStroke ? props.pointStroke(d) : color(d.key)
-    );
+    .style('fill', d => (props.pointFill ? props.pointFill(d) : color(d.key)))
+    .style('stroke', d => (props.pointStroke ? props.pointStroke(d) : color(d.key)));
 
   if (props.pointLabels) {
     points
@@ -356,7 +336,7 @@ ChartLib.drawPoint = (elem, props, domain, scales, jitters) => {
       .select('.label')
       .transition()
       .duration(1000)
-      .text((d) => (d.label ? d.label : ''))
+      .text(d => (d.label ? d.label : ''))
       .attr('x', (d, i) => x(d, i) + 6)
       .attr('y', (d, i) => y(d, i) - 6);
   }
@@ -374,7 +354,7 @@ ChartLib.drawWaffle = (elem, props, domain, scales) => {
   const maxCol = props.maxColumn || 10;
   const levelMargin = props.levelMargin || 10;
 
-  const colCount = (d) => props.columnCounts[d.xLevel];
+  const colCount = d => props.columnCounts[d.xLevel];
 
   const x = (d, i) => {
     // x offset by virtue of x's level
@@ -396,7 +376,7 @@ ChartLib.drawWaffle = (elem, props, domain, scales) => {
     .select(elem)
     .select('.waffle-container')
     .selectAll('.waffle')
-    .data(props.waffleData, (d) => d[props.waffleKey] || ['waffle']);
+    .data(props.waffleData, d => d[props.waffleKey] || ['waffle']);
 
   const waffleEnter = waffle
     .enter()

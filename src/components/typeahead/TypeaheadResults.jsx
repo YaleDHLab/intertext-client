@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { fetchSearchResults } from '../../actions/search';
 import { setTypeaheadQuery } from '../../actions/typeahead';
 
-class Results extends React.Component {
+class TypeaheadResults extends React.Component {
   constructor(props) {
     super(props);
     this.handleMousedown = this.handleMousedown.bind(this);
@@ -67,16 +67,15 @@ class Results extends React.Component {
   }
 }
 
-Results.propTypes = {
+TypeaheadResults.propTypes = {
   fetchSearchResults: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
   query: PropTypes.string.isRequired,
-  results: PropTypes.array.isRequired,
   setTypeaheadQuery: PropTypes.func.isRequired,
-  submitSearch: PropTypes.func.isRequired
+  submitSearch: PropTypes.func.isRequired,
 };
 
-const Result = (props) => (
+const Result = props => (
   <span
     onClick={props.onClick}
     className={props.active ? 'typeahead-result active' : 'typeahead-result'}
@@ -90,18 +89,20 @@ Result.propTypes = {
   active: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
   submitSearch: PropTypes.func.isRequired,
-  val: PropTypes.string.isRequired
+  val: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  results: state.typeahead.results,
+const mapStateToProps = state => ({
+  results: state.typeahead.fileIds
+    ? Object.keys(state.typeahead.fileIds[state.typeahead.field])
+    : [],
   query: state.typeahead.query,
-  index: state.typeahead.index
+  index: state.typeahead.index,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  setTypeaheadQuery: (val) => dispatch(setTypeaheadQuery(val)),
-  fetchSearchResults: () => dispatch(fetchSearchResults())
+const mapDispatchToProps = dispatch => ({
+  setTypeaheadQuery: val => dispatch(setTypeaheadQuery(val)),
+  fetchSearchResults: () => dispatch(fetchSearchResults()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Results);
+export default connect(mapStateToProps, mapDispatchToProps)(TypeaheadResults);

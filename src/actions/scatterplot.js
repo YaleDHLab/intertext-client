@@ -1,34 +1,34 @@
 import * as d3 from 'd3';
-import { fetchScatterplotFile } from '../utils/fetchJSONFile';
+import { fetchJSONFile } from './ajax';
 
 export const toggleJitter = () => ({
-  type: 'TOGGLE_JITTER'
+  type: 'TOGGLE_JITTER',
 });
 
 export const removeZoom = () => ({
-  type: 'REMOVE_ZOOM'
+  type: 'REMOVE_ZOOM',
 });
 
-export const setY = (y) => ({
+export const setY = y => ({
   type: 'SET_Y',
-  y: y
+  y: y,
 });
 
 export const scatterplotRequestFailed = () => ({
-  type: 'SCATTERPLOT_REQUEST_FAILED'
+  type: 'SCATTERPLOT_REQUEST_FAILED',
 });
 
-export const receiveResults = (obj) => ({
+export const receiveResults = obj => ({
   type: 'RECEIVE_SCATTERPLOT_RESULTS',
-  obj: obj
+  obj: obj,
 });
 
-export const setTooltip = (obj) => ({
+export const setTooltip = obj => ({
   type: 'SET_TOOLTIP',
-  obj: obj
+  obj: obj,
 });
 
-export const setDomains = (domains) => {
+export const setDomains = domains => {
   return (dispatch, getState) => {
     dispatch({ type: 'SET_DOMAINS', domains: domains });
     dispatch(fetchScatterplotResults());
@@ -36,27 +36,27 @@ export const setDomains = (domains) => {
 };
 
 export const resetZoom = () => {
-  return (dispatch) => {
+  return dispatch => {
     dispatch(fetchScatterplotResults());
   };
 };
 
-export const setUnit = (unit) => {
-  return (dispatch) => {
+export const setUnit = unit => {
+  return dispatch => {
     dispatch({ type: 'SET_UNIT', unit: unit });
     dispatch(fetchScatterplotResults());
   };
 };
 
-export const setStatistic = (stat) => {
-  return (dispatch) => {
+export const setStatistic = stat => {
+  return dispatch => {
     dispatch({ type: 'SET_STATISTIC', statistic: stat });
     dispatch(fetchScatterplotResults());
   };
 };
 
-export const setUse = (use) => {
-  return (dispatch) => {
+export const setUse = use => {
+  return dispatch => {
     dispatch({ type: 'SET_USE', use: use });
     dispatch(fetchScatterplotResults());
   };
@@ -65,13 +65,15 @@ export const setUse = (use) => {
 export const fetchScatterplotResults = () => {
   return (dispatch, getState) => {
     dispatch({ type: 'FETCH_SCATTERPLOT_RESULTS' });
-    fetchScatterplotFile(getScatterplotProps(getState()))
-      .then((json) => {
+    const props = getScatterplotProps(getState());
+    const { use, unit, stat } = props;
+    return fetchJSONFile(`/api/scatterplots/${use}-${unit}-${stat}.json`)
+      .then(json => {
         const state = getState();
         const yDomain = state.scatterplot.yDomains;
         const xDomain = state.scatterplot.xDomain;
 
-        const filteredResults = json.filter((item) => {
+        const filteredResults = json.filter(item => {
           // if there's an xdomain, filter on it
           if (yDomain && yDomain.length === 2) {
             const [minYear, maxYear] = d3.extent(yDomain);
@@ -92,23 +94,23 @@ export const fetchScatterplotResults = () => {
         });
         dispatch(parseResults(filteredResults));
       })
-      .catch((err) => {
+      .catch(err => {
         dispatch(scatterplotRequestFailed());
       });
   };
 };
 
-const getScatterplotProps = (state) => {
+const getScatterplotProps = state => {
   return {
     use: getUse(state.scatterplot.use),
     unit: getUnit(state.scatterplot.unit),
-    stat: state.scatterplot.statistic
+    stat: state.scatterplot.statistic,
   };
 };
 
-const getUse = (use) => (use === 'earlier' ? 'target' : 'source');
+const getUse = use => (use === 'earlier' ? 'target' : 'source');
 
-const getUnit = (unit) => {
+const getUnit = unit => {
   if (unit === 'passage') return 'segment_ids';
   if (unit === 'author') return 'author';
   if (unit === 'book') return 'file_id';
@@ -118,8 +120,8 @@ const getUnit = (unit) => {
 // set the full and displayed domains
 const getDomains = (data, _state) => {
   return {
-    x: d3.extent(data, (d) => d.similarity),
-    y: d3.extent(data, (d) => d[getUse(_state.use) + '_year'])
+    x: d3.extent(data, d => d.similarity),
+    y: d3.extent(data, d => d[getUse(_state.use) + '_year']),
   };
 };
 
@@ -136,7 +138,7 @@ const parseResults = (data, options) => {
       data: data,
       xDomain: domains.x,
       yDomain: domains.y,
-      zoomed: false
+      zoomed: false,
     };
     dispatch(receiveResults(args));
   };

@@ -1,52 +1,43 @@
-import { selectTypeaheadQuery } from '../selectors/typeahead';
-import { fetchTypeaheadFieldFile } from '../utils/fetchJSONFile';
+import { fetchJSONFile } from './ajax';
 
-export const setTypeaheadField = (field) => ({
+export const setTypeaheadField = field => ({
   type: 'SET_TYPEAHEAD_FIELD',
-  field
+  field,
 });
 
-export const setTypeaheadQuery = (query) => ({
+export const setTypeaheadQuery = query => ({
   type: 'SET_TYPEAHEAD_QUERY',
-  query
+  query,
 });
 
-export const setTypeaheadIndex = (index) => ({
+export const setTypeaheadIndex = index => ({
   type: 'SET_TYPEAHEAD_INDEX',
-  index
-});
-
-export const receiveTypeaheadResults = (obj) => ({
-  type: 'RECEIVE_TYPEAHEAD_RESULTS',
-  results: obj.results,
-  fieldFile: obj.file
+  index,
 });
 
 export const typeaheadRequestFailed = () => ({
-  type: 'TYPEAHEAD_REQUEST_FAILED'
+  type: 'TYPEAHEAD_REQUEST_FAILED',
 });
 
-export function fetchTypeaheadResults() {
+export function fetchTypeaheadMetadata() {
   return function (dispatch, getState) {
-    // Construct the data URL
-    const q = selectTypeaheadQuery(getState()).toLowerCase();
-    return dispatch(fetchTypeaheadFieldFile())
-      .then((dataMap) => dataMap)
-      .then((dataMap) => {
-        dispatch({
-          type: 'RECEIVE_TYPEAHEAD_RESULTS',
-          file: dataMap,
-          filtered: Object.keys(dataMap).filter((v) =>
-            v.toLowerCase().includes(q)
-          )
-        });
+    return fetchJSONFile('/api/metadata.json').then(metadata => {
+      // create a map from author/title to file ids that have that string in their metadata
+      let fileIds = {
+        author: {},
+        title: {},
+      };
+      metadata.forEach((m, fileIdx) => {
+        fileIds['author'][m.author] =
+          m.author in fileIds['author'] ? fileIds['author'][m.author].concat(fileIdx) : [fileIdx];
+        fileIds['title'][m.title] =
+          m.title in fileIds['title'] ? fileIds['aitle'][m.title].concat(fileIdx) : [fileIdx];
       });
+      dispatch({
+        type: 'RECEIVE_TYPEAHEAD_FILE_IDS',
+        fileIds: fileIds,
+        metadata: metadata,
+      });
+    });
   };
 }
-
-export const setTypeaheadFieldAndFetch = (field) => {
-  return (dispatch) => {
-    dispatch(setTypeaheadField(field));
-    dispatch(fetchTypeaheadResults());
-  };
-};

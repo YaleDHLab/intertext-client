@@ -5,30 +5,46 @@
 header {
   background: #ffffff;
   color: #a5a5a5;
-  height: 90px;
+  height: 60px;
   width: 100%;
-  position: fixed;
   z-index: 4;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.15);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100vw;
 }
 
 .header-text {
   margin: 0 40px;
   height: 100%;
-  display: table;
 }
 
 .brand {
   height: 20px;
   width: 112px;
   display: inline-block;
-  vertical-align: middle;
-  position: relative;
-  top: 25px;
   padding: 10px;
   box-sizing: content-box;
 }
 
 .brand img {
   height: 100%;
+}
+
+@media (max-width: 700px) {
+  .header-text {
+    margin: 0 10px;
+  }
+
+  .brand {
+    height: 17px;
+    width: auto;
+    padding: 5px;
+  }
+
+  header {
+    height: 40px;
+  }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import ChartLib from './chart-lib';
+import ChartLib from './lib/chart-lib';
 
 export default class Chart extends React.Component {
   constructor(props) {
@@ -35,7 +35,7 @@ export default class Chart extends React.Component {
   update(elem, props, brushElem) {
     let brush, domain, scales;
     ChartLib.updateBase(elem, props);
-    ChartLib.getGeoms(props).map((geom) => {
+    ChartLib.getGeoms(props).map(geom => {
       domain = ChartLib.getDomain(geom.data, props);
       scales = ChartLib.getScales(elem, props, domain);
       geom.draw(elem, props, domain, scales);
@@ -51,7 +51,7 @@ export default class Chart extends React.Component {
   destroy() {}
 
   render() {
-    return <div className="chart"></div>;
+    return <div className='chart'></div>;
   }
 }
 
@@ -59,7 +59,7 @@ export const WaffleDataProps = PropTypes.shape({
   column: PropTypes.number.isRequired,
   row: PropTypes.number.isRequired,
   similarity: PropTypes.number.isRequired,
-  xLevel: PropTypes.string.isRequired
+  xLevel: PropTypes.string.isRequired,
 });
 
 Chart.propTypes = {
@@ -71,7 +71,7 @@ Chart.propTypes = {
     bottom: PropTypes.number.isRequired,
     left: PropTypes.number.isRequired,
     right: PropTypes.number.isRequired,
-    top: PropTypes.number.isRequired
+    top: PropTypes.number.isRequired,
   }).isRequired,
   maxColumns: PropTypes.number,
   onBrush: PropTypes.func,
@@ -89,5 +89,5 @@ Chart.propTypes = {
   xScale: PropTypes.string,
   yScale: PropTypes.string,
   xTickFormat: PropTypes.func,
-  yLabel: PropTypes.string
+  yLabel: PropTypes.string,
 };

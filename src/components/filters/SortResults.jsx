@@ -14,25 +14,22 @@ class SortResults extends React.Component {
 
   render() {
     return (
-      <select
-        className="sort-results"
-        value={this.props.sortBy}
-        onChange={this.handleChange}
-      >
-        <option value="author">Author</option>
-        <option value="year">Publication Year</option>
-        <option value="similarity">Similarity</option>
+      <select className='sort-results' value={this.props.sortField} onChange={this.handleChange}>
+        <option disabled>Sort By</option>
+        <option value='author'>Author</option>
+        <option value='year'>Date</option>
+        <option value='similarity'>Similarity</option>
       </select>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  sortBy: state.search.sortBy
+const mapStateToProps = state => ({
+  sortField: state.search.sortField,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  setSortAndSearch: (field) => dispatch(setSortAndSearch(field))
+const mapDispatchToProps = dispatch => ({
+  setSortAndSearch: field => dispatch(setSortAndSearch(field)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SortResults);

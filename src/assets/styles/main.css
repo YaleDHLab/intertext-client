@@ -23,7 +23,7 @@ html {
 }
 
 body {
-  font-family: 'Open Sans';
+  font-family: 'Open Sans', sans-serif;
 }
 
 #app,
@@ -33,12 +33,56 @@ body {
 }
 
 .page-container {
-  padding: 90px 0 90px;
   text-align: center;
-  overflow: hidden;
   background: #f8f8f8;
-  height: 100%;
   box-sizing: border-box;
+  padding-top: 60px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.align-start {
+  align-items: flex-start;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.disabled {
+  cursor: not-allowed;
 }
 
 /**
@@ -61,6 +105,15 @@ input {
   font-size: 15px;
   border: 1px solid lightgray;
   box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
 }
 
 /**
@@ -101,4 +154,10 @@ input {
 
 .clear-both {
   clear: both;
+}
+
+@media (max-width: 700px) {
+  .page-container {
+    padding-top: 40px;
+  }
 }

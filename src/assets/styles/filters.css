@@ -2,27 +2,23 @@
 * Basic search filters
 **/
 
-.filters-container {
-  background: #f8f8f8;
-  width: 100%;
+#filters-container {
   text-align: center;
   box-sizing: border-box;
-  position: fixed;
-  top: 90px;
-  z-index: 3;
-  height: 60px;
-  overflow: hidden;
+  background: #f9f9f9;
+  margin-top: 20px;
 }
 
-.filters {
-  display: inline-block;
-  width: 1160px;
+#filters-inner {
+  width: 992px;
   position: relative;
+  box-shadow: 0 0 4px #c7c7c7;
+  white-space: nowrap;
+  padding: 6px 16px;
 }
 
-.filter-fields {
-  display: inline-block;
-  margin: 3px;
+.filter-group {
+  width: 300px;
 }
 
 .filter-label {
@@ -41,12 +37,37 @@
   text-align: left;
   font-size: 0.8em;
   display: inline-block;
-  width: 250px;
+  margin-right: 30px;
 }
 
 .results-count span {
   margin: 0 2px;
   font-weight: 600;
+}
+
+#advanced-filters-icon {
+  width: 20px;
+  padding: 2px;
+  transform: rotate(90deg);
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+#advanced-filters-icon.open,
+#advanced-filters-icon.has-selection {
+  filter: invert(1) sepia(1) saturate(7) brightness(71%) hue-rotate(104deg);
+}
+
+#advanced-filters-icon.has-selection {
+  opacity: 0.4;
+}
+
+#advanced-filters-icon.has-selection.open {
+  opacity: 1;
+}
+
+#advanced-filters {
+  box-shadow: 0 2px 3px #ccc;
 }
 
 /**
@@ -58,4 +79,96 @@
   right: 35px;
   top: 30px;
   cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  #filters-inner {
+    padding: 8px;
+    margin: 0;
+    width: 100%;
+  }
+
+  #filters-inner .filter-group {
+    display: none;
+  }
+}
+
+/**
+ * Advanced Search
+ **/
+
+.advanced-filter-column {
+  background: #ececec;
+  padding: 10px 40px;
+  font-size: 14px;
+}
+
+.advanced-filter-column .row {
+  margin: 10px 0;
+}
+
+.advanced-filter-column .row .label {
+  width: 45px;
+  text-align: right;
+  margin-right: 15px;
+  font-size: 12px;
+}
+
+.advanced-filter-column input,
+.advanced-filter-column button {
+  padding: 4px 10px;
+  flex: 1;
+  border: 1px solid #aba9a9;
+}
+
+.advanced-filter-column-label {
+  text-align: left;
+  font-size: 12px;
+  color: #aaa;
+}
+
+.advanced-filter-footer button,
+.advanced-filter-footer .advanced-filter-clear {
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.advanced-filter-footer .advanced-filter-clear.disabled {
+  opacity: 0.4;
+  cursor: initial;
+}
+
+.advanced-filter-column button {
+  background: #fff;
+  padding: 3px 7px;
+  border: 1px solid #aba9a9;
+  border-radius: 4px;
+  margin-left: 10px;
+  flex: initial;
+}
+
+.advanced-filter-column button.disabled {
+  opacity: 0.4;
+  cursor: initial;
+}
+
+.advanced-filter-footer button.active {
+  cursor: pointer;
+}
+
+/**
+ * Applied filters count
+ **/
+
+#advanced-filters-selection-count {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  font-size: 9px;
+  line-height: 8px;
+  border-radius: 100%;
+  background: #71ccce;
+  color: #fff;
+  width: 14px;
+  height: 14px;
 }

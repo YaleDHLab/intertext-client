@@ -1,41 +1,39 @@
 const initialState = {
   query: '',
-  results: [],
   index: 0,
   err: null,
-  field: 'Title',
-  fieldFiles: {}
+  field: 'title',
+  fileIds: null,
+  metadata: null,
 };
 
 const typeaheadReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_TYPEAHEAD_FIELD':
       return Object.assign({}, state, {
-        field: action.field
+        field: action.field.toLowerCase(),
       });
 
     case 'SET_TYPEAHEAD_QUERY':
       return Object.assign({}, state, {
-        query: action.query
+        query: action.query,
       });
 
     case 'SET_TYPEAHEAD_INDEX':
       return Object.assign({}, state, {
-        index: action.index
+        index: action.index,
       });
 
-    case 'RECEIVE_TYPEAHEAD_RESULTS':
+    case 'RECEIVE_TYPEAHEAD_FILE_IDS':
       return Object.assign({}, state, {
-        fieldFiles: Object.assign({}, state.fieldFiles, {
-          [state.field]: action.file
-        }),
-        results: action.filtered,
-        err: null
+        fileIds: action.fileIds,
+        metadata: action.metadata,
+        err: null,
       });
 
     case 'TYPEAHEAD_REQUEST_FAILED':
       return Object.assign({}, state, {
-        err: true
+        err: true,
       });
 
     default:

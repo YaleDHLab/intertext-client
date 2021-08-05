@@ -1,5 +1,5 @@
 .waffle-card-wrapper {
-  width: 100vw;
+  width: 100%;
   overflow: auto;
   text-align: center;
   background: #f8f8f8;
@@ -96,7 +96,6 @@ span.label {
 
 .headshot-container {
   width: 150px;
-  height: 241px;
   float: left;
   text-align: center;
   background: #e1f4f4;
@@ -114,7 +113,6 @@ span.label {
   display: inline-block;
   border-radius: 100%;
   border: 3px solid #5bb3b3;
-  margin-top: 50px;
 }
 
 .headshot-label {
@@ -131,6 +129,9 @@ span.label {
 .waffle-chart {
   padding-left: 20px;
   overflow: auto;
+  margin: 0 auto;
+  width: 950px;
+  height: 256px;
 }
 
 .waffle-chart .chart {

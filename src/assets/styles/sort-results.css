@@ -5,24 +5,20 @@
 .sort-results {
   background: url(../images/icons/down-caret-gray.png);
   background-repeat: no-repeat;
-  background-size: 7%;
+  background-size: 9px;
   background-position-x: 94%;
   background-position-y: 59%;
   height: 26px;
   overflow: hidden;
-  width: 140px;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   border-radius: 8px;
-  margin: 0 50px;
-  background-color: #ffffff;
+  background-color: transparent;
   display: inline-block;
-  border: 2px solid #ebebeb;
+  border: none;
   position: relative;
-  top: 12px;
   padding: 2px 10px;
-  float: right;
-  width: 175px;
+  width: 87px;
   -webkit-appearance: none;
   position: relative;
   outline: none;

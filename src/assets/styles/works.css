@@ -1,0 +1,27 @@
+#page-works {
+  max-width: 700px;
+  margin: 0 auto 60px;
+}
+
+.work-row div {
+  display: inline;
+}
+
+.work-row {
+  margin: 17px 0;
+  text-align: left;
+}
+
+.work-author {
+  color: #999;
+  margin-right: 5px;
+  white-space: nowrap;
+}
+
+.work-title {
+  font-weight: 600;
+}
+
+.work-row a {
+  color: #71ccce;
+}

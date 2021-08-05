@@ -1,6 +1,6 @@
-export const sort = (arr) => Object.assign([], arr).sort((a, b) => a - b);
+export const sort = arr => Object.assign([], arr).sort((a, b) => a - b);
 
-export const toggleFavorite = (obj) => {
+export const toggleFavorite = obj => {
   return (dispatch, getState) => {
     const _id = obj.result._id;
     const _state = getState();
@@ -13,14 +13,14 @@ export const toggleFavorite = (obj) => {
   };
 };
 
-export const addFavorite = (obj) => ({
+export const addFavorite = obj => ({
   type: 'ADD_FAVORITE',
-  obj: obj
+  obj: obj,
 });
 
-export const removeFavorite = (obj) => ({
+export const removeFavorite = obj => ({
   type: 'REMOVE_FAVORITE',
-  obj: obj
+  obj: obj,
 });
 
 export const saveFavorites = () => {
