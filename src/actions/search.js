@@ -25,8 +25,7 @@ export const setSimilarityAndSearch = val => {
       type: 'SET_SIMILARITY',
       val: val,
     });
-    dispatch(resetMaxDisplayedSearchResults());
-    window.scrollTo(0, 0);
+    dispatch(scrollToCardsTop())
     dispatch(fetchSearchResults());
   };
 };
@@ -137,9 +136,10 @@ export const fetchSearchResults = () => {
   return (dispatch, getState) => {
     const state = getState();
     const runSearch = () => {
+      dispatch(resetMaxDisplayedSearchResults());
       dispatch(setTypeaheadIndex(0));
       dispatch(loadSearchFromUrl());
-      window.scrollTo(0, 0);
+      dispatch(scrollToCardsTop());
       dispatch(fetchMoreSearchResults());
     };
     // check to see if we need to run the first search result
@@ -209,6 +209,12 @@ const fetchMoreSearchResults = () => {
 const resetMaxDisplayedSearchResults = () => ({
   type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS',
 });
+
+const scrollToCardsTop = () => {
+  return () => {
+    document.querySelector('#result-pairs-container').scrollTo(0,0);
+  }
+}
 
 /**
  * Main search function that filters the sorted match index to find suitable matches
