@@ -133,6 +133,11 @@
   cursor: pointer;
 }
 
+.advanced-filter-footer .advanced-filter-clear.disabled {
+  opacity: 0.4;
+  cursor: initial;
+}
+
 .advanced-filter-column button {
   background: #fff;
   padding: 3px 7px;

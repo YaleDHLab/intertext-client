@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import * as searchActions from '../../actions/search';
-import { notNull } from './Filters'
+import { notNull, getChangedCount } from './Filters'
 
 class AdvancedFilters extends React.Component {
   render() {
@@ -57,6 +57,8 @@ const AdvancedFilterColumn = props => {
     },
   ]
 
+  const clearable = getChangedCount(props.type, props.advanced) > 0;
+
   return (
     <div className='advanced-filter-column flex-1' ref={ref}>
       <div className='advanced-filter-column-label'>{titleCase(props.type)} Text</div>
@@ -76,7 +78,7 @@ const AdvancedFilterColumn = props => {
         );
       })}
       <div className='advanced-filter-footer justify-end row align-center'>
-        <div className='advanced-filter-clear' onClick={clear}>
+        <div className={clearable ? 'advanced-filter-clear clearable' : 'advanced-filter-clear disabled'} onClick={clear}>
           Clear
         </div>
         <button className={buttonClass} onClick={search}>

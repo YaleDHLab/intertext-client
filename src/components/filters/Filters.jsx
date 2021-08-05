@@ -67,12 +67,18 @@ const getFilterSelectionCount = state => {
   const { advanced } = {...state.search};
   let count = 0;
   ['earlier', 'later'].forEach(type => {
-    ['author', 'title', 'fileId'].forEach(field => {
-      let v;
-      v = type in advanced ? advanced[type] : {};
-      v = field in v ? v[field] : false;
-      if (notNull(v)) count++;
-    })
+    count += getChangedCount(type, advanced);
+  })
+  return count;
+}
+
+export const getChangedCount = (type, advanced) => {
+  let count = 0;
+  ['author', 'title', 'fileId'].forEach(field => {
+    let v;
+    v = type in advanced ? advanced[type] : {};
+    v = field in v ? v[field] : false;
+    if (notNull(v)) count++;
   })
   return count;
 }
