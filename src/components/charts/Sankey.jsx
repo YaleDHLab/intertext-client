@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { plot } from './lib/sankey-lib';
 import { connect } from 'react-redux';
+import * as searchActions from '../../actions/search';
 import * as _ from 'lodash';
 
 const Sankey = props => {
@@ -77,8 +78,12 @@ const Sankey = props => {
     if (initialized || !props.sortIndex || !props.labelToFileIds) return;
     setInitialized(true);
     const data = getData(props.sortIndex, props.labelToFileIds);
-    plot(ref.current, data);
-  }, [initialized, props.sortIndex, props.labelToFileIds]);
+    plot({
+      svg: ref.current,
+      data: data,
+      setField: props.setField,
+    });
+  }, [initialized, props.sortIndex, props.labelToFileIds, props.setField]);
 
   return (
     <div className='sankey-wrap'>
@@ -93,6 +98,8 @@ const mapStateToProps = state => ({
   sortIndex: state.search.sortIndex,
 });
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  setField: obj => dispatch(searchActions.setAdvancedFilterField(obj)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sankey);

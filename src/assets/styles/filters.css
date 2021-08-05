@@ -46,15 +46,24 @@
 }
 
 #advanced-filters-icon {
-  height: 20px;
+  width: 20px;
   padding: 2px;
   transform: rotate(90deg);
   margin-left: 20px;
   cursor: pointer;
 }
 
-#advanced-filters-icon.active {
+#advanced-filters-icon.open,
+#advanced-filters-icon.has-selection {
   filter: invert(1) sepia(1) saturate(7) brightness(71%) hue-rotate(104deg);
+}
+
+#advanced-filters-icon.has-selection {
+  opacity: 0.4;
+}
+
+#advanced-filters-icon.has-selection.open {
+  opacity: 1;
 }
 
 #advanced-filters {
@@ -140,4 +149,21 @@
 
 .advanced-filter-footer button.active {
   cursor: pointer;
+}
+
+/**
+ * Applied filters count
+ **/
+
+#advanced-filters-selection-count {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  font-size: 9px;
+  line-height: 8px;
+  border-radius: 100%;
+  background: #71ccce;
+  color: #fff;
+  width: 14px;
+  height: 14px;
 }

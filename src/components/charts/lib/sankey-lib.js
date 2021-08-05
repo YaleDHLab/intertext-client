@@ -7,7 +7,9 @@ import {
 import { colors } from './color-lib';
 import { history } from '../../../store';
 
-export const plot = (svg, data) => {
+export const plot = (props) => {
+  let { svg, data, setField } = {...props}
+
   // sort the nodes by how many edges they have
   let counts = {};
   data.links.map(e => (counts[e.source] = counts[e.source] ? counts[e.source] + 1 : 1));
@@ -47,7 +49,17 @@ export const plot = (svg, data) => {
   });
 
   const handleLinkClick = d => {
-    history.push(`/cards?earlier=${d.source.id}&later=${d.target.id}`);
+    setField({
+      earlierLater: 'earlier',
+      field: 'fileId',
+      value: d.source.id,
+    });
+    setField({
+      earlierLater: 'later',
+      field: 'fileId',
+      value: d.target.id,
+    });
+    history.push('/cards')
   };
 
   const link = svg

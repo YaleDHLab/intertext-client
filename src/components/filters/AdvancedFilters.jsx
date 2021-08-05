@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import * as searchActions from '../../actions/search';
+import { notNull } from './Filters'
 
 class AdvancedFilters extends React.Component {
   render() {
@@ -22,7 +23,7 @@ const AdvancedFilterColumn = props => {
     setDirty(true);
     props.setField({
       earlierLater: childProps.type.toLowerCase(),
-      field: childProps.field,
+      field: childProps.field.field,
       value: e.target.value,
     });
   };
@@ -41,14 +42,36 @@ const AdvancedFilterColumn = props => {
   let buttonClass = 'advanced-filter-apply-button';
   buttonClass += dirty ? ' active' : ' disabled';
 
+  const fields = [
+    {
+      label: 'Author',
+      field: 'author',
+    },
+    {
+      label: 'Title',
+      field: 'title',
+    },
+    {
+      label: 'File Id',
+      field: 'fileId',
+    },
+  ]
+
   return (
     <div className='advanced-filter-column flex-1' ref={ref}>
       <div className='advanced-filter-column-label'>{titleCase(props.type)} Text</div>
-      {['Author', 'Title'].map(r => {
+      {fields.map(f => {
         return (
-          <div key={r} className='row justify-start align-center'>
-            <div className='label'>{r}</div>
-            <AdvancedFilterInput type={props.type} field={r} onChange={setField} />
+          <div key={f.field} className='row justify-start align-center'>
+            <div className='label'>{f.label}</div>
+            <AdvancedFilterInput
+              type={props.type}
+              field={f}
+              defaultValue={
+                notNull(props.advanced[props.type][f.field])
+                  ? props.advanced[props.type][f.field]
+                  : ''}
+              onChange={setField} />
           </div>
         );
       })}
@@ -65,14 +88,19 @@ const AdvancedFilterColumn = props => {
 };
 
 const AdvancedFilterInput = props => {
-  return <input type='text' onChange={e => props.onChange(props, e)} />;
+  return <input
+    type='text'
+    defaultValue={props.defaultValue}
+    onChange={e => props.onChange(props, e)} />;
 };
 
 const titleCase = s => {
   return s.substring(0, 1).toUpperCase() + s.substring(1, s.length).toLowerCase();
 };
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  advanced: state.search.advanced,
+});
 
 const mapDispatchToProps = dispatch => ({
   setField: obj => dispatch(searchActions.setAdvancedFilterField(obj)),

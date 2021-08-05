@@ -5,6 +5,7 @@ import Typeahead from '../typeahead/Typeahead';
 import TypeaheadSelect from '../typeahead/TypeaheadSelect';
 import filterIcon from '../../assets/images/icons/filter-icon.svg';
 import AdvancedFilters from './AdvancedFilters';
+import { connect } from 'react-redux';
 
 const Filters = props => {
   const ref = useRef();
@@ -28,6 +29,9 @@ const Filters = props => {
     setOpen(!open);
   };
 
+  let iconClassName = '';
+  if (open) iconClassName += 'open ';
+  if (props.selectionCount > 0) iconClassName += 'has-selection ';
   return (
     <div id='filters-container' className='col justify-center' ref={ref}>
       <div id='filters-inner' className='row space-between justify-center align-center'>
@@ -41,11 +45,17 @@ const Filters = props => {
           <SortResults />
           <img
             alt='Advanced filters icon'
-            className={open ? 'active' : ''}
+            className={iconClassName}
             id='advanced-filters-icon'
             src={filterIcon}
             onClick={toggleOpen}
           />
+          {props.selectionCount > 0
+            ? <div id='advanced-filters-selection-count' className='row justify-center align-center'>
+                <div>{props.selectionCount}</div>
+              </div>
+            : null
+          }
         </div>
       </div>
       {open ? <AdvancedFilters refProp={childRef} /> : null}
@@ -53,4 +63,27 @@ const Filters = props => {
   );
 };
 
-export default Filters;
+const getFilterSelectionCount = state => {
+  const { advanced } = {...state.search};
+  let count = 0;
+  ['earlier', 'later'].forEach(type => {
+    ['author', 'title', 'fileId'].forEach(field => {
+      let v;
+      v = type in advanced ? advanced[type] : {};
+      v = field in v ? v[field] : false;
+      if (notNull(v)) count++;
+    })
+  })
+  return count;
+}
+
+export const notNull = v => {
+  if (typeof v === 'number' || typeof v === 'string') return true;
+  return false;
+}
+
+const mapStateToProps = state => ({
+  selectionCount: getFilterSelectionCount(state),
+})
+
+export default connect(mapStateToProps)(Filters);
