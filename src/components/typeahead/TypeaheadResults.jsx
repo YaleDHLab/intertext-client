@@ -75,7 +75,7 @@ TypeaheadResults.propTypes = {
   submitSearch: PropTypes.func.isRequired,
 };
 
-const Result = (props) => (
+const Result = props => (
   <span
     onClick={props.onClick}
     className={props.active ? 'typeahead-result active' : 'typeahead-result'}
@@ -92,7 +92,7 @@ Result.propTypes = {
   val: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   results: state.typeahead.fileIds
     ? Object.keys(state.typeahead.fileIds[state.typeahead.field])
     : [],
@@ -100,8 +100,8 @@ const mapStateToProps = (state) => ({
   index: state.typeahead.index,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  setTypeaheadQuery: (val) => dispatch(setTypeaheadQuery(val)),
+const mapDispatchToProps = dispatch => ({
+  setTypeaheadQuery: val => dispatch(setTypeaheadQuery(val)),
   fetchSearchResults: () => dispatch(fetchSearchResults()),
 });
 

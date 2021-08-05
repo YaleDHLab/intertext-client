@@ -7,19 +7,17 @@ import fetch from 'isomorphic-fetch';
  * @param {string} url
  */
 
-export const fetchJSONFile = (url) => {
+export const fetchJSONFile = url => {
   const base = window.location.href.split('#')[0].replace('index.html', '');
   url = url[0] === '/' ? url.substring(1) : url;
   return fetch(base + url)
-    .then((response) => {
+    .then(response => {
       if (response.status !== 200) {
-        throw new Error(
-          'Fetch failed (Status = ' + response.status + '): ' + url
-        );
+        throw new Error('Fetch failed (Status = ' + response.status + '): ' + url);
       }
       return response.json();
     })
-    .then((obj) => {
+    .then(obj => {
       return obj;
     });
 };

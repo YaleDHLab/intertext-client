@@ -35,7 +35,7 @@ export default class Chart extends React.Component {
   update(elem, props, brushElem) {
     let brush, domain, scales;
     ChartLib.updateBase(elem, props);
-    ChartLib.getGeoms(props).map((geom) => {
+    ChartLib.getGeoms(props).map(geom => {
       domain = ChartLib.getDomain(geom.data, props);
       scales = ChartLib.getScales(elem, props, domain);
       geom.draw(elem, props, domain, scales);
@@ -51,7 +51,7 @@ export default class Chart extends React.Component {
   destroy() {}
 
   render() {
-    return <div className="chart"></div>;
+    return <div className='chart'></div>;
   }
 }
 

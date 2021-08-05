@@ -17,13 +17,13 @@ import {
   setDomains,
 } from '../../actions/scatterplot';
 
-const Scatterplot = (props) => {
+const Scatterplot = props => {
   return (
-    <div className="scatterplot-container flex-1">
-      <div className="scatterplot hide-x-grid flex-1">
+    <div className='scatterplot-container flex-1'>
+      <div className='scatterplot hide-x-grid flex-1'>
         <IntroText {...props} />
         <Controls {...props} />
-        <div className="row align-start justify-center">
+        <div className='row align-start justify-center'>
           <Left {...props} />
           <Right {...props} />
         </div>
@@ -32,24 +32,22 @@ const Scatterplot = (props) => {
   );
 };
 
-const IntroText = (props) => {
+const IntroText = props => {
   return (
     <>
       <h1>Popular {props.unit}s</h1>
       <div>
         <span>The chart below displays the most popular </span>
         <span>{props.unit}s </span>
-        <span>
-          within your corpus. Hover over individual points for more information.
-        </span>
+        <span>within your corpus. Hover over individual points for more information.</span>
       </div>
     </>
   );
 };
 
-const Controls = (props) => {
+const Controls = props => {
   return (
-    <div className="controls">
+    <div className='controls'>
       <span>{'Show ' + props.unit + 's most similar to'}</span>
       <select onChange={props.setUse} value={props.use}>
         <option value={'earlier'}>Earlier</option>
@@ -57,29 +55,29 @@ const Controls = (props) => {
       </select>
       <span>{props.unit + 's based on'}</span>
       <select onChange={props.setStatistic} value={props.statistic}>
-        <option value="sum">Sum</option>
-        <option value="mean">Mean</option>
+        <option value='sum'>Sum</option>
+        <option value='mean'>Mean</option>
       </select>
       <span>of passage similarity</span>
     </div>
   );
 };
 
-const Left = (props) => {
+const Left = props => {
   return (
-    <div className="left">
+    <div className='left'>
       <LeftControls {...props} />
       <LeftChart {...props} />
     </div>
   );
 };
 
-const Right = (props) => {
+const Right = props => {
   return (
-    <div className="col">
+    <div className='col'>
       {props.tooltip.title ? <Tooltip {...props} /> : null}
       <Table {...props} />
-      <div className="controls-lower">
+      <div className='controls-lower'>
         <div
           className={props.zoomed ? 'reset-button visible' : 'reset-button'}
           onClick={props.resetZoom}
@@ -91,25 +89,21 @@ const Right = (props) => {
   );
 };
 
-const LeftControls = (props) => {
+const LeftControls = props => {
   return (
-    <div className="row align-center">
-      <span className="swatch-label">Similarity</span>
+    <div className='row align-center'>
+      <span className='swatch-label'>Similarity</span>
       <Legend domain={props.xDomain} percents={props.statistic === 'mean'} />
-      <div className="jitter row align-center">
+      <div className='jitter row align-center'>
         <span>Jitter</span>
-        <input
-          type="checkbox"
-          onChange={props.toggleJitter}
-          value={props.jitter}
-        />
+        <input type='checkbox' onChange={props.toggleJitter} value={props.jitter} />
       </div>
     </div>
   );
 };
 
-const LeftChart = (props) => {
-  const handleMouseover = (d) => {
+const LeftChart = props => {
+  const handleMouseover = d => {
     const container = d3.select('.scatterplot-container').node();
     const mouseLocation = d3.mouse(container);
     props.setTooltip({
@@ -121,7 +115,7 @@ const LeftChart = (props) => {
     });
   };
 
-  const handleMouseout = (d) => {
+  const handleMouseout = d => {
     props.setTooltip({
       x: null,
       y: null,
@@ -150,12 +144,9 @@ const LeftChart = (props) => {
       scales.y.invert(d3.event.selection[1][1]),
     ];
     // only brush if there are observations in brushed area
-    const selected = props.data.filter((d) => {
+    const selected = props.data.filter(d => {
       return (
-        d.similarity >= x[0] &&
-        d.similarity <= x[1] &&
-        d[props.y] >= y[0] &&
-        d[props.y] <= y[1]
+        d.similarity >= x[0] && d.similarity <= x[1] && d[props.y] >= y[0] && d[props.y] <= y[1]
       );
     });
     if (selected.length) props.setDomains({ x: x, y: y });
@@ -167,7 +158,7 @@ const LeftChart = (props) => {
   const colorScale = d3.scaleQuantize().domain(props.xDomain).range(colors);
 
   return props.data.length === 0 ? (
-    <div className="col flex-1 justify-center align-center">
+    <div className='col flex-1 justify-center align-center'>
       <Loader />
     </div>
   ) : (
@@ -176,21 +167,21 @@ const LeftChart = (props) => {
       height={600}
       margin={{ top: 15, right: 20, bottom: 20, left: 40 }}
       pointData={props.data}
-      pointStroke={(d) => '#fff'}
-      pointFill={(d) => colorScale(d.similarity)}
+      pointStroke={d => '#fff'}
+      pointFill={d => colorScale(d.similarity)}
       pointLabels={true}
-      pointKey={(d) => d.key}
+      pointKey={d => d.key}
       jitter={props.jitter}
       r={8}
       x={'similarity'}
       xTicks={7}
       xDomain={props.xDomain}
-      xTickFormat={(d) => Math.round(d) / 100}
+      xTickFormat={d => Math.round(d) / 100}
       y={props.y}
       yTicks={5}
       yScale={'inverse'}
       yDomain={props.yDomain}
-      yTickFormat={(d) => parseInt(d)}
+      yTickFormat={d => parseInt(d)}
       drawGrid={true}
       setBrush={setBrush}
       onBrush={handleBrush}
@@ -201,32 +192,30 @@ const LeftChart = (props) => {
   );
 };
 
-const Tooltip = (props) => {
+const Tooltip = props => {
   return (
     <div
-      className="tooltip"
+      className='tooltip'
       style={{
         left: props.tooltip.x + 5,
         top: props.tooltip.y + 30,
       }}
     >
-      <div className="title">{props.tooltip.title}</div>
-      <div className="author">
-        {props.tooltip.author + ', ' + props.tooltip.year}
-      </div>
+      <div className='title'>{props.tooltip.title}</div>
+      <div className='author'>{props.tooltip.author + ', ' + props.tooltip.year}</div>
     </div>
   );
 };
 
-const Table = (props) => {
+const Table = props => {
   return (
-    <div className="right">
-      <div className="scatterplot-label">
+    <div className='right'>
+      <div className='scatterplot-label'>
         <span>Top {Math.min(20, props.data.length)} most popular </span>
         <span>{props.unit}s </span>
         <span>in current view</span>
       </div>
-      <div className="clear-both" />
+      <div className='clear-both' />
       <hr />
       <table>
         <tbody>
@@ -239,16 +228,16 @@ const Table = (props) => {
   );
 };
 
-const Row = (props) => {
+const Row = props => {
   return (
-    <tr className="book">
-      <td className="book-number">{props.row.label}.</td>
+    <tr className='book'>
+      <td className='book-number'>{props.row.label}.</td>
       <td dangerouslySetInnerHTML={getRowText(props)} />
     </tr>
   );
 };
 
-const getRowText = (props) => {
+const getRowText = props => {
   switch (props.unit) {
     case 'passage':
       const words = props.row.match.split(' ');
@@ -301,7 +290,7 @@ Scatterplot.propTypes = {
   yDomain: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   unit: state.scatterplot.unit,
   statistic: state.scatterplot.statistic,
   use: state.scatterplot.use,
@@ -314,15 +303,15 @@ const mapStateToProps = (state) => ({
   zoomed: state.scatterplot.zoomed,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  setY: (y) => dispatch(setY(y)),
-  setUse: (e) => dispatch(setUse(e.target.value)),
-  setUnit: (unit) => dispatch(setUnit(unit)),
-  setStatistic: (e) => dispatch(setStatistic(e.target.value)),
-  setTooltip: (obj) => dispatch(setTooltip(obj)),
+const mapDispatchToProps = dispatch => ({
+  setY: y => dispatch(setY(y)),
+  setUse: e => dispatch(setUse(e.target.value)),
+  setUnit: unit => dispatch(setUnit(unit)),
+  setStatistic: e => dispatch(setStatistic(e.target.value)),
+  setTooltip: obj => dispatch(setTooltip(obj)),
   resetZoom: () => dispatch(resetZoom()),
   toggleJitter: () => dispatch(toggleJitter()),
-  setDomains: (obj) => dispatch(setDomains(obj)),
+  setDomains: obj => dispatch(setDomains(obj)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Scatterplot);

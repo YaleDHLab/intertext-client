@@ -3,7 +3,7 @@ import { plot } from './lib/sankey-lib';
 import { connect } from 'react-redux';
 import * as _ from 'lodash';
 
-const Sankey = (props) => {
+const Sankey = props => {
   const ref = useRef();
   const [initialized, setInitialized] = useState(false);
 
@@ -15,13 +15,13 @@ const Sankey = (props) => {
       // obtain a mapping from file id to label
       let fileIdToLabel = {};
       for (const [label, fileIds] of Object.entries(labelToFileIds)) {
-        fileIds.forEach((fileId) => {
+        fileIds.forEach(fileId => {
           fileIdToLabel[fileId] = label;
         });
       }
       // obtain a mapping from match id to match objects
       let matchIdMap = {};
-      sortIndex.forEach((i) => {
+      sortIndex.forEach(i => {
         const [fileIdA, matchId, , ,] = i;
         matchIdMap[matchId] = matchIdMap[matchId] || [];
         matchIdMap[matchId].push(fileIdA);
@@ -29,7 +29,7 @@ const Sankey = (props) => {
       // parse the data to be represented
       const nodes = {};
       const links = {};
-      sortIndex.forEach((i) => {
+      sortIndex.forEach(i => {
         const [, matchEarlierFileId, matchLaterFileId, similarity] = i;
         const a = matchEarlierFileId;
         const b = matchLaterFileId;
@@ -56,8 +56,8 @@ const Sankey = (props) => {
       });
 
       const l = [];
-      Object.keys(links).forEach((a) => {
-        Object.keys(links[a]).forEach((b) => {
+      Object.keys(links).forEach(a => {
+        Object.keys(links[a]).forEach(b => {
           l.push({
             source: a,
             target: b,
@@ -81,20 +81,18 @@ const Sankey = (props) => {
   }, [initialized, props.sortIndex, props.labelToFileIds]);
 
   return (
-    <div className="sankey-wrap">
-      <svg ref={ref} id="sankey-plot" />
+    <div className='sankey-wrap'>
+      <svg ref={ref} id='sankey-plot' />
     </div>
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   typeaheadField: state.typeahead.field,
-  labelToFileIds: state.typeahead.fileIds
-    ? state.typeahead.fileIds[state.typeahead.field]
-    : null,
+  labelToFileIds: state.typeahead.fileIds ? state.typeahead.fileIds[state.typeahead.field] : null,
   sortIndex: state.search.sortIndex,
 });
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = dispatch => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sankey);

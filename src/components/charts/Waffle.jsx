@@ -13,10 +13,10 @@ import { setWaffleFeature, getWaffleActive } from '../../actions/waffle';
 class Waffle extends React.Component {
   render() {
     return (
-      <div className="waffle-card-wrapper">
-        <div className="waffle-card-container">
-          <div className="waffle-card-controls">
-            <span className="label">Visualize similar passages by:</span>
+      <div className='waffle-card-wrapper'>
+        <div className='waffle-card-container'>
+          <div className='waffle-card-controls'>
+            <span className='label'>Visualize similar passages by:</span>
             {options.map((o, i) => (
               <Button
                 key={i}
@@ -27,28 +27,28 @@ class Waffle extends React.Component {
               />
             ))}
             <Legend />
-            <Link to="/" className="close-visualization-wrapper">
-              <div className="close-visualization" />
+            <Link to='/' className='close-visualization-wrapper'>
+              <div className='close-visualization' />
             </Link>
           </div>
-          <div className="result waffle-chart-card">
-            <div className="result-top row align-center">
-              <div className="result-title">
+          <div className='result waffle-chart-card'>
+            <div className='result-top row align-center'>
+              <div className='result-title'>
                 <span>All passages similar to </span>
                 <span>
                   <i>{this.props.title}</i>
                 </span>
               </div>
             </div>
-            <div className="result-body row">
-              <div className="headshot-container col justify-center align-center">
+            <div className='result-body row'>
+              <div className='headshot-container col justify-center align-center'>
                 <div
-                  className="headshot"
+                  className='headshot'
                   style={{
                     backgroundImage: 'url(' + getImage(this.props.image) + ')',
                   }}
                 />
-                <div className="headshot-label">{this.props.author}</div>
+                <div className='headshot-label'>{this.props.author}</div>
               </div>
               <WafflePlot />
             </div>
@@ -60,14 +60,10 @@ class Waffle extends React.Component {
   }
 }
 
-const Button = (props) => {
+const Button = props => {
   return (
     <div
-      className={
-        props.feature === props.active
-          ? 'waffle-button active'
-          : 'waffle-button'
-      }
+      className={props.feature === props.active ? 'waffle-button active' : 'waffle-button'}
       onClick={props.setFeature.bind(null, props.feature)}
     >
       {props.label}
@@ -75,13 +71,13 @@ const Button = (props) => {
   );
 };
 
-const WaffleResults = (props) => {
+const WaffleResults = props => {
   return (
-    <div className="waffle-card-result-container results-container">
-      <div className="result-pair row">
-        <Result key="key-source" type={props.type} result={props.active} />
+    <div className='waffle-card-result-container results-container'>
+      <div className='result-pair row'>
+        <Result key='key-source' type={props.type} result={props.active} />
         <Result
-          key="key-target"
+          key='key-target'
           type={props.type === 'source' ? 'target' : 'source'}
           result={props.active}
         />
@@ -90,12 +86,8 @@ const WaffleResults = (props) => {
   );
 };
 
-const getImage = (image) => {
-  return image
-    ? image.substring(0, 4) === 'src/'
-      ? image.substring(3)
-      : image
-    : headshot;
+const getImage = image => {
+  return image ? (image.substring(0, 4) === 'src/' ? image.substring(3) : image) : headshot;
 };
 
 const options = [
@@ -108,9 +100,9 @@ const options = [
  * Plot
  **/
 
-const StatelessWafflePlot = (props) => {
+const StatelessWafflePlot = props => {
   return (
-    <div className="waffle-chart hide-y-axis">
+    <div className='waffle-chart hide-y-axis'>
       {props.data.length > 0 ? (
         <Chart
           height={236}
@@ -118,7 +110,7 @@ const StatelessWafflePlot = (props) => {
           xLabel={''}
           yLabel={''}
           xScale={'ordinal'}
-          xTickFormat={(d) => d}
+          xTickFormat={d => d}
           xLabelRotate={25}
           yDomain={[1, 20]}
           waffleKey={'_id'}
@@ -139,11 +131,11 @@ const StatelessWafflePlot = (props) => {
   );
 };
 
-const colorCell = (d) => {
+const colorCell = d => {
   return colorScale(parseInt(d));
 };
 
-let mapStateToProps = (state) => ({
+let mapStateToProps = state => ({
   data: state.waffle.data,
   width: state.waffle.width,
   xDomain: state.waffle.xDomain,
@@ -151,14 +143,11 @@ let mapStateToProps = (state) => ({
   maxColumn: state.waffle.maxColumn,
 });
 
-let mapDispatchToProps = (dispatch) => ({
+let mapDispatchToProps = dispatch => ({
   getActive: (d, i) => dispatch(getWaffleActive(d, i)),
 });
 
-const WafflePlot = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(StatelessWafflePlot);
+const WafflePlot = connect(mapStateToProps, mapDispatchToProps)(StatelessWafflePlot);
 
 /**
  * Plot
@@ -193,7 +182,7 @@ Waffle.propTypes = {
   type: PropTypes.string.isRequired,
 };
 
-mapStateToProps = (state) => ({
+mapStateToProps = state => ({
   type: state.waffle.type,
   feature: state.waffle.feature,
   author: state.waffle.author,
@@ -203,8 +192,8 @@ mapStateToProps = (state) => ({
   active: state.waffle.active,
 });
 
-mapDispatchToProps = (dispatch) => ({
-  setFeature: (feature) => dispatch(setWaffleFeature(feature)),
+mapDispatchToProps = dispatch => ({
+  setFeature: feature => dispatch(setWaffleFeature(feature)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Waffle);

@@ -63,13 +63,9 @@ const searchReducer = (state = initialState, action) => {
     case 'SET_ADVANCED_FILTER':
       return Object.assign({}, state, {
         advanced: Object.assign({}, state.advanced, {
-          [action.earlierLater]: Object.assign(
-            {},
-            state.advanced[action.type.toLowerCase()],
-            {
-              [action.field.toLowerCase()]: action.value,
-            }
-          ),
+          [action.earlierLater]: Object.assign({}, state.advanced[action.type.toLowerCase()], {
+            [action.field.toLowerCase()]: action.value,
+          }),
         }),
       });
 
@@ -83,9 +79,7 @@ const searchReducer = (state = initialState, action) => {
     case 'LOAD_SEARCH_FROM_URL':
       let update = Object.assign({}, state, {
         advanced: Object.assign({}, state.advanced, {
-          earlier: action.obj.earlier
-            ? action.obj.earlier
-            : state.advanced.earlier,
+          earlier: action.obj.earlier ? action.obj.earlier : state.advanced.earlier,
           later: action.obj.later ? action.obj.later : state.advanced.later,
         }),
       });

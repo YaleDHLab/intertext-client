@@ -1,17 +1,17 @@
 import { history } from '../store';
 import { fetchMatchFile } from './search';
 
-export const setWaffleVisualized = (obj) => ({
+export const setWaffleVisualized = obj => ({
   type: 'SET_WAFFLE_VISUALIZED',
   obj: obj,
 });
 
-export const setWaffleData = (obj) => ({
+export const setWaffleData = obj => ({
   type: 'SET_WAFFLE_DATA',
   obj: obj,
 });
 
-export const setActiveWaffle = (obj) => ({
+export const setActiveWaffle = obj => ({
   type: 'SET_WAFFLE_ACTIVE',
   obj: obj,
 });
@@ -20,25 +20,25 @@ export const waffleImageRequestFailed = () => ({
   type: 'WAFFLE_IMAGE_REQUEST_FAILED',
 });
 
-export const receiveWaffleImage = (url) => ({
+export const receiveWaffleImage = url => ({
   type: 'RECEIVE_WAFFLE_IMAGE',
   url: url,
 });
 
-export const setWaffleFeature = (feature) => {
-  return (dispatch) => {
+export const setWaffleFeature = feature => {
+  return dispatch => {
     dispatch({ type: 'SET_WAFFLE_FEATURE', feature: feature });
     dispatch(plotWaffle());
   };
 };
 
 export const getWaffleActive = (d, i) => {
-  return (dispatch) => {
+  return dispatch => {
     dispatch(requestWaffleActiveData(d, i));
   };
 };
 
-export const visualize = (obj) => {
+export const visualize = obj => {
   return (dispatch, getState) => {
     dispatch(setWaffleVisualized(obj));
     dispatch(plotWaffle());
@@ -48,14 +48,14 @@ export const visualize = (obj) => {
 
 export const saveWaffleInUrl = () => {
   // TODO: Store waffle state in url params
-  return (dispatch) => {
+  return dispatch => {
     history.push('waffle');
   };
 };
 
-export const requestWaffleActiveData = (d) => {
+export const requestWaffleActiveData = d => {
   return (dispatch, getState) => {
-    const result = getState().waffle.matches.filter((r) => r._id === d._id)[0];
+    const result = getState().waffle.matches.filter(r => r._id === d._id)[0];
     dispatch(setActiveWaffle(Object.assign({}, result)));
   };
 };
@@ -66,7 +66,7 @@ export const plotWaffle = () => {
     const size = 10; // h, w of each waffle cell
     const levelMargin = 10; // margin between levels
     const margin = { top: 0, right: 80, bottom: 90, left: 0 };
-    getCellData(state.waffle.file_id, state.waffle.feature).then((data) => {
+    getCellData(state.waffle.file_id, state.waffle.feature).then(data => {
       const cols = data.cols;
       // find the level with the max column count
       const maxCol = keys(cols).reduce((a, b) => (cols[a] > cols[b] ? a : b));
@@ -97,13 +97,10 @@ const getCellData = async (fileId, feature) => {
     cols = {},
     data = [];
   // fetch all matches for the requested query file
-  return fetchMatchFile(fileId).then((matches) => {
+  return fetchMatchFile(fileId).then(matches => {
     matches.map((d, i) => {
       // get the portion of this match that isn't from the visualized fileId
-      let level =
-        d.source_file_id === fileId
-          ? d['target_' + feature]
-          : d['source_' + feature];
+      let level = d.source_file_id === fileId ? d['target_' + feature] : d['source_' + feature];
       // set the 0-based count of the times each level occurs
       counts[level] = counts[level] > -1 ? counts[level] + 1 : 0;
       // set the 0-based column index where this cell belongs
@@ -130,4 +127,4 @@ const getCellData = async (fileId, feature) => {
   });
 };
 
-const keys = (obj) => Object.keys(obj);
+const keys = obj => Object.keys(obj);

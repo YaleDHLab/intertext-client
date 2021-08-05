@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-const ResultCount = (props) => (
-  <div className="results-count">
+const ResultCount = props => (
+  <div className='results-count'>
     {props.loading ? null : (
       <>
         <span>
@@ -19,7 +19,7 @@ ResultCount.propTypes = {
   totalResults: PropTypes.number,
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   loading: state.search.loading,
   totalResults: state.search.resultsMeta.totalResults,
 });

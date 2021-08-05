@@ -18,20 +18,16 @@ const routes = [
   },
 ];
 
-const Header = (props) => {
+const Header = props => {
   return (
     <header>
-      <div className="header-text row align-center space-between">
-        <Link className="brand" to="/">
-          <img src={brand} alt="Intertext brand logo" />
+      <div className='header-text row align-center space-between'>
+        <Link className='brand' to='/'>
+          <img src={brand} alt='Intertext brand logo' />
         </Link>
-        <nav className="row align-center">
-          {routes.map((r) => (
-            <Link
-              key={r.route}
-              to={r.route}
-              className={props.route === r.route ? 'active' : ''}
-            >
+        <nav className='row align-center'>
+          {routes.map(r => (
+            <Link key={r.route} to={r.route} className={props.route === r.route ? 'active' : ''}>
               {r.label}
             </Link>
           ))}
@@ -43,7 +39,7 @@ const Header = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   route: state.router.location.pathname,
 });
 

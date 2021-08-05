@@ -78,64 +78,40 @@ class Result extends React.Component {
   render() {
     return (
       <div className={`result col space-between flex-1 ${this.props.type}`}>
-        <div className="result-top row space-between align-center">
+        <div className='result-top row space-between align-center'>
           {this.props.type === 'source' ? (
             <>
-              <div
-                className="result-title"
-                dangerouslySetInnerHTML={this.getText('title')}
-              />
-              <div className="result-year-container">
-                <div
-                  className="result-year"
-                  dangerouslySetInnerHTML={this.getText('year')}
-                />
+              <div className='result-title' dangerouslySetInnerHTML={this.getText('title')} />
+              <div className='result-year-container'>
+                <div className='result-year' dangerouslySetInnerHTML={this.getText('year')} />
               </div>
             </>
           ) : (
             <>
-              <div className="result-year-container">
-                <div
-                  className="result-year"
-                  dangerouslySetInnerHTML={this.getText('year')}
-                />
+              <div className='result-year-container'>
+                <div className='result-year' dangerouslySetInnerHTML={this.getText('year')} />
               </div>
-              <div
-                className="result-title"
-                dangerouslySetInnerHTML={this.getText('title')}
-              />
+              <div className='result-title' dangerouslySetInnerHTML={this.getText('title')} />
             </>
           )}
         </div>
-        <div className="result-body flex-1">
-          <div
-            className="result-author"
-            dangerouslySetInnerHTML={this.getText('author')}
-          />
-          <div className="result-match">
-            <span
-              className="prematch"
-              dangerouslySetInnerHTML={this.getText('prematch')}
-            />
-            <span
-              className="match"
-              dangerouslySetInnerHTML={this.getText('match', ' ')}
-            />
-            <span
-              className="postmatch"
-              dangerouslySetInnerHTML={this.getText('postmatch', ' ')}
-            />
+        <div className='result-body flex-1'>
+          <div className='result-author' dangerouslySetInnerHTML={this.getText('author')} />
+          <div className='result-match'>
+            <span className='prematch' dangerouslySetInnerHTML={this.getText('prematch')} />
+            <span className='match' dangerouslySetInnerHTML={this.getText('match', ' ')} />
+            <span className='postmatch' dangerouslySetInnerHTML={this.getText('postmatch', ' ')} />
           </div>
         </div>
-        <div className="result-footer-container">
-          <div className="result-footer row">
+        <div className='result-footer-container'>
+          <div className='result-footer row'>
             {this.props.result[this.props.type + '_url'] ? (
               <>
                 <a
-                  className="read"
-                  target="_blank"
+                  className='read'
+                  target='_blank'
                   href={this.props.result[this.props.type + '_url']}
-                  rel="noreferrer"
+                  rel='noreferrer'
                 >
                   <ReadIcon />
                   Read
@@ -150,7 +126,7 @@ class Result extends React.Component {
               <FavoriteIcon />
               Favorite
             </div>
-            <Link to={'waffle'} onClick={this.visualize} className="visualize">
+            <Link to={'waffle'} onClick={this.visualize} className='visualize'>
               <VisualizeIcon />
               Visualize
             </Link>
@@ -161,7 +137,7 @@ class Result extends React.Component {
   }
 }
 
-const fadeCardsOut = (results) => {
+const fadeCardsOut = results => {
   for (let i = 0; i < results.length; i++) {
     setTimeout(animate.bind(null, results[i], true), i * 30);
   }
@@ -183,13 +159,13 @@ const fadeCardsIn = (container, results, duration) => {
   }, duration + 200);
 };
 
-const animate = (elem) => {
+const animate = elem => {
   elem.className = elem.className + ' animated';
   const circle = elem.querySelector('.similarity-circle');
   circle.className = circle.className + ' fade-out';
 };
 
-const removeAnimation = (elem) => {
+const removeAnimation = elem => {
   elem.className = elem.className.replace(' animated', '');
   const circle = elem.querySelector('.similarity-circle');
   circle.className = circle.className.replace(' fade-out', '');
@@ -238,15 +214,15 @@ Result.propTypes = {
   visualize: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   favorites: state.favorites,
   compare: state.compare,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  toggleFavorite: (obj) => dispatch(toggleFavorite(obj)),
-  toggleCompare: (obj) => dispatch(toggleCompare(obj)),
-  visualize: (obj) => dispatch(visualize(obj)),
+const mapDispatchToProps = dispatch => ({
+  toggleFavorite: obj => dispatch(toggleFavorite(obj)),
+  toggleCompare: obj => dispatch(toggleCompare(obj)),
+  visualize: obj => dispatch(visualize(obj)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Result);

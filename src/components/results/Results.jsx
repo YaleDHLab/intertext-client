@@ -7,7 +7,7 @@ import Loader from '../partials/Loader';
 import { fetchSearchResults, displayMoreResults } from '../../actions/search';
 import { throttle } from 'lodash';
 
-const Results = (props) => {
+const Results = props => {
   const { results, loading, displayMoreResults, fetchSearchResults } = {
     ...props,
   };
@@ -31,10 +31,10 @@ const Results = (props) => {
   }, []);
 
   return (
-    <div id="results-container" className="col align-center">
+    <div id='results-container' className='col align-center'>
       <Filters />
       <div
-        id="result-pairs-container"
+        id='result-pairs-container'
         ref={ref}
         className={loading ? 'flex-1 col justify-center' : 'flex-1 col'}
       >
@@ -43,34 +43,33 @@ const Results = (props) => {
         ) : results && results.length ? (
           <ResultPairs results={results} />
         ) : (
-          <span className="no-results">Sorry, no results could be found</span>
+          <span className='no-results'>Sorry, no results could be found</span>
         )}
       </div>
     </div>
   );
 };
 
-const ResultPairs = (props) => {
+const ResultPairs = props => {
   return (
     <div>
       {props.results.map((result, idx) => (
         <div
           className={`result-pair row
             ${
-              result.source_author === 'Unknown' &&
-              result.target_author === 'Unknown'
+              result.source_author === 'Unknown' && result.target_author === 'Unknown'
                 ? 'hide-authors'
                 : ''
             }`}
           key={idx}
         >
-          <Result result={result} type="source" />
-          <div className="similarity-circle row justify-center align-center">
-            <div className="similarity row justify-center align-center">
+          <Result result={result} type='source' />
+          <div className='similarity-circle row justify-center align-center'>
+            <div className='similarity row justify-center align-center'>
               <span>{Math.round(result.similarity) + '%'}</span>
             </div>
           </div>
-          <Result result={result} type="target" />
+          <Result result={result} type='target' />
         </div>
       ))}
     </div>
@@ -86,12 +85,12 @@ Results.propTypes = {
   results: PropTypes.arrayOf(ResultProps),
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   results: state.search.results,
   loading: state.search.resultsMeta.loading,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   displayMoreResults: () => dispatch(displayMoreResults()),
   fetchSearchResults: () => dispatch(fetchSearchResults()),
 });
