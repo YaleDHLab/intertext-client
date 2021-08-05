@@ -50,12 +50,11 @@ const Filters = props => {
             src={filterIcon}
             onClick={toggleOpen}
           />
-          {props.selectionCount > 0
-            ? <div id='advanced-filters-selection-count' className='row justify-center align-center'>
-                <div>{props.selectionCount}</div>
-              </div>
-            : null
-          }
+          {props.selectionCount > 0 ? (
+            <div id='advanced-filters-selection-count' className='row justify-center align-center'>
+              <div>{props.selectionCount}</div>
+            </div>
+          ) : null}
         </div>
       </div>
       {open ? <AdvancedFilters refProp={childRef} /> : null}
@@ -64,13 +63,13 @@ const Filters = props => {
 };
 
 const getFilterSelectionCount = state => {
-  const { advanced } = {...state.search};
+  const { advanced } = { ...state.search };
   let count = 0;
   ['earlier', 'later'].forEach(type => {
     count += getChangedCount(type, advanced);
-  })
+  });
   return count;
-}
+};
 
 export const getChangedCount = (type, advanced) => {
   let count = 0;
@@ -79,17 +78,17 @@ export const getChangedCount = (type, advanced) => {
     v = type in advanced ? advanced[type] : {};
     v = field in v ? v[field] : false;
     if (notNull(v)) count++;
-  })
+  });
   return count;
-}
+};
 
 export const notNull = v => {
   if (typeof v === 'number' || typeof v === 'string') return true;
   return false;
-}
+};
 
 const mapStateToProps = state => ({
   selectionCount: getFilterSelectionCount(state),
-})
+});
 
 export default connect(mapStateToProps)(Filters);

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import * as searchActions from '../../actions/search';
-import { notNull, getChangedCount } from './Filters'
+import { notNull, getChangedCount } from './Filters';
 
 class AdvancedFilters extends React.Component {
   render() {
@@ -55,7 +55,7 @@ const AdvancedFilterColumn = props => {
       label: 'File Id',
       field: 'fileId',
     },
-  ]
+  ];
 
   const clearable = getChangedCount(props.type, props.advanced) > 0;
 
@@ -72,13 +72,20 @@ const AdvancedFilterColumn = props => {
               defaultValue={
                 notNull(props.advanced[props.type][f.field])
                   ? props.advanced[props.type][f.field]
-                  : ''}
-              onChange={setField} />
+                  : ''
+              }
+              onChange={setField}
+            />
           </div>
         );
       })}
       <div className='advanced-filter-footer justify-end row align-center'>
-        <div className={clearable ? 'advanced-filter-clear clearable' : 'advanced-filter-clear disabled'} onClick={clear}>
+        <div
+          className={
+            clearable ? 'advanced-filter-clear clearable' : 'advanced-filter-clear disabled'
+          }
+          onClick={clear}
+        >
           Clear
         </div>
         <button className={buttonClass} onClick={search}>
@@ -90,10 +97,9 @@ const AdvancedFilterColumn = props => {
 };
 
 const AdvancedFilterInput = props => {
-  return <input
-    type='text'
-    defaultValue={props.defaultValue}
-    onChange={e => props.onChange(props, e)} />;
+  return (
+    <input type='text' defaultValue={props.defaultValue} onChange={e => props.onChange(props, e)} />
+  );
 };
 
 const titleCase = s => {

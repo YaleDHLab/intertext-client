@@ -63,9 +63,13 @@ const searchReducer = (state = initialState, action) => {
     case 'SET_ADVANCED_FILTER':
       return Object.assign({}, state, {
         advanced: Object.assign({}, state.advanced, {
-          [action.earlierLater]: Object.assign({}, state.advanced[action.earlierLater.toLowerCase()], {
-            [action.field]: action.field === 'fileId' ? parseInt(action.value) : action.value,
-          }),
+          [action.earlierLater]: Object.assign(
+            {},
+            state.advanced[action.earlierLater.toLowerCase()],
+            {
+              [action.field]: action.field === 'fileId' ? parseInt(action.value) : action.value,
+            }
+          ),
         }),
       });
 

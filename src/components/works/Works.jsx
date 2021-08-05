@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import { orderBy } from 'lodash';
 import { Link } from 'react-router-dom';
-import * as typeaheadActions from '../../actions/typeahead'
-import * as searchActions from '../../actions/search'
+import * as typeaheadActions from '../../actions/typeahead';
+import * as searchActions from '../../actions/search';
 
 const Works = props => {
   const sorted = orderBy(props.metadata, 'author');
@@ -13,7 +13,7 @@ const Works = props => {
     props.setTypeaheadField('title');
     props.setTypeaheadQuery(title);
     props.fetchSearchResults();
-  }
+  };
 
   return (
     <div id='page-works'>
@@ -23,7 +23,9 @@ const Works = props => {
           <div className='work-row' key={idx}>
             <div className='work-author'>{m.author}, </div>
             {m.matches ? (
-              <Link to={'/cards'} onClick={() => onClick(m.title)}>{m.title}</Link>
+              <Link to={'/cards'} onClick={() => onClick(m.title)}>
+                {m.title}
+              </Link>
             ) : (
               <div className='work-title'>{m.title}</div>
             )}
