@@ -8,6 +8,8 @@ const Works = props => {
   const sorted = orderBy(props.metadata, 'author');
 
   const onClick = title => {
+    props.clearAdvancedFilterType('earlier');
+    props.clearAdvancedFilterType('later');
     props.setTypeaheadField('title');
     props.setTypeaheadQuery(title);
     props.fetchSearchResults();
@@ -39,6 +41,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setTypeaheadQuery: val => dispatch(typeaheadActions.setTypeaheadQuery(val)),
   setTypeaheadField: val => dispatch(typeaheadActions.setTypeaheadField(val)),
+  clearAdvancedFilterType: val => dispatch(searchActions.clearAdvancedFilterType(val)),
   fetchSearchResults: () => dispatch(searchActions.fetchSearchResults()),
 });
 

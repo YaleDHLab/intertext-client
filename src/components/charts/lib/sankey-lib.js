@@ -8,7 +8,7 @@ import { colors } from './color-lib';
 import { history } from '../../../store';
 
 export const plot = (props) => {
-  let { svg, data, setField } = {...props}
+  let { svg, data, setField, setTypeaheadQuery } = {...props}
 
   // sort the nodes by how many edges they have
   let counts = {};
@@ -49,6 +49,7 @@ export const plot = (props) => {
   });
 
   const handleLinkClick = d => {
+    setTypeaheadQuery('');
     setField({
       earlierLater: 'earlier',
       field: 'fileId',

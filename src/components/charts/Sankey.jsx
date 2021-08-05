@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { plot } from './lib/sankey-lib';
 import { connect } from 'react-redux';
 import * as searchActions from '../../actions/search';
+import * as typeaheadActions from '../../actions/typeahead';
 import * as _ from 'lodash';
 
 const Sankey = props => {
@@ -82,8 +83,9 @@ const Sankey = props => {
       svg: ref.current,
       data: data,
       setField: props.setField,
+      setTypeaheadQuery: props.setTypeaheadQuery,
     });
-  }, [initialized, props.sortIndex, props.labelToFileIds, props.setField]);
+  }, [initialized, props.sortIndex, props.labelToFileIds, props.setField, props.setTypeaheadQuery]);
 
   return (
     <div className='sankey-wrap'>
@@ -99,6 +101,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  setTypeaheadQuery: s => dispatch(typeaheadActions.setTypeaheadQuery(s)),
   setField: obj => dispatch(searchActions.setAdvancedFilterField(obj)),
 });
 
