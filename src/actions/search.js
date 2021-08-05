@@ -95,8 +95,9 @@ export const saveSearchInUrl = () => {
 
 export const loadSearchFromUrl = () => {
   return (dispatch, getState) => {
-    if (window.location.hash.includes('sankey')) return;
-    let search = window.location.hash.split('#/')[1];
+    const url = window.location.hash;
+    if (url.includes('sankey') || url.includes('works')) return;
+    let search = url.split('#/')[1];
     search = search.replace('cards', '');
     if (search.includes('?')) search = search.split('?')[1];
     if (!search) return;
