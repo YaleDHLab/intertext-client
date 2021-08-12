@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toggleFavorite, sort } from '../../actions/favorite';
-import { toggleCompare } from '../../actions/compare';
 import { visualize } from '../../actions/waffle';
 import ReadIcon from './icons/ReadIcon';
-import CompareIcon from './icons/CompareIcon';
 import FavoriteIcon from './icons/FavoriteIcon';
 import VisualizeIcon from './icons/VisualizeIcon';
 
@@ -15,7 +13,6 @@ class Result extends React.Component {
     super(props);
     this.getText = this.getText.bind(this);
     this.favorite = this.favorite.bind(this);
-    this.compare = this.compare.bind(this);
     this.visualize = this.visualize.bind(this);
     this.getFavoriteClass = this.getFavoriteClass.bind(this);
   }
@@ -33,22 +30,6 @@ class Result extends React.Component {
     });
   }
 
-  compare() {
-    const props = this.props;
-    const duration = 1500;
-    const results = document.querySelectorAll('.result-pair');
-    const container = document.querySelector('.result-pair-container');
-    if (container) {
-      // card view compare action
-      fadeCardsOut(results);
-      getCompareResults(container, duration, props);
-      fadeCardsIn(container, results, duration);
-    } else {
-      // waffle view compare action
-      props.toggleCompare({ type: props.type, result: props.result });
-    }
-  }
-
   visualize() {
     this.props.visualize(
       Object.assign({}, this.props.result, {
@@ -63,18 +44,6 @@ class Result extends React.Component {
     return favs.indexOf(_id) > -1 ? 'favorite active' : 'favorite';
   }
 
-  getCompareClass() {
-    const compare = this.props.compare;
-    const result = this.props.result;
-    const type = this.props.type;
-    const segment_ids = sort(result[type + '_segment_ids']).join('.');
-    return compare.type === type &&
-      compare.file_id === result[type + '_file_id'] &&
-      compare.segment_ids === segment_ids
-      ? 'compare active'
-      : 'compare';
-  }
-
   render() {
     return (
       <div className={`result col space-between flex-1 ${this.props.type}`}>
@@ -82,9 +51,12 @@ class Result extends React.Component {
           {this.props.type === 'source' ? (
             <>
               <div className='result-title' dangerouslySetInnerHTML={this.getText('title')} />
-              <div className='result-year-container'>
-                <div className='result-year' dangerouslySetInnerHTML={this.getText('year')} />
-              </div>
+              {this.getText('year')
+                ? <div className='result-year-container'>
+                    <div className='result-year' dangerouslySetInnerHTML={this.getText('year')} />
+                  </div>
+                : null
+              }
             </>
           ) : (
             <>
@@ -118,10 +90,6 @@ class Result extends React.Component {
                 </a>
               </>
             ) : null}
-            <div onClick={this.compare} className={this.getCompareClass()}>
-              <CompareIcon />
-              Compare
-            </div>
             <div onClick={this.favorite} className={this.getFavoriteClass()}>
               <FavoriteIcon />
               Favorite
@@ -136,40 +104,6 @@ class Result extends React.Component {
     );
   }
 }
-
-const fadeCardsOut = results => {
-  for (let i = 0; i < results.length; i++) {
-    setTimeout(animate.bind(null, results[i], true), i * 30);
-  }
-};
-
-const getCompareResults = (container, duration, props) => {
-  setTimeout(() => {
-    container.className = container.className + ' fade-out';
-    props.toggleCompare({ type: props.type, result: props.result });
-  }, duration);
-};
-
-const fadeCardsIn = (container, results, duration) => {
-  setTimeout(() => {
-    container.className = container.className.replace(' fade-out', '');
-    for (let i = 0; i < results.length; i++) {
-      removeAnimation(results[i]);
-    }
-  }, duration + 200);
-};
-
-const animate = elem => {
-  elem.className = elem.className + ' animated';
-  const circle = elem.querySelector('.similarity-circle');
-  circle.className = circle.className + ' fade-out';
-};
-
-const removeAnimation = elem => {
-  elem.className = elem.className.replace(' animated', '');
-  const circle = elem.querySelector('.similarity-circle');
-  circle.className = circle.className.replace(' fade-out', '');
-};
 
 export const ResultProps = PropTypes.shape({
   _id: PropTypes.number,
@@ -209,7 +143,6 @@ Result.propTypes = {
   }),
   result: ResultProps,
   toggleFavorite: PropTypes.func.isRequired,
-  toggleCompare: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   visualize: PropTypes.func.isRequired,
 };
@@ -221,7 +154,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   toggleFavorite: obj => dispatch(toggleFavorite(obj)),
-  toggleCompare: obj => dispatch(toggleCompare(obj)),
   visualize: obj => dispatch(visualize(obj)),
 });
 

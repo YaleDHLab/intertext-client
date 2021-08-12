@@ -1,5 +1,4 @@
 import { history } from '../store';
-import { setCompare, filterResultsWithCompare } from './compare';
 import { fetchJSONFile } from './ajax';
 import { addCacheRecord } from '../actions/cache';
 import { uniq } from 'lodash';
@@ -25,8 +24,7 @@ export const setSimilarityAndSearch = val => {
       type: 'SET_SIMILARITY',
       val: val,
     });
-    dispatch(resetMaxDisplayedSearchResults());
-    window.scrollTo(0, 0);
+    dispatch(scrollToCardsTop())
     dispatch(fetchSearchResults());
   };
 };
@@ -123,7 +121,6 @@ export const loadSearchFromUrl = () => {
       type: 'LOAD_SEARCH_FROM_URL',
       obj: update,
     });
-    if (obj.compare && Object.values(obj.compare).length) dispatch(setCompare(obj.compare));
     if (obj.query && obj.query.length) dispatch(setTypeaheadQuery(obj.query));
     if (obj.field && obj.field.length) dispatch(setTypeaheadField(obj.field));
   };
@@ -137,9 +134,10 @@ export const fetchSearchResults = () => {
   return (dispatch, getState) => {
     const state = getState();
     const runSearch = () => {
+      dispatch(resetMaxDisplayedSearchResults());
       dispatch(setTypeaheadIndex(0));
       dispatch(loadSearchFromUrl());
-      window.scrollTo(0, 0);
+      dispatch(scrollToCardsTop());
       dispatch(fetchMoreSearchResults());
     };
     // check to see if we need to run the first search result
@@ -191,7 +189,7 @@ const fetchMoreSearchResults = () => {
       .then(({ count, docs }) => {
         dispatch({
           type: 'SET_ALL_SEARCH_RESULTS',
-          docs: dispatch(filterResultsWithCompare(docs)),
+          docs: docs,
           total: count,
           err: false,
         });
@@ -209,6 +207,14 @@ const fetchMoreSearchResults = () => {
 const resetMaxDisplayedSearchResults = () => ({
   type: 'RESET_MAX_DISPLAYED_SEARCH_RESULTS',
 });
+
+const scrollToCardsTop = () => {
+  return () => {
+    const elem = document.querySelector('#result-pairs-container');
+    if (!elem) return;
+    elem.scrollTo(0,0);
+  }
+}
 
 /**
  * Main search function that filters the sorted match index to find suitable matches

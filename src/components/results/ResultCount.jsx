@@ -6,9 +6,7 @@ const ResultCount = props => (
   <div className='results-count'>
     {props.loading ? null : (
       <>
-        <span>
-          <b>{props.totalResults || 0}</b>
-        </span>
+        <span>{props.totalResults || 0}</span>
         <span>matches</span>
       </>
     )}
