@@ -1,5 +1,4 @@
 import { history } from '../store';
-import { setCompare, filterResultsWithCompare } from './compare';
 import { fetchJSONFile } from './ajax';
 import { addCacheRecord } from '../actions/cache';
 import { uniq } from 'lodash';
@@ -122,7 +121,6 @@ export const loadSearchFromUrl = () => {
       type: 'LOAD_SEARCH_FROM_URL',
       obj: update,
     });
-    if (obj.compare && Object.values(obj.compare).length) dispatch(setCompare(obj.compare));
     if (obj.query && obj.query.length) dispatch(setTypeaheadQuery(obj.query));
     if (obj.field && obj.field.length) dispatch(setTypeaheadField(obj.field));
   };
@@ -191,7 +189,7 @@ const fetchMoreSearchResults = () => {
       .then(({ count, docs }) => {
         dispatch({
           type: 'SET_ALL_SEARCH_RESULTS',
-          docs: dispatch(filterResultsWithCompare(docs)),
+          docs: docs,
           total: count,
           err: false,
         });
@@ -212,7 +210,9 @@ const resetMaxDisplayedSearchResults = () => ({
 
 const scrollToCardsTop = () => {
   return () => {
-    document.querySelector('#result-pairs-container').scrollTo(0,0);
+    const elem = document.querySelector('#result-pairs-container');
+    if (!elem) return;
+    elem.scrollTo(0,0);
   }
 }
 

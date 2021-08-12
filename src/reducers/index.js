@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 import waffleReducer from './waffleReducer';
 import searchReducer from './searchReducer';
-import compareReducer from './compareReducer';
 import favoriteReducer from './favoriteReducer';
 import typeaheadReducer from './typeaheadReducer';
 import scatterplotReducer from './scatterplotReducer';
@@ -13,6 +12,5 @@ export const rootReducer = combineReducers({
   typeahead: typeaheadReducer,
   scatterplot: scatterplotReducer,
   waffle: waffleReducer,
-  compare: compareReducer,
   cache: cacheReducer,
 });
