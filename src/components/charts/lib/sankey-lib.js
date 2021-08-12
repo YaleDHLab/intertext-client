@@ -21,7 +21,7 @@ export const plot = props => {
 
   const margin = { top: 10, right: 210, bottom: 10, left: 210 },
     width = 900 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+    height = (data.nodes.length * 30) - margin.top - margin.bottom;
 
   const linkColor = d3.scaleThreshold().domain([0, 60, 70, 80]).range(colors);
 
@@ -37,7 +37,7 @@ export const plot = props => {
     .nodeAlign(d3sankeyCenter)
     .nodeSort(null)
     .nodeWidth(15)
-    .nodePadding(10)
+    .nodePadding(18)
     .extent([
       [0, 5],
       [width, height - 5],
@@ -123,7 +123,7 @@ export const plot = props => {
         : 'sankey-label-container later';
     })
     .append('xhtml:div')
-    .text(d => (d.label.length < 30 ? d.label : d.label.substring(0, 30) + '...'))
+    .text(d => (d.label.length < 25 ? d.label : d.label.substring(0, 25) + '...'))
     .on('mouseenter', activateLinks)
     .on('mouseout', deactivateLinks);
 };
