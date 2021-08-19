@@ -21,7 +21,7 @@ export const plot = props => {
 
   const margin = { top: 10, right: 210, bottom: 10, left: 210 },
     width = 900 - margin.left - margin.right,
-    height = (data.nodes.length * 30) - margin.top - margin.bottom;
+    height = data.nodes.length * 30 - margin.top - margin.bottom;
 
   const linkColor = d3.scaleThreshold().domain([0, 60, 70, 80]).range(colors);
 
@@ -92,7 +92,7 @@ export const plot = props => {
 
   const isSafari = () => {
     return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  }
+  };
 
   const node = svg
     .append('g')
@@ -118,9 +118,7 @@ export const plot = props => {
   node
     .append('foreignObject')
     .attr('class', d => {
-      return d.sankeyId.includes('earlier')
-        ? 'earlier'
-        : 'later';
+      return d.sankeyId.includes('earlier') ? 'earlier' : 'later';
     })
     .attr('x', d => (d.sankeyId.includes('earlier') ? -205 : 20))
     .attr('y', d => (d.y1 - d.y0 >= 20 ? 0 : -(20 - (d.y1 - d.y0)) / 2))
@@ -128,7 +126,7 @@ export const plot = props => {
     .attr('height', d => Math.max(d.y1 - d.y0, 20))
     .append('xhtml:body')
     .attr('xmlns', 'http://www.w3.org/1999/xhtml')
-    .attr('class', () => isSafari() ? '' : 'center-vertically')
+    .attr('class', () => (isSafari() ? '' : 'center-vertically'))
     .text(d => (d.label.length < 25 ? d.label : d.label.substring(0, 25) + '...'))
     .on('mouseenter', activateLinks)
     .on('mouseout', deactivateLinks);

@@ -51,12 +51,11 @@ class Result extends React.Component {
           {this.props.type === 'source' ? (
             <>
               <div className='result-title' dangerouslySetInnerHTML={this.getText('title')} />
-              {this.getText('year')
-                ? <div className='result-year-container'>
-                    <div className='result-year' dangerouslySetInnerHTML={this.getText('year')} />
-                  </div>
-                : null
-              }
+              {this.getText('year') ? (
+                <div className='result-year-container'>
+                  <div className='result-year' dangerouslySetInnerHTML={this.getText('year')} />
+                </div>
+              ) : null}
             </>
           ) : (
             <>
