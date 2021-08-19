@@ -130,7 +130,6 @@ export const loadSearchFromUrl = () => {
  **/
 
 export const fetchSearchResults = () => {
-  console.log('FETCH_SEARCH_RESULTS');
   return (dispatch, getState) => {
     const state = getState();
     dispatch(setSearchLoading(true));
@@ -166,7 +165,6 @@ export const displayMoreResults = () => {
 
 // load the match files for the set of displayed search results
 const fetchMoreSearchResults = () => {
-  console.log('FETCH MORE SEARCH RESULTS');
   return (dispatch, getState) => {
     const state = getState();
     // get the full list of match metadata vals for the search params
