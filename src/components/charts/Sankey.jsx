@@ -84,8 +84,9 @@ const Sankey = props => {
       data: data,
       setField: props.setField,
       setTypeaheadQuery: props.setTypeaheadQuery,
+      fetchSearchResults: props.fetchSearchResults,
     });
-  }, [initialized, props.sortIndex, props.labelToFileIds, props.setField, props.setTypeaheadQuery]);
+  }, [initialized, props.sortIndex, props.labelToFileIds, props.setField, props.setTypeaheadQuery, props.fetchSearchResults]);
 
   return (
     <div className='sankey-wrap'>
@@ -101,6 +102,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  fetchSearchResults: () => dispatch(searchActions.fetchSearchResults()),
   setTypeaheadQuery: s => dispatch(typeaheadActions.setTypeaheadQuery(s)),
   setField: obj => dispatch(searchActions.setAdvancedFilterField(obj)),
 });

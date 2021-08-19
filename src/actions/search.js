@@ -74,7 +74,6 @@ export const clearAdvancedFilterType = type => {
       type: 'CLEAR_ADVANCED_FILTER_TYPE',
       earlierLater: type,
     });
-    dispatch(fetchSearchResults());
   };
 };
 
@@ -131,8 +130,10 @@ export const loadSearchFromUrl = () => {
  **/
 
 export const fetchSearchResults = () => {
+  console.log('FETCH_SEARCH_RESULTS')
   return (dispatch, getState) => {
     const state = getState();
+    dispatch(setSearchLoading(true));
     const runSearch = () => {
       dispatch(resetMaxDisplayedSearchResults());
       dispatch(setTypeaheadIndex(0));
@@ -143,7 +144,10 @@ export const fetchSearchResults = () => {
     // check to see if we need to run the first search result
     state.search.sortIndex && state.typeahead.metadata
       ? runSearch()
-      : Promise.all([dispatch(fetchSortIndex()), dispatch(fetchTypeaheadMetadata())]).then(v => {
+      : Promise.all([
+          dispatch(fetchSortIndex()),
+          dispatch(fetchTypeaheadMetadata()),
+        ]).then(v => {
           runSearch();
         });
   };
@@ -165,6 +169,7 @@ export const displayMoreResults = () => {
 
 // load the match files for the set of displayed search results
 const fetchMoreSearchResults = () => {
+  console.log('FETCH MORE SEARCH RESULTS')
   return (dispatch, getState) => {
     const state = getState();
     // get the full list of match metadata vals for the search params
@@ -312,3 +317,12 @@ const getMatchFile = matchFileID => {
 export const fetchMatchFile = textID => {
   return fetchJSONFile('/api/matches/' + String(textID) + '.json');
 };
+
+/**
+ * Search loading
+ **/
+
+export const setSearchLoading = bool => ({
+  type: 'SET_SEARCH_LOADING',
+  bool: bool
+})
