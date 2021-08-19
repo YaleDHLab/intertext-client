@@ -86,7 +86,14 @@ const Sankey = props => {
       setTypeaheadQuery: props.setTypeaheadQuery,
       fetchSearchResults: props.fetchSearchResults,
     });
-  }, [initialized, props.sortIndex, props.labelToFileIds, props.setField, props.setTypeaheadQuery, props.fetchSearchResults]);
+  }, [
+    initialized,
+    props.sortIndex,
+    props.labelToFileIds,
+    props.setField,
+    props.setTypeaheadQuery,
+    props.fetchSearchResults,
+  ]);
 
   return (
     <div className='sankey-wrap'>

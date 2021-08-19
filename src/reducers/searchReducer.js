@@ -104,7 +104,7 @@ const searchReducer = (state = initialState, action) => {
     case 'SET_SEARCH_LOADING':
       return Object.assign({}, state, {
         resultsMeta: Object.assign({}, state.resultsMeta, {
-          loading: action.bool
+          loading: action.bool,
         }),
       });
 

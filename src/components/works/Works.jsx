@@ -3,7 +3,7 @@ import { orderBy } from 'lodash';
 import { Link } from 'react-router-dom';
 import * as typeaheadActions from '../../actions/typeahead';
 import * as searchActions from '../../actions/search';
-import { history } from '../../store'
+import { history } from '../../store';
 
 const Works = props => {
   const sorted = orderBy(props.metadata, 'author');
@@ -15,7 +15,7 @@ const Works = props => {
     props.setTypeaheadField('title');
     props.setTypeaheadQuery(title);
     props.fetchSearchResults();
-    history.push('/cards')
+    history.push('/cards');
   };
 
   return (
@@ -26,7 +26,7 @@ const Works = props => {
           <div className='work-row' key={idx}>
             <div className='work-author'>{m.author}, </div>
             {m.matches ? (
-              <Link to={'/cards'} onClick={(e) => onClick(m.title, e)}>
+              <Link to={'/cards'} onClick={e => onClick(m.title, e)}>
                 {m.title}
               </Link>
             ) : (
