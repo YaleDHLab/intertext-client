@@ -89,6 +89,10 @@ export const plot = props => {
     d3.selectAll('.link').classed('active', false);
   };
 
+  const isSafari = () => {
+    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  }
+
   const node = svg
     .append('g')
     .attr('class', 'nodes')
@@ -112,17 +116,18 @@ export const plot = props => {
 
   node
     .append('foreignObject')
+    .attr('class', d => {
+      return d.sankeyId.includes('earlier')
+        ? 'earlier'
+        : 'later';
+    })
     .attr('x', d => (d.sankeyId.includes('earlier') ? -205 : 20))
     .attr('y', d => (d.y1 - d.y0 >= 20 ? 0 : -(20 - (d.y1 - d.y0)) / 2))
     .attr('width', 200)
     .attr('height', d => Math.max(d.y1 - d.y0, 20))
-    .append('xhtml:div')
-    .attr('class', d => {
-      return d.sankeyId.includes('earlier')
-        ? 'sankey-label-container earlier'
-        : 'sankey-label-container later';
-    })
-    .append('xhtml:div')
+    .append('xhtml:body')
+    .attr('xmlns', 'http://www.w3.org/1999/xhtml')
+    .attr('class', () => isSafari() ? '' : 'center-vertically')
     .text(d => (d.label.length < 25 ? d.label : d.label.substring(0, 25) + '...'))
     .on('mouseenter', activateLinks)
     .on('mouseout', deactivateLinks);
