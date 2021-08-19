@@ -83,8 +83,9 @@ export const getChangedCount = (type, advanced) => {
 };
 
 export const notNull = v => {
+  if (typeof v === 'string') return true;
   if (isNaN(v)) return false;
-  if (typeof v === 'number' || typeof v === 'string') return true;
+  if (typeof v === 'number') return true;
   return false;
 };
 
