@@ -26,10 +26,6 @@ const Results = props => {
     };
   }, [displayMoreResults]);
 
-  useEffect(() => {
-    fetchSearchResults();
-  }, []);
-
   return (
     <div id='results-container' className='col align-center'>
       <Filters />
@@ -61,7 +57,7 @@ const ResultPairs = props => {
                 ? 'hide-authors'
                 : ''
             }`}
-          key={idx}
+          key={result._id}
         >
           <Result result={result} type='source' />
           <div className='similarity-circle row justify-center align-center'>
