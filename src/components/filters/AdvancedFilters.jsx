@@ -5,8 +5,9 @@ import { notNull, getChangedCount } from './Filters';
 
 class AdvancedFilters extends React.Component {
   render() {
+    const { open, refProp } = {...this.props}
     return (
-      <div id='advanced-filters' className='row space-between' ref={this.props.refProp}>
+      <div id='advanced-filters' className={`row space-between ${open ? 'open' : ''}`} ref={refProp}>
         <AdvancedFilterColumn type='earlier' {...this.props} />
         {/*<div className='similarity-circle opacity-0' />*/}
         <AdvancedFilterColumn type='later' {...this.props} />

@@ -57,7 +57,7 @@ const Filters = props => {
           ) : null}
         </div>
       </div>
-      {open ? <AdvancedFilters refProp={childRef} /> : null}
+      <AdvancedFilters refProp={childRef} open={open} />
     </div>
   );
 };

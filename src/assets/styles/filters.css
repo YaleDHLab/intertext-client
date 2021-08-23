@@ -67,6 +67,13 @@
 
 #advanced-filters {
   box-shadow: 0 2px 3px #ccc;
+  height: 0;
+  transition: 0.3s;
+  overflow: hidden;
+}
+
+#advanced-filters.open {
+  height: 185px;
 }
 
 /**
