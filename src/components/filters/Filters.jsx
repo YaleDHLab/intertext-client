@@ -20,9 +20,9 @@ const Filters = props => {
       if (!ref.current || ref.current.contains(elem)) return;
       setOpen(false);
     };
-    window.addEventListener('click', onWindowClick);
+    window.addEventListener('mousedown', onWindowClick);
     return () => {
-      window.removeEventListener('click', onWindowClick);
+      window.removeEventListener('mousedown', onWindowClick);
     };
   }, [open]);
 
