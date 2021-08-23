@@ -6,6 +6,7 @@ import TypeaheadSelect from '../typeahead/TypeaheadSelect';
 import filterIcon from '../../assets/images/icons/filter-icon.svg';
 import AdvancedFilters from './AdvancedFilters';
 import { connect } from 'react-redux';
+import { defaultAdvanced } from '../../reducers/searchReducer';
 
 const Filters = props => {
   const ref = useRef();
@@ -57,7 +58,7 @@ const Filters = props => {
           ) : null}
         </div>
       </div>
-      {open ? <AdvancedFilters refProp={childRef} /> : null}
+      <AdvancedFilters refProp={childRef} open={open} />
     </div>
   );
 };
@@ -73,11 +74,15 @@ const getFilterSelectionCount = state => {
 
 export const getChangedCount = (type, advanced) => {
   let count = 0;
-  ['author', 'title', 'fileId'].forEach(field => {
+  ['author', 'title', 'fileId', 'length'].forEach(field => {
+    // get the value of the current field
     let v;
     v = type in advanced ? advanced[type] : {};
     v = field in v ? v[field] : false;
-    if (notNull(v)) count++;
+    // get the default value of the current field
+    let initial = defaultAdvanced[field];
+    // increment the count of changed fields if necessary
+    if (JSON.stringify(v) !== JSON.stringify(initial)) count++;
   });
   return count;
 };

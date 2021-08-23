@@ -1,12 +1,16 @@
 import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import * as searchActions from '../../actions/search';
-import { notNull, getChangedCount } from './Filters';
+import { getChangedCount } from './Filters';
+import Slider from 'rc-slider';
+
+const Range = Slider.createSliderWithTooltip(Slider.Range);
 
 class AdvancedFilters extends React.Component {
   render() {
+    const { open, refProp } = {...this.props}
     return (
-      <div id='advanced-filters' className='row space-between' ref={this.props.refProp}>
+      <div id='advanced-filters' className={`row space-between ${open ? 'open' : ''}`} ref={refProp}>
         <AdvancedFilterColumn type='earlier' {...this.props} />
         {/*<div className='similarity-circle opacity-0' />*/}
         <AdvancedFilterColumn type='later' {...this.props} />
@@ -19,12 +23,12 @@ const AdvancedFilterColumn = props => {
   const ref = useRef();
   const [dirty, setDirty] = useState(false);
 
-  const setField = (childProps, e) => {
+  const setField = (type, field, val) => {
     setDirty(true);
     props.setField({
-      earlierLater: childProps.type.toLowerCase(),
-      field: childProps.field.field,
-      value: e.target.value,
+      earlierLater: type.toLowerCase(),
+      field: field.toLowerCase(),
+      value: val,
     });
   };
 
@@ -46,15 +50,23 @@ const AdvancedFilterColumn = props => {
     {
       label: 'Author',
       field: 'author',
+      type: 'input',
     },
     {
       label: 'Title',
       field: 'title',
+      type: 'input',
     },
     {
       label: 'File Id',
       field: 'fileId',
+      type: 'input',
     },
+    {
+      label: 'Match Length',
+      field: 'length',
+      type: 'range'
+    }
   ];
 
   const clearable = getChangedCount(props.type, props.advanced) > 0;
@@ -66,16 +78,24 @@ const AdvancedFilterColumn = props => {
         return (
           <div key={f.field} className='row justify-start align-center'>
             <div className='label'>{f.label}</div>
-            <AdvancedFilterInput
-              type={props.type}
-              field={f}
-              defaultValue={
-                notNull(props.advanced[props.type][f.field])
-                  ? props.advanced[props.type][f.field]
-                  : ''
-              }
-              onChange={setField}
-            />
+            {
+              f.type === 'input'
+                ? <AdvancedFilterInput
+                    type={props.type}
+                    field={f.field}
+                    defaultValue={props.advanced[props.type][f.field]}
+                    onChange={setField}
+                  />
+                : f.type === 'range'
+                  ? <Range
+                      min={1}
+                      max={25}
+                      step={1}
+                      value={props.advanced[props.type][f.field]}
+                      onChange={(val) => setField(props.type, f.field, val)}
+                    />
+                  : null
+            }
           </div>
         );
       })}
@@ -98,7 +118,7 @@ const AdvancedFilterColumn = props => {
 
 const AdvancedFilterInput = props => {
   return (
-    <input type='text' defaultValue={props.defaultValue} onChange={e => props.onChange(props, e)} />
+    <input type='text' defaultValue={props.defaultValue} onChange={e => props.onChange(props.type, props.field, e.target.value)} />
   );
 };
 
