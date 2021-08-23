@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import Filters from '../filters/Filters';
 import Result, { ResultProps } from './Result';
 import Loader from '../partials/Loader';
-import { fetchSearchResults, displayMoreResults } from '../../actions/search';
+import { displayMoreResults } from '../../actions/search';
 import { throttle } from 'lodash';
 
 const Results = props => {
-  const { results, loading, displayMoreResults, fetchSearchResults } = {
+  const { results, loading, displayMoreResults } = {
     ...props,
   };
 
@@ -88,7 +88,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   displayMoreResults: () => dispatch(displayMoreResults()),
-  fetchSearchResults: () => dispatch(fetchSearchResults()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Results);

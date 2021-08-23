@@ -1,5 +1,12 @@
 const maxDisplayedStep = 10;
 
+export const defaultAdvanced = {
+  title: '',
+  author: '',
+  fileId: '',
+  length: [1, 25],
+}
+
 const initialState = {
   results: [],
   allResults: [],
@@ -15,16 +22,8 @@ const initialState = {
 
   // advanced filters
   advanced: {
-    earlier: {
-      title: false,
-      author: false,
-      fileId: false,
-    },
-    later: {
-      title: false,
-      author: false,
-      fileId: false,
-    },
+    earlier: defaultAdvanced,
+    later: defaultAdvanced,
   },
 
   // metadata associated with search results
@@ -76,7 +75,7 @@ const searchReducer = (state = initialState, action) => {
     case 'CLEAR_ADVANCED_FILTER_TYPE':
       return Object.assign({}, state, {
         advanced: Object.assign({}, state.advanced, {
-          [action.earlierLater.toLowerCase()]: {},
+          [action.earlierLater.toLowerCase()]: defaultAdvanced,
         }),
       });
 

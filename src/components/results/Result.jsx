@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { toggleFavorite, sort } from '../../actions/favorite';
+import { toggleFavorite } from '../../actions/favorite';
 import { visualize } from '../../actions/waffle';
 import ReadIcon from './icons/ReadIcon';
 import FavoriteIcon from './icons/FavoriteIcon';

@@ -73,7 +73,7 @@
 }
 
 #advanced-filters.open {
-  height: 185px;
+  height: 215px;
 }
 
 /**
@@ -114,10 +114,11 @@
 }
 
 .advanced-filter-column .row .label {
-  width: 45px;
+  width: 75px;
   text-align: right;
   margin-right: 15px;
   font-size: 12px;
+  white-space: nowrap;
 }
 
 .advanced-filter-column input,
@@ -177,4 +178,20 @@
   color: #fff;
   width: 14px;
   height: 14px;
+}
+
+/**
+ * Filters slider
+ **/
+
+#advanced-filters .rc-slider-track {
+  background-color: #71ccce;
+}
+
+#advanced-filters .rc-slider-handle {
+  border: solid 2px #71ccce;
+}
+
+#advanced-filters .rc-slider-rail {
+  background-color: #d4d1d1;
 }

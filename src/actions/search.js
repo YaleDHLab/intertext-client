@@ -141,11 +141,16 @@ export const fetchSearchResults = () => {
       dispatch(fetchMoreSearchResults());
     };
     // check to see if we need to run the first search result
-    state.search.sortIndex && state.typeahead.metadata
-      ? runSearch()
-      : Promise.all([dispatch(fetchSortIndex()), dispatch(fetchTypeaheadMetadata())]).then(v => {
-          runSearch();
-        });
+    if (state.search.sortIndex && state.typeahead.metadata) {
+      runSearch()
+    } else {
+      Promise.all([
+        dispatch(fetchSortIndex()), //
+        dispatch(fetchTypeaheadMetadata()),
+      ]).then(v => {
+        runSearch();
+      });
+    }
   };
 };
 
@@ -223,8 +228,10 @@ const scrollToCardsTop = () => {
 const getFilteredSortIndex = state => {
   const { sortIndex, advanced, similarity } = { ...state.search };
   const { fileIds, field, query } = { ...state.typeahead };
+
   // handle case where Results.jsx runs first search instead of '../store.js'
   if (!fileIds) return;
+
   // given a query and a map from strings to lists of values, return values that match the query
   const getValuesOfMatchingKeys = (q, map) => {
     let s = new Set();
@@ -272,8 +279,10 @@ const getFilteredSortIndex = state => {
   // return the filtered sort index
   return sortIndex.filter(item => {
     // destructure a single row from the sorted match index
-    const [, matchEarlierFileId, matchLaterFileId, matchSimilarity] = item;
+    const [, matchEarlierFileId, matchLaterFileId, matchSimilarity, earlierWindows, laterWindows] = item;
     if (matchSimilarity < similarity[0] || matchSimilarity > similarity[1]) return false;
+    if (earlierWindows < advanced.earlier.length[0] || earlierWindows > advanced.earlier.length[1]) return false;
+    if (laterWindows < advanced.later.length[0] || laterWindows > advanced.later.length[1]) return false;
     if (!filterFileIds.earlier.has(matchEarlierFileId)) return false;
     if (!filterFileIds.later.has(matchLaterFileId)) return false;
     if (
