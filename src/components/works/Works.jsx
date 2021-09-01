@@ -23,7 +23,7 @@ const Works = props => {
       <h1>Works</h1>
       <div>
         {sorted.map((m, idx) => (
-          <div className='work-row' key={idx}>
+          <div className='work-row row align-center' key={idx}>
             <div className='work-author'>{m.author}, </div>
             {m.matches ? (
               <Link to={'/cards'} onClick={e => onClick(m.title, e)}>
