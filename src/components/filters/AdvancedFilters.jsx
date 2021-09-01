@@ -1,19 +1,79 @@
 import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import * as searchActions from '../../actions/search';
-import { getChangedCount } from './Filters';
 import Slider from 'rc-slider';
 
 const Range = Slider.createSliderWithTooltip(Slider.Range);
 
 class AdvancedFilters extends React.Component {
+  constructor(props) {
+    super(props)
+    this.setLength = this.setLength.bind(this);
+    this.setDisplayedLength = this.setDisplayedLength.bind(this);
+    this.setSimilarity = this.setSimilarity.bind(this);
+    this.setDisplayedSimilarity = this.setDisplayedSimilarity.bind(this);
+    this.clearAdvanced = this.clearAdvanced.bind(this);
+  }
+
+  setDisplayedLength(val) {
+    this.props.setDisplayedLength(val);
+  }
+
+  setLength(val) {
+    this.props.setLength(val);
+    this.props.search();
+  }
+
+  setDisplayedSimilarity(val) {
+    this.props.setDisplayedSimilarity(val);
+  }
+
+  setSimilarity(val) {
+    this.props.setSimilarity(val);
+    this.props.search();
+  }
+
+  clearAdvanced() {
+    clearInputs(document.querySelector('#advanced-filter-columns'));
+    this.props.clearAdvanced();
+  }
+
   render() {
-    const { open, refProp } = {...this.props}
+    const { open, selectionCount, refProp, displayedLength, displayedSimilarity } = {...this.props}
+    let className = 'col space-between ';
+    if (open) className += 'open ';
+    if (selectionCount > 0) className += 'changed ';
     return (
-      <div id='advanced-filters' className={`row space-between ${open ? 'open' : ''}`} ref={refProp}>
-        <AdvancedFilterColumn type='earlier' {...this.props} />
-        {/*<div className='similarity-circle opacity-0' />*/}
-        <AdvancedFilterColumn type='later' {...this.props} />
+      <div id='advanced-filters' className={className} ref={refProp}>
+        <div id='clear-advanced-filter' onClick={this.clearAdvanced}>Clear ⨉</div>
+        <div id='shared-advanced-filters'>
+          <div className='shared-advanced-filter row align-center'>
+            <div className='label'>Match Length</div>
+            <Range
+              min={1}
+              max={25}
+              step={1}
+              value={displayedLength}
+              onChange={(val) => this.setDisplayedLength(val)}
+              onAfterChange={(val) => this.setLength(val)}
+            />
+          </div>
+          <div className='shared-advanced-filter row align-center'>
+            <div className='label'>Similarity</div>
+            <Range
+              min={1}
+              max={100}
+              step={1}
+              value={displayedSimilarity}
+              onChange={(val) => this.setDisplayedSimilarity(val)}
+              onAfterChange={(val) => this.setSimilarity(val)}
+            />
+          </div>
+        </div>
+        <div id='advanced-filter-columns' className='row'>
+          <AdvancedFilterColumn earlierLater='earlier' {...this.props} />
+          <AdvancedFilterColumn earlierLater='later' {...this.props} />
+        </div>
       </div>
     );
   }
@@ -23,19 +83,18 @@ const AdvancedFilterColumn = props => {
   const ref = useRef();
   const [dirty, setDirty] = useState(false);
 
-  const setField = (type, field, val) => {
+  const setField = (earlierLater, field, val) => {
     setDirty(true);
     props.setField({
-      earlierLater: type.toLowerCase(),
-      field: field.toLowerCase(),
+      earlierLater: earlierLater,
+      field: field,
       value: val,
     });
   };
 
-  const clear = () => {
-    const elems = ref.current.querySelectorAll('input');
-    elems.forEach(e => (e.value = ''));
-    props.clear(props.type);
+  const clearColumn = () => {
+    clearInputs(ref.current);
+    props.clearColumn(props.earlierLater);
   };
 
   const search = () => {
@@ -50,51 +109,37 @@ const AdvancedFilterColumn = props => {
     {
       label: 'Author',
       field: 'author',
-      type: 'input',
+      type: 'text',
     },
     {
       label: 'Title',
       field: 'title',
-      type: 'input',
+      type: 'text',
     },
     {
       label: 'File Id',
       field: 'fileId',
-      type: 'input',
+      type: 'number',
     },
-    {
-      label: 'Match Length',
-      field: 'length',
-      type: 'range'
-    }
   ];
-
-  const clearable = getChangedCount(props.type, props.advanced) > 0;
 
   return (
     <div className='advanced-filter-column flex-1' ref={ref}>
-      <div className='advanced-filter-column-label'>{titleCase(props.type)} Text</div>
+      <div className='advanced-filter-column-label'>{titleCase(props.earlierLater)} Text</div>
       {fields.map(f => {
         return (
           <div key={f.field} className='row justify-start align-center'>
             <div className='label'>{f.label}</div>
             {
-              f.type === 'input'
+              f.type === 'text' || f.type === 'number'
                 ? <AdvancedFilterInput
-                    type={props.type}
+                    type={f.type}
                     field={f.field}
-                    defaultValue={props.advanced[props.type][f.field]}
+                    earlierLater={props.earlierLater}
+                    defaultValue={props.advanced[props.earlierLater][f.field]}
                     onChange={setField}
                   />
-                : f.type === 'range'
-                  ? <Range
-                      min={1}
-                      max={25}
-                      step={1}
-                      value={props.advanced[props.type][f.field]}
-                      onChange={(val) => setField(props.type, f.field, val)}
-                    />
-                  : null
+                : null
             }
           </div>
         );
@@ -102,9 +147,11 @@ const AdvancedFilterColumn = props => {
       <div className='advanced-filter-footer justify-end row align-center'>
         <div
           className={
-            clearable ? 'advanced-filter-clear clearable' : 'advanced-filter-clear disabled'
+            props.advanced[props.earlierLater].changed > 0
+              ? 'advanced-filter-clear clearable'
+              : 'advanced-filter-clear disabled'
           }
-          onClick={clear}
+          onClick={clearColumn}
         >
           Clear
         </div>
@@ -118,9 +165,17 @@ const AdvancedFilterColumn = props => {
 
 const AdvancedFilterInput = props => {
   return (
-    <input type='text' defaultValue={props.defaultValue} onChange={e => props.onChange(props.type, props.field, e.target.value)} />
+    <input
+      defaultValue={props.defaultValue}
+      onChange={e => props.onChange(props.earlierLater, props.field, e.target.value)}
+      type={props.type} />
   );
 };
+
+const clearInputs = elem => {
+  const elems = elem.querySelectorAll('input');
+  elems.forEach(e => (e.value = ''));
+}
 
 const titleCase = s => {
   return s.substring(0, 1).toUpperCase() + s.substring(1, s.length).toLowerCase();
@@ -128,12 +183,21 @@ const titleCase = s => {
 
 const mapStateToProps = state => ({
   advanced: state.search.advanced,
+  length: state.search.advanced.length,
+  displayedLength: state.search.advanced.displayedLength,
+  similarity: state.search.advanced.similarity,
+  displayedSimilarity: state.search.advanced.displayedSimilarity,
 });
 
 const mapDispatchToProps = dispatch => ({
   setField: obj => dispatch(searchActions.setAdvancedFilterField(obj)),
-  clear: type => dispatch(searchActions.clearAdvancedFilterType(type)),
+  setLength: (val) => dispatch(searchActions.setLength(val)),
+  setDisplayedLength: (val) => dispatch(searchActions.setDisplayedLength(val)),
+  setSimilarity: (val) => dispatch(searchActions.setSimilarity(val)),
+  setDisplayedSimilarity: (val) => dispatch(searchActions.setDisplayedSimilarity(val)),
+  clearColumn: type => dispatch(searchActions.clearAdvancedFilterType(type)),
   search: () => dispatch(searchActions.fetchSearchResults()),
+  clearAdvanced: () => dispatch(searchActions.clearAdvancedFilters()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdvancedFilters);

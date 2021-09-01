@@ -4,10 +4,10 @@ export const defaultAdvanced = {
   title: '',
   author: '',
   fileId: '',
-  length: [1, 25],
+  changed: 0,
 }
 
-const initialState = {
+export const initialState = {
   results: [],
   allResults: [],
   maxDisplayed: maxDisplayedStep,
@@ -16,12 +16,13 @@ const initialState = {
   sortField: 'similarity',
   sortIndex: null,
 
-  // similarity range
-  similarity: [0, 100],
-  displayedSimilarity: [0, 100],
-
   // advanced filters
   advanced: {
+    similarity: [1, 100],
+    displayedSimilarity: [1, 100],
+    length: [1, 25],
+    displayedLength: [1, 25],
+    changed: 0,
     earlier: defaultAdvanced,
     later: defaultAdvanced,
   },
@@ -49,35 +50,86 @@ const searchReducer = (state = initialState, action) => {
         sortIndex: action.sortIndex,
       });
 
-    case 'SET_SIMILARITY':
-      return Object.assign({}, state, {
-        similarity: action.val,
-      });
-
-    case 'SET_DISPLAYED_SIMILARITY':
-      return Object.assign({}, state, {
-        displayedSimilarity: action.val,
-      });
-
     case 'SET_ADVANCED_FILTER':
+      const t = action.earlierLater;
+      const field = action.field;
+      // convert types here
+      const val = action.field === 'fileId'
+        ? action.value
+          ? parseInt(action.value)
+          : ''
+        : action.value;
+      // set the new earlier/later field values
+      let col = Object.assign({}, state.advanced[t], {
+        [field]: val,
+      });
+      // identify the number of fields that have changed
+      let count = 0;
+      Object.keys(defaultAdvanced).forEach(function(key) {
+        if (key !== 'changed') {
+          if (defaultAdvanced[key] !== col[key]) count++;
+        }
+      })
+      col.changed = count;
+      // update the advanced column state
       return Object.assign({}, state, {
         advanced: Object.assign({}, state.advanced, {
-          [action.earlierLater]: Object.assign(
-            {},
-            state.advanced[action.earlierLater.toLowerCase()],
-            {
-              [action.field]: action.field === 'fileId' ? parseInt(action.value) : action.value,
-            }
-          ),
-        }),
+          [t]: col
+        })
       });
+
+    case 'SET_ADVANCED_FILTER_LENGTH': {
+      // identify the number of shared filter fields that have changed
+      return Object.assign({}, state, {
+        advanced: Object.assign({}, state.advanced, {
+          length: action.val,
+        })
+      })
+    }
+
+    case 'SET_ADVANCED_FILTER_DISPLAYED_LENGTH': {
+      return Object.assign({}, state, {
+        advanced: Object.assign({}, state.advanced, {
+          displayedLength: action.val,
+        })
+      })
+    }
+
+    case 'SET_ADVANCED_FILTER_SIMILARITY': {
+      return Object.assign({}, state, {
+        advanced: Object.assign({}, state.advanced, {
+          similarity: action.val,
+        })
+      })
+    }
+
+    case 'SET_ADVANCED_FILTER_DISPLAYED_SIMILARITY': {
+      return Object.assign({}, state, {
+        advanced: Object.assign({}, state.advanced, {
+          displayedSimilarity: action.val,
+        })
+      })
+    }
+
+    case 'SET_ADVANCED_FILTER_CHANGE_COUNT': {
+      return Object.assign({}, state, {
+        advanced: Object.assign({}, state.advanced, {
+          changed: getSharedChangeCount(state),
+        })
+      })
+    }
 
     case 'CLEAR_ADVANCED_FILTER_TYPE':
       return Object.assign({}, state, {
         advanced: Object.assign({}, state.advanced, {
-          [action.earlierLater.toLowerCase()]: defaultAdvanced,
+          [action.earlierLater]: defaultAdvanced,
         }),
       });
+
+    case 'CLEAR_ADVANCED_FILTERS':
+      return Object.assign({}, state, {
+        advanced: Object.assign({}, initialState.advanced)
+      })
 
     case 'LOAD_SEARCH_FROM_URL':
       let update = Object.assign({}, state, {
@@ -127,5 +179,13 @@ const searchReducer = (state = initialState, action) => {
       return state;
   }
 };
+
+const getSharedChangeCount = state => {
+  let count = 0;
+  ['similarity', 'length'].forEach(function(f) {
+    if (state.advanced[f].toString() !== initialState.advanced[f].toString()) count++;
+  })
+  return count;
+}
 
 export default searchReducer;

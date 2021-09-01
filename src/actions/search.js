@@ -10,26 +10,6 @@ import {
 } from './typeahead';
 
 /**
- * Similarity
- **/
-
-export const setDisplayedSimilarity = val => ({
-  type: 'SET_DISPLAYED_SIMILARITY',
-  val: val,
-});
-
-export const setSimilarityAndSearch = val => {
-  return dispatch => {
-    dispatch({
-      type: 'SET_SIMILARITY',
-      val: val,
-    });
-    dispatch(scrollToCardsTop());
-    dispatch(fetchSearchResults());
-  };
-};
-
-/**
  * Sort
  **/
 
@@ -76,6 +56,44 @@ export const clearAdvancedFilterType = type => {
     });
   };
 };
+
+export const setLength = val => {
+  return (dispatch) => {
+    dispatch({
+      type: 'SET_ADVANCED_FILTER_LENGTH',
+      val: val,
+    })
+    dispatch({
+      type: 'SET_ADVANCED_FILTER_CHANGE_COUNT',
+    })
+  }
+}
+
+export const setDisplayedLength = val => ({
+  type: 'SET_ADVANCED_FILTER_DISPLAYED_LENGTH',
+  val: val,
+})
+
+export const setSimilarity = val => {
+  return (dispatch) => {
+    dispatch({
+      type: 'SET_ADVANCED_FILTER_SIMILARITY',
+      val: val,
+    })
+    dispatch({
+      type: 'SET_ADVANCED_FILTER_CHANGE_COUNT',
+    })
+  }
+}
+
+export const setDisplayedSimilarity = val => ({
+  type: 'SET_ADVANCED_FILTER_DISPLAYED_SIMILARITY',
+  val: val,
+})
+
+export const clearAdvancedFilters = () => ({
+  type: 'CLEAR_ADVANCED_FILTERS'
+})
 
 /**
  * Search + URL interactions
@@ -279,10 +297,9 @@ const getFilteredSortIndex = state => {
   // return the filtered sort index
   return sortIndex.filter(item => {
     // destructure a single row from the sorted match index
-    const [, matchEarlierFileId, matchLaterFileId, matchSimilarity, earlierWindows, laterWindows] = item;
-    if (matchSimilarity < similarity[0] || matchSimilarity > similarity[1]) return false;
-    if (earlierWindows < advanced.earlier.length[0] || earlierWindows > advanced.earlier.length[1]) return false;
-    if (laterWindows < advanced.later.length[0] || laterWindows > advanced.later.length[1]) return false;
+    const [, matchEarlierFileId, matchLaterFileId, matchLength, matchSimilarity] = item;
+    if (matchSimilarity < advanced.similarity[0] || matchSimilarity > advanced.similarity[1]) return false;
+    if (matchLength < advanced.length[0] || matchLength > advanced.length[1]) return false;
     if (!filterFileIds.earlier.has(matchEarlierFileId)) return false;
     if (!filterFileIds.later.has(matchLaterFileId)) return false;
     if (

@@ -32,7 +32,7 @@ const Sankey = props => {
       const nodes = {};
       const links = {};
       sortIndex.forEach(i => {
-        const [, matchEarlierFileId, matchLaterFileId, similarity] = i;
+        const [matchIndex, matchEarlierFileId, matchLaterFileId, matchLength, similarity] = i;
         const a = matchEarlierFileId;
         const b = matchLaterFileId;
         // create node labels
