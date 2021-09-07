@@ -91,9 +91,15 @@ export const setDisplayedSimilarity = val => ({
   val: val,
 })
 
-export const clearAdvancedFilters = () => ({
-  type: 'CLEAR_ADVANCED_FILTERS'
-})
+export const clearAdvancedFilters = () => {
+  return (dispatch) => {
+    dispatch({
+      type: 'CLEAR_ADVANCED_FILTERS'
+    })
+    dispatch(setTypeaheadQuery(''));
+    dispatch(fetchSearchResults());
+  }
+}
 
 /**
  * Search + URL interactions

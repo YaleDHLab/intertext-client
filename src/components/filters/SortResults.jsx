@@ -16,9 +16,11 @@ class SortResults extends React.Component {
     return (
       <select className='sort-results' value={this.props.sortField} onChange={this.handleChange}>
         <option disabled>Sort By</option>
-        <option value='author'>Author</option>
-        <option value='year'>Date</option>
         <option value='similarity'>Similarity</option>
+        <option value='length'>Length</option>
+        <option value='author'>Author</option>
+        <option value='title'>Title</option>
+        <option value='year'>Date</option>
       </select>
     );
   }
