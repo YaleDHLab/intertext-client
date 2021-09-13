@@ -303,19 +303,28 @@ const getFilteredSortIndex = state => {
   // return the filtered sort index
   return sortIndex.filter(item => {
     // destructure a single row from the sorted match index
-    const [, matchEarlierFileId, matchLaterFileId, matchLength, matchSimilarity] = item;
-    if (matchSimilarity < advanced.similarity[0] || matchSimilarity > advanced.similarity[1]) return false;
-    if (matchLength < advanced.length[0] || matchLength > advanced.length[1]) return false;
-    if (!filterFileIds.earlier.has(matchEarlierFileId)) return false;
-    if (!filterFileIds.later.has(matchLaterFileId)) return false;
+    const row = parseSortIndexRow(item);
+    if (row.similarity < advanced.similarity[0] || row.similarity > advanced.similarity[1]) return false;
+    if (row.length < advanced.length[0] || row.length > advanced.length[1]) return false;
+    if (!filterFileIds.earlier.has(row.earlierId)) return false;
+    if (!filterFileIds.later.has(row.laterId)) return false;
     if (
-      !filterFileIds.either.has(matchEarlierFileId) &&
-      !filterFileIds.either.has(matchLaterFileId)
+      !filterFileIds.either.has(row.earlierId) &&
+      !filterFileIds.either.has(row.laterId)
     )
       return false;
     return true;
   });
 };
+
+export const parseSortIndexRow = arr => ({
+  id: arr[0],
+  earlierId: arr[1],
+  laterId: arr[2],
+  length: arr[3],
+  probability: arr[4],
+  similarity: arr[5],
+})
 
 /**
  * Match file loading

@@ -24,9 +24,9 @@ const Sankey = props => {
       // obtain a mapping from match id to match objects
       let matchIdMap = {};
       sortIndex.forEach(i => {
-        const [fileIdA, matchId, , ,] = i;
-        matchIdMap[matchId] = matchIdMap[matchId] || [];
-        matchIdMap[matchId].push(fileIdA);
+        const row = searchActions.parseSortIndexRow(i);
+        matchIdMap[row.earlierId] = matchIdMap[row.earlierId] || [];
+        matchIdMap[row.earlierId].push(row.laterId);
       });
       // parse the data to be represented
       const nodes = {};
