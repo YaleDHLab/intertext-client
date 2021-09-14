@@ -13,7 +13,7 @@ export const initialState = {
   maxDisplayed: maxDisplayedStep,
 
   // sort
-  sortField: 'similarity',
+  sortField: 'length',
   sortIndex: null,
 
   // advanced filters
