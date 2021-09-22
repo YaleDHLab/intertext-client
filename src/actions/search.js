@@ -317,14 +317,16 @@ const getFilteredSortIndex = state => {
   });
 };
 
-export const parseSortIndexRow = arr => ({
-  id: arr[0],
-  earlierId: arr[1],
-  laterId: arr[2],
-  length: arr[3],
-  probability: arr[4],
-  similarity: arr[5],
-})
+export const parseSortIndexRow = arr => {
+  return {
+    id: arr[0],
+    earlierId: arr[1],
+    laterId: arr[2],
+    length: arr[3],
+    probability: arr[4],
+    similarity: arr[5],
+  }
+}
 
 /**
  * Match file loading

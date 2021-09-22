@@ -32,9 +32,9 @@ const Sankey = props => {
       const nodes = {};
       const links = {};
       sortIndex.forEach(i => {
-        const [matchIndex, matchEarlierFileId, matchLaterFileId, matchLength, similarity] = i;
-        const a = matchEarlierFileId;
-        const b = matchLaterFileId;
+        const row = searchActions.parseSortIndexRow(i);
+        const a = row.earlierId;
+        const b = row.laterId;
         // create node labels
         const aLabel = fileIdToLabel[a];
         const bLabel = fileIdToLabel[b];
@@ -54,7 +54,7 @@ const Sankey = props => {
           similarity: [],
         };
         links[sankeyIdA][sankeyIdB]['count'] += 1;
-        links[sankeyIdA][sankeyIdB]['similarity'].push(similarity);
+        links[sankeyIdA][sankeyIdB]['similarity'].push(row.similarity);
       });
 
       const l = [];
