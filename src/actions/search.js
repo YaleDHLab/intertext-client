@@ -58,48 +58,48 @@ export const clearAdvancedFilterType = type => {
 };
 
 export const setLength = val => {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({
       type: 'SET_ADVANCED_FILTER_LENGTH',
       val: val,
-    })
+    });
     dispatch({
       type: 'SET_ADVANCED_FILTER_CHANGE_COUNT',
-    })
-  }
-}
+    });
+  };
+};
 
 export const setDisplayedLength = val => ({
   type: 'SET_ADVANCED_FILTER_DISPLAYED_LENGTH',
   val: val,
-})
+});
 
 export const setSimilarity = val => {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({
       type: 'SET_ADVANCED_FILTER_SIMILARITY',
       val: val,
-    })
+    });
     dispatch({
       type: 'SET_ADVANCED_FILTER_CHANGE_COUNT',
-    })
-  }
-}
+    });
+  };
+};
 
 export const setDisplayedSimilarity = val => ({
   type: 'SET_ADVANCED_FILTER_DISPLAYED_SIMILARITY',
   val: val,
-})
+});
 
 export const clearAdvancedFilters = () => {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({
-      type: 'CLEAR_ADVANCED_FILTERS'
-    })
+      type: 'CLEAR_ADVANCED_FILTERS',
+    });
     dispatch(setTypeaheadQuery(''));
     dispatch(fetchSearchResults());
-  }
-}
+  };
+};
 
 /**
  * Search + URL interactions
@@ -166,7 +166,7 @@ export const fetchSearchResults = () => {
     };
     // check to see if we need to run the first search result
     if (state.search.sortIndex && state.typeahead.metadata) {
-      runSearch()
+      runSearch();
     } else {
       Promise.all([
         dispatch(fetchSortIndex()), //
@@ -304,27 +304,27 @@ const getFilteredSortIndex = state => {
   return sortIndex.filter(item => {
     // destructure a single row from the sorted match index
     const row = parseSortIndexRow(item);
-    if (row.similarity < advanced.similarity[0] || row.similarity > advanced.similarity[1]) return false;
+    if (row.similarity < advanced.similarity[0] || row.similarity > advanced.similarity[1])
+      return false;
     if (row.length < advanced.length[0] || row.length > advanced.length[1]) return false;
     if (!filterFileIds.earlier.has(row.earlierId)) return false;
     if (!filterFileIds.later.has(row.laterId)) return false;
-    if (
-      !filterFileIds.either.has(row.earlierId) &&
-      !filterFileIds.either.has(row.laterId)
-    )
+    if (!filterFileIds.either.has(row.earlierId) && !filterFileIds.either.has(row.laterId))
       return false;
     return true;
   });
 };
 
-export const parseSortIndexRow = arr => ({
-  id: arr[0],
-  earlierId: arr[1],
-  laterId: arr[2],
-  length: arr[3],
-  probability: arr[4],
-  similarity: arr[5],
-})
+export const parseSortIndexRow = arr => {
+  return {
+    id: arr[0],
+    earlierId: arr[1],
+    laterId: arr[2],
+    length: arr[3],
+    probability: arr[4],
+    similarity: arr[5],
+  };
+};
 
 /**
  * Match file loading
