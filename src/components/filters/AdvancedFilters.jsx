@@ -7,7 +7,7 @@ const Range = Slider.createSliderWithTooltip(Slider.Range);
 
 class AdvancedFilters extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.setLength = this.setLength.bind(this);
     this.setDisplayedLength = this.setDisplayedLength.bind(this);
     this.setSimilarity = this.setSimilarity.bind(this);
@@ -39,13 +39,17 @@ class AdvancedFilters extends React.Component {
   }
 
   render() {
-    const { open, selectionCount, refProp, displayedLength, displayedSimilarity } = {...this.props}
+    const { open, selectionCount, refProp, displayedLength, displayedSimilarity } = {
+      ...this.props,
+    };
     let className = 'col space-between ';
     if (open) className += 'open ';
     if (selectionCount > 0) className += 'changed ';
     return (
       <div id='advanced-filters' className={className} ref={refProp}>
-        <div id='clear-advanced-filter' onClick={this.clearAdvanced}>Clear ⨉</div>
+        <div id='clear-advanced-filter' onClick={this.clearAdvanced}>
+          Clear ⨉
+        </div>
         <div id='shared-advanced-filters'>
           <div className='shared-advanced-filter row align-center'>
             <div className='label'>Match Length</div>
@@ -54,8 +58,8 @@ class AdvancedFilters extends React.Component {
               max={25}
               step={1}
               value={displayedLength}
-              onChange={(val) => this.setDisplayedLength(val)}
-              onAfterChange={(val) => this.setLength(val)}
+              onChange={val => this.setDisplayedLength(val)}
+              onAfterChange={val => this.setLength(val)}
             />
           </div>
           <div className='shared-advanced-filter row align-center'>
@@ -65,8 +69,8 @@ class AdvancedFilters extends React.Component {
               max={100}
               step={1}
               value={displayedSimilarity}
-              onChange={(val) => this.setDisplayedSimilarity(val)}
-              onAfterChange={(val) => this.setSimilarity(val)}
+              onChange={val => this.setDisplayedSimilarity(val)}
+              onAfterChange={val => this.setSimilarity(val)}
             />
           </div>
         </div>
@@ -130,17 +134,15 @@ const AdvancedFilterColumn = props => {
         return (
           <div key={f.field} className='row justify-start align-center'>
             <div className='label'>{f.label}</div>
-            {
-              f.type === 'text' || f.type === 'number'
-                ? <AdvancedFilterInput
-                    type={f.type}
-                    field={f.field}
-                    earlierLater={props.earlierLater}
-                    defaultValue={props.advanced[props.earlierLater][f.field]}
-                    onChange={setField}
-                  />
-                : null
-            }
+            {f.type === 'text' || f.type === 'number' ? (
+              <AdvancedFilterInput
+                type={f.type}
+                field={f.field}
+                earlierLater={props.earlierLater}
+                defaultValue={props.advanced[props.earlierLater][f.field]}
+                onChange={setField}
+              />
+            ) : null}
           </div>
         );
       })}
@@ -168,14 +170,15 @@ const AdvancedFilterInput = props => {
     <input
       defaultValue={props.defaultValue}
       onChange={e => props.onChange(props.earlierLater, props.field, e.target.value)}
-      type={props.type} />
+      type={props.type}
+    />
   );
 };
 
 const clearInputs = elem => {
   const elems = elem.querySelectorAll('input');
   elems.forEach(e => (e.value = ''));
-}
+};
 
 const titleCase = s => {
   return s.substring(0, 1).toUpperCase() + s.substring(1, s.length).toLowerCase();
@@ -191,10 +194,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setField: obj => dispatch(searchActions.setAdvancedFilterField(obj)),
-  setLength: (val) => dispatch(searchActions.setLength(val)),
-  setDisplayedLength: (val) => dispatch(searchActions.setDisplayedLength(val)),
-  setSimilarity: (val) => dispatch(searchActions.setSimilarity(val)),
-  setDisplayedSimilarity: (val) => dispatch(searchActions.setDisplayedSimilarity(val)),
+  setLength: val => dispatch(searchActions.setLength(val)),
+  setDisplayedLength: val => dispatch(searchActions.setDisplayedLength(val)),
+  setSimilarity: val => dispatch(searchActions.setSimilarity(val)),
+  setDisplayedSimilarity: val => dispatch(searchActions.setDisplayedSimilarity(val)),
   clearColumn: type => dispatch(searchActions.clearAdvancedFilterType(type)),
   search: () => dispatch(searchActions.fetchSearchResults()),
   clearAdvanced: () => dispatch(searchActions.clearAdvancedFilters()),
