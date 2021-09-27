@@ -6,8 +6,29 @@ import {
   setTypeaheadQuery,
   setTypeaheadIndex,
   setTypeaheadField,
-  fetchTypeaheadMetadata,
+  setTypeaheadMetadata,
 } from './typeahead';
+
+/**
+ * Config
+ **/
+
+const fetchConfig = () => {
+  return (dispatch) => {
+    const url = `/api/config.json`;
+    return fetchJSONFile(url)
+      .then(json => {
+        dispatch({
+          type: 'SET_CONFIG',
+          config: json,
+        });
+        dispatch(setTypeaheadMetadata(json.metadata));
+      })
+      .catch(e => {
+        console.warn('Could not fetch config: ' + e);
+      });
+  }
+}
 
 /**
  * Sort
@@ -170,7 +191,7 @@ export const fetchSearchResults = () => {
     } else {
       Promise.all([
         dispatch(fetchSortIndex()), //
-        dispatch(fetchTypeaheadMetadata()),
+        dispatch(fetchConfig()),
       ]).then(v => {
         runSearch();
       });
@@ -250,7 +271,7 @@ const scrollToCardsTop = () => {
  */
 
 const getFilteredSortIndex = state => {
-  const { sortIndex, advanced, similarity } = { ...state.search };
+  const { sortIndex, advanced } = { ...state.search };
   const { fileIds, field, query } = { ...state.typeahead };
 
   // handle case where Results.jsx runs first search instead of '../store.js'
@@ -299,7 +320,6 @@ const getFilteredSortIndex = state => {
     earlier: getEarlierOrLaterFileIds('earlier', fileIds), // from filters
     later: getEarlierOrLaterFileIds('later', fileIds), // from filters
   };
-
   // return the filtered sort index
   return sortIndex.filter(item => {
     // destructure a single row from the sorted match index
