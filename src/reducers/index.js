@@ -4,6 +4,7 @@ import searchReducer from './searchReducer';
 import favoriteReducer from './favoriteReducer';
 import typeaheadReducer from './typeaheadReducer';
 import scatterplotReducer from './scatterplotReducer';
+import viewerReducer from './viewerReducer';
 import cacheReducer from './cacheReducer';
 
 export const rootReducer = combineReducers({
@@ -12,5 +13,6 @@ export const rootReducer = combineReducers({
   typeahead: typeaheadReducer,
   scatterplot: scatterplotReducer,
   waffle: waffleReducer,
+  viewer: viewerReducer,
   cache: cacheReducer,
 });

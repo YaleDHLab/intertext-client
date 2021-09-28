@@ -138,7 +138,7 @@ export const saveSearchInUrl = () => {
 export const loadSearchFromUrl = () => {
   return (dispatch, getState) => {
     const url = window.location.hash;
-    if (url.includes('sankey') || url.includes('works')) return;
+    if (url.includes('sankey') || url.includes('works') || url.includes('viewer')) return;
     let search = url.split('#/')[1];
     search = search.replace('cards', '');
     if (search.includes('?')) search = search.split('?')[1];
@@ -181,7 +181,6 @@ export const fetchSearchResults = () => {
     const runSearch = () => {
       dispatch(resetMaxDisplayedSearchResults());
       dispatch(setTypeaheadIndex(0));
-      dispatch(loadSearchFromUrl());
       dispatch(scrollToCardsTop());
       dispatch(fetchMoreSearchResults());
     };
@@ -357,21 +356,39 @@ const getMatchFiles = matchFileIDs => {
 };
 
 // Helper to fetch match file from memory or network
-const getMatchFile = matchFileID => {
+export const getWordsFile = matchFileID => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const cacheKey = `words/${matchFileID}.json`;
+    return cacheKey in state.cache
+      ? new Promise((resolve, reject) => resolve(state.cache[cacheKey]))
+      : fetchWordsFile(matchFileID.toString()).then(words => {
+          dispatch(addCacheRecord(cacheKey, words));
+          return words;
+        });
+  };
+};
+
+// Helper to fetch match file from memory or network
+export const getMatchFile = matchFileID => {
   return (dispatch, getState) => {
     const state = getState();
     const cacheKey = `matches/${matchFileID}.json`;
     return cacheKey in state.cache
       ? new Promise((resolve, reject) => resolve(state.cache[cacheKey]))
-      : fetchMatchFile(matchFileID.toString()).then(match => {
+      : fetchMatchFile(matchFileID).then(match => {
           dispatch(addCacheRecord(cacheKey, match));
           return match;
         });
   };
 };
 
+const fetchWordsFile = textID => {
+  return fetchJSONFile('/api/texts/' + textID.toString() + '.json');
+}
+
 export const fetchMatchFile = textID => {
-  return fetchJSONFile('/api/matches/' + String(textID) + '.json');
+  return fetchJSONFile('/api/matches/' + textID.toString() + '.json');
 };
 
 /**

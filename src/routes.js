@@ -6,6 +6,7 @@ import Waffle from './components/charts/Waffle';
 import Sankey from './components/charts/Sankey';
 import Scatterplot from './components/charts/Scatterplot';
 import Works from './components/works/Works';
+import Viewer from './components/viewer/Viewer';
 
 const routes = (
   <App>
@@ -15,6 +16,7 @@ const routes = (
       <Route path='/scatterplot' component={Scatterplot} />
       <Route path='/works' component={Works} />
       <Route path='/cards' component={Results} />
+      <Route path='/viewer/:id' component={Viewer} />
       <Route exact path='/' component={Results}>
         <Redirect to='cards' />
       </Route>

@@ -15,6 +15,7 @@ import './use-type.css';
 import './waffle.css';
 import './sankey.css';
 import './works.css';
+import './viewer.css';
 
 // node module styles
 import 'rc-slider/assets/index.css';
