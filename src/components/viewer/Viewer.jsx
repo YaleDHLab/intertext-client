@@ -1,42 +1,40 @@
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import * as viewerActions from '../../actions/viewer';
 
 const Viewer = props => {
 
   const offscreenRef = useRef();
+  const [rows, setRows] = useState([]);
+  const [matchMap, setMatchMap] = useState({});
+  const loaded = props.match.params.id.toString() === props.fileId.toString() && rows.length;
 
-  // load the data for the requested file
-  const fileId = props.match.params.id;
-  props.getViewerData(fileId);
-
-  // create a map from fileId window to [matches]
-  const matchMap = getMatchMap(props);
-
-  // get the innerHTML content for a row of word objects
-  const getRowText = row => {
-    return row.map(w => w.word).join(' ');
-  }
-
-  // get the list of objects for a given row
-  const getRowMatches = row => {
-
-  }
-
-  console.log(matchMap)
+  useEffect(() => {
+    // load the data for the requested file
+    props.getViewerData(props.match.params.id);
+    // create a map from fileId window to [matches]
+    setRows(getRows(offscreenRef, props));
+    setMatchMap(getMatchMap(props));
+  }, [props.match.params.id, props.fileId, props.matches])
 
   return (
     <div id='page-viewer'>
       <div id='offscreen' ref={offscreenRef} />
       <div id='page-viewer-left'>
         {
-          fileId.toString() === props.fileId.toString()
+          loaded
             ? <div className='viewer-text-column'>
-                {getRows(offscreenRef, props).map((r, ridx) => (
-                  <div key={ridx}
-                    className='line'
-                    dangerouslySetInnerHTML={{__html: getRowText(r)}} />
-                ))}
+                {rows.map((r, ridx) => {
+                  const matches = getRowMatches(r, matchMap);
+                  return (
+                    <div className='row space-between' key={ridx}>
+                      <div
+                        className='line'
+                        dangerouslySetInnerHTML={{__html: getRowText(r)}} />
+                      <div className='match-count'>{matches.length}</div>
+                    </div>
+                  )
+                })}
               </div>
             : <div>LOADING</div>
         }
@@ -64,24 +62,34 @@ const getMatchMap = (props) => {
 const getRows = (offscreenRef, props) => {
   // transform the word array into a sequence of (word, windowId) tuples
   let words = [];
-  let windowIndex = 0;
+  var windows = [];
+  let windowIndex = -1; // -1 because we increment on the first word
   (props.words || []).forEach((word, wordIndex) => {
     if (wordIndex % props.config.window_slide === 0) windowIndex++;
+    // add the current window to the list of windows if needed
+    if (!(windows.length) || windows[windows.length-1] !== windowIndex) {
+      windows.push(windowIndex);
+    }
+    // identify first and last word indices in window. Remove first window if needed
+    var start = windows[0] * props.config.window_slide;
+    var end = start + props.config.window_size;
+    if (wordIndex >= end) {
+      windows = windows.slice(1);
+    }
     // add the word itself
     words.push({
       word: word.replaceAll('<br/>', ''),
-      window: windowIndex,
+      windows: windows.slice(0), // clone the object
     })
     // add any trailing line breaks
     while (word.includes('<br/>')) {
       word = word.replace('<br/>', '');
       words.push({
         word: '<br/>',
-        window: null,
+        windows: null,
       })
     }
   })
-
   var rows = [];
   if (offscreenRef && offscreenRef.current) {
     // add the line number to each word in the words list
@@ -105,9 +113,31 @@ const getRows = (offscreenRef, props) => {
       row.push(words[i]);
     }
   }
-
   return rows;
 }
+
+// get the innerHTML content for a row of word objects
+  const getRowText = (row) => {
+    return row.map(w => w.word).join(' ');
+  }
+
+  // get the list of objects for a given row
+  const getRowMatches = (row, matchMap) => {
+    let ids = new Set();
+    let matches = [];
+    row.forEach(r => {
+      (r.windows || []).forEach(w => {
+        // get the matches for this window
+        if (matchMap[w]) matchMap[w].forEach(m => {
+          if (!ids.has(m._id)) {
+            ids.add(m._id);
+            matches.push(m);
+          }
+        })
+      })
+    });
+    return matches;
+  }
 
 const mapStateToProps = state => ({
   words: state.viewer.words,

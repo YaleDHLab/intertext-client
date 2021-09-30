@@ -4,4 +4,13 @@
   line-height: 1.6em;
   font-weight: 600;
   text-align: left;
+  padding: 10px 30px 30px;
+}
+
+.viewer-text-column .row {
+  cursor: pointer;
+}
+
+.viewer-text-column .row:hover {
+  background: #efefef;
 }
