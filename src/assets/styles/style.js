@@ -6,7 +6,7 @@ import './header.css';
 import './legend.css';
 import './loader.css';
 import './nav.css';
-import './results.css';
+import './cards.css';
 import './scatterplot.css';
 import './similarity-slider.css';
 import './sort-results.css';

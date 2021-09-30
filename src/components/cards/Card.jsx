@@ -8,7 +8,7 @@ import ReadIcon from './icons/ReadIcon';
 import FavoriteIcon from './icons/FavoriteIcon';
 import VisualizeIcon from './icons/VisualizeIcon';
 
-class Result extends React.Component {
+class Card extends React.Component {
   constructor(props) {
     super(props);
     this.getText = this.getText.bind(this);
@@ -45,29 +45,19 @@ class Result extends React.Component {
   }
 
   render() {
+    const author = this.getText('author');
     return (
-      <div className={`result col space-between flex-1 ${this.props.type}`}>
+      <div className={`result col space-between flex-1`}>
         <div className='result-top row space-between align-center'>
-          {this.props.type === 'source' ? (
-            <>
-              <div className='result-title' dangerouslySetInnerHTML={this.getText('title')} />
-              {this.getText('year') ? (
-                <div className='result-year-container'>
-                  <div className='result-year' dangerouslySetInnerHTML={this.getText('year')} />
-                </div>
-              ) : null}
-            </>
-          ) : (
-            <>
-              <div className='result-year-container'>
-                <div className='result-year' dangerouslySetInnerHTML={this.getText('year')} />
-              </div>
-              <div className='result-title' dangerouslySetInnerHTML={this.getText('title')} />
-            </>
-          )}
+          {this.props.type === 'source' || this.props.headerRight
+            ? <HeaderLeft getText={this.getText} />
+            : <HeaderRight getText={this.getText} />
+          }
         </div>
         <div className='result-body flex-1'>
-          <div className='result-author' dangerouslySetInnerHTML={this.getText('author')} />
+          {author && author.__html != 'Unknown'
+          ? <div className='result-author' dangerouslySetInnerHTML={author} />
+          : null}
           <div className='result-match'>
             <span className='prematch' dangerouslySetInnerHTML={this.getText('prematch')} />
             <span className='match' dangerouslySetInnerHTML={this.getText('match', ' ')} />
@@ -104,7 +94,31 @@ class Result extends React.Component {
   }
 }
 
-export const ResultProps = PropTypes.shape({
+const HeaderLeft = props => {
+  return (
+    <>
+      <div className='result-title' dangerouslySetInnerHTML={props.getText('title')} />
+      {props.getText('year') ? (
+        <div className='result-year-container header-left'>
+          <div className='result-year' dangerouslySetInnerHTML={props.getText('year')} />
+        </div>
+      ) : null}
+    </>
+  )
+}
+
+const HeaderRight = props => {
+  return (
+    <>
+      <div className='result-year-container header-right'>
+        <div className='result-year' dangerouslySetInnerHTML={props.getText('year')} />
+      </div>
+      <div className='result-title' dangerouslySetInnerHTML={props.getText('title')} />
+    </>
+  )
+}
+
+export const CardProps = PropTypes.shape({
   _id: PropTypes.number,
   similarity: PropTypes.number.isRequired,
   source_author: PropTypes.string.isRequired,
@@ -130,7 +144,7 @@ export const ResultProps = PropTypes.shape({
   target_year: PropTypes.string.isRequired,
 });
 
-Result.propTypes = {
+Card.propTypes = {
   compare: PropTypes.shape({
     file_id: PropTypes.number,
     segment_ids: PropTypes.string,
@@ -140,7 +154,7 @@ Result.propTypes = {
     source: PropTypes.arrayOf(PropTypes.number),
     target: PropTypes.arrayOf(PropTypes.number),
   }),
-  result: ResultProps,
+  result: CardProps,
   toggleFavorite: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   visualize: PropTypes.func.isRequired,
@@ -156,4 +170,4 @@ const mapDispatchToProps = dispatch => ({
   visualize: obj => dispatch(visualize(obj)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Result);
+export default connect(mapStateToProps, mapDispatchToProps)(Card);
