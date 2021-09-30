@@ -1,16 +1,24 @@
 .viewer-text-column {
-  width: 500px;
+  width: 530px;
   font-size: 13px;
   line-height: 1.6em;
   font-weight: 600;
   text-align: left;
-  padding: 10px 30px 30px;
+  padding: 30px;
 }
 
-.viewer-text-column .row {
+.viewer-text-column .row.selectable {
   cursor: pointer;
 }
 
-.viewer-text-column .row:hover {
+.viewer-text-column .row.selectable:hover {
   background: #efefef;
+}
+
+.viewer-text-column .result-footer-container {
+  opacity: 1;
+}
+
+.viewer-text-column  .match-row {
+  margin-bottom: 20px;
 }

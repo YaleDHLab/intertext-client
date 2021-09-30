@@ -1,12 +1,15 @@
 import { useRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import * as viewerActions from '../../actions/viewer';
+import Card from '../cards/Card';
 
 const Viewer = props => {
 
   const offscreenRef = useRef();
   const [rows, setRows] = useState([]);
   const [matchMap, setMatchMap] = useState({});
+  const [selectedRow, setSelectedRow] = useState({idx: null, matches: []});
+
   const loaded = props.match.params.id.toString() === props.fileId.toString() && rows.length;
 
   useEffect(() => {
@@ -15,30 +18,104 @@ const Viewer = props => {
     // create a map from fileId window to [matches]
     setRows(getRows(offscreenRef, props));
     setMatchMap(getMatchMap(props));
-  }, [props.match.params.id, props.fileId, props.matches])
+  }, [props, props.match.params.id, props.fileId, props.matches])
 
   return (
-    <div id='page-viewer'>
+    <div id='page-viewer' className='row justify-center'>
       <div id='offscreen' ref={offscreenRef} />
-      <div id='page-viewer-left'>
-        {
-          loaded
-            ? <div className='viewer-text-column'>
-                {rows.map((r, ridx) => {
-                  const matches = getRowMatches(r, matchMap);
-                  return (
-                    <div className='row space-between' key={ridx}>
-                      <div
-                        className='line'
-                        dangerouslySetInnerHTML={{__html: getRowText(r)}} />
-                      <div className='match-count'>{matches.length}</div>
-                    </div>
-                  )
-                })}
-              </div>
-            : <div>LOADING</div>
-        }
+      <div className='row'>
+        <div id='page-viewer-left'>
+          {
+            loaded
+              ? <div className='viewer-text-column'>
+                  {rows.map((r, ridx) => (
+                    <TextRow
+                      key={ridx}
+                      r={r}
+                      ridx={ridx}
+                      matchMap={matchMap}
+                      setSelectedRow={setSelectedRow} />
+                  ))}
+                </div>
+              : <div>LOADING</div>
+          }
+        </div>
+        <div id='matches' className='viewer-text-column'>
+          {selectedRow.matches.length
+            ? selectedRow.matches.map((m, midx) => (
+                <MatchRow key={midx} m={m} otherId={props.fileId.toString()} />
+              ))
+            : null
+          }
+        </div>
       </div>
+    </div>
+  )
+}
+
+const MatchRow = props => {
+
+  const isSource = props.otherId === props.m.source_file_id.toString();
+
+  const getRowText = m => {
+    return isSource
+      ? m.target_prematch + m.target_match + m.target_postmatch
+      : m.source_prematch + m.source_match + m.source_postmatch
+  }
+
+  return (
+    <div className='match-row'>
+      <Card result={props.m} type={isSource ? 'source' : 'target'} headerRight={true} />
+    </div>
+  )
+}
+
+const TextRow = props => {
+
+  // get the list of objects for a given row
+  const getRowMatches = (row, matchMap) => {
+    let ids = new Set();
+    let matches = [];
+    row.forEach(r => {
+      (r.windows || []).forEach(w => {
+        // get the matches for this window
+        if (matchMap[w]) matchMap[w].forEach(m => {
+          if (!ids.has(m._id)) {
+            ids.add(m._id);
+            matches.push(m);
+          }
+        })
+      })
+    });
+    return matches;
+  }
+
+  // get the innerHTML content for a row of word objects
+  const getRowText = (row) => {
+    return row.map(w => w.word).join(' ');
+  }
+
+  const onClick = (ridx, matches) => {
+    props.setSelectedRow({
+      idx: ridx,
+      matches: matches,
+    })
+  }
+
+  const getClassName = hasWindows => {
+    let s = 'row space-between';
+    if (hasWindows) s += ' selectable';
+    return s;
+  }
+
+  const { r, ridx, matchMap } = {...props}
+  const matches = getRowMatches(r, matchMap);
+  const hasWindows = r.filter(i => i.windows && i.windows.length).length > 0;
+
+  return (
+    <div className={getClassName(hasWindows)} onClick={e => onClick(ridx, matches)}>
+      <div className='line' dangerouslySetInnerHTML={{__html: getRowText(r)}} />
+      { hasWindows ? <div className='match-count'>{matches.length}</div> : null }
     </div>
   )
 }
@@ -115,29 +192,6 @@ const getRows = (offscreenRef, props) => {
   }
   return rows;
 }
-
-// get the innerHTML content for a row of word objects
-  const getRowText = (row) => {
-    return row.map(w => w.word).join(' ');
-  }
-
-  // get the list of objects for a given row
-  const getRowMatches = (row, matchMap) => {
-    let ids = new Set();
-    let matches = [];
-    row.forEach(r => {
-      (r.windows || []).forEach(w => {
-        // get the matches for this window
-        if (matchMap[w]) matchMap[w].forEach(m => {
-          if (!ids.has(m._id)) {
-            ids.add(m._id);
-            matches.push(m);
-          }
-        })
-      })
-    });
-    return matches;
-  }
 
 const mapStateToProps = state => ({
   words: state.viewer.words,

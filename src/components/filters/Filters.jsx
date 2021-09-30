@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import SortResults from './SortResults';
-import ResultCount from '../results/ResultCount';
+import ResultCount from '../cards/ResultCount';
 import Typeahead from '../typeahead/Typeahead';
 import TypeaheadSelect from '../typeahead/TypeaheadSelect';
 import filterIcon from '../../assets/images/icons/filter-icon.svg';
