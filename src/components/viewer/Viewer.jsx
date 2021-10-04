@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as viewerActions from '../../actions/viewer';
 import Card from '../cards/Card';
 import Loader from '../partials/Loader';
+import * as d3 from 'd3';
 
 const Viewer = props => {
 
@@ -33,6 +34,7 @@ const Viewer = props => {
                     key={ridx}
                     r={r}
                     ridx={ridx}
+                    selectedRow={selectedRow}
                     matchMap={matchMap}
                     setSelectedRow={setSelectedRow} />
                 ))}
@@ -51,23 +53,6 @@ const Viewer = props => {
             <Loader />
           </div>
       }
-    </div>
-  )
-}
-
-const MatchRow = props => {
-
-  const isSource = props.otherId === props.m.source_file_id.toString();
-
-  const getRowText = m => {
-    return isSource
-      ? m.target_prematch + m.target_match + m.target_postmatch
-      : m.source_prematch + m.source_match + m.source_postmatch
-  }
-
-  return (
-    <div className='match-row'>
-      <Card result={props.m} type={isSource ? 'source' : 'target'} headerRight={true} />
     </div>
   )
 }
@@ -106,7 +91,19 @@ const TextRow = props => {
 
   const getClassName = hasWindows => {
     let s = 'row space-between';
-    if (hasWindows) s += ' selectable';
+    if (props.selectedRow.idx !== null) {
+      if (Math.abs(props.selectedRow.idx - props.ridx) < 5) {
+        s += ' selected-context';
+      } else {
+        s += ' not-selected';
+      }
+    }
+    if (props.selectedRow.idx === props.ridx) s += ' selected';
+    if (hasWindows) {
+      s += ' selectable';
+    } else {
+      s += ' not-selectable';
+    }
     return s;
   }
 
@@ -114,10 +111,18 @@ const TextRow = props => {
   const matches = getRowMatches(r, matchMap);
   const hasWindows = r.filter(i => i.windows && i.windows.length).length > 0;
 
+  // get the color for the color block
+  var colorScale = d3.scaleLinear().domain([0, 10]).range(['#eee', '#222']);
+
   return (
-    <div className={getClassName(hasWindows)} onClick={e => onClick(ridx, matches)}>
+    <div className={getClassName(hasWindows)}
+        onClick={e => matches.length ? onClick(ridx, matches) : null}>
       <div className='line' dangerouslySetInnerHTML={{__html: getRowText(r)}} />
-      { hasWindows ? <div className='match-count'>{matches.length}</div> : null }
+      <div className='match-count' style={{
+        background: hasWindows
+          ? colorScale(Math.min(matches.length, 10))
+          : colorScale(0)
+      }} />
     </div>
   )
 }
@@ -193,6 +198,27 @@ const getRows = (offscreenRef, props) => {
     }
   }
   return rows;
+}
+
+/**
+ * Match cards
+ **/
+
+const MatchRow = props => {
+
+  const isSource = props.otherId === props.m.source_file_id.toString();
+
+  const getRowText = m => {
+    return isSource
+      ? m.target_prematch + m.target_match + m.target_postmatch
+      : m.source_prematch + m.source_match + m.source_postmatch
+  }
+
+  return (
+    <div className='match-row'>
+      <Card result={props.m} type={isSource ? 'source' : 'target'} headerRight={true} />
+    </div>
+  )
 }
 
 const mapStateToProps = state => ({

@@ -13,19 +13,56 @@
   padding: 30px;
 }
 
+.viewer-text-column .row {
+  padding-left: 15px;
+  position: relative;
+}
+
 .viewer-text-column .row.selectable {
   cursor: pointer;
+}
+
+.viewer-text-column .row.not-selected {
+  background: #ccc;
+}
+
+.viewer-text-column .row.not-selected,
+.viewer-text-column .row.selected-context {
+  color: #888;
+}
+
+.viewer-text-column .row.selected {
+  color: #000;
+  background: #eaf7f8;
 }
 
 .viewer-text-column .row.selectable:hover {
   background: #efefef;
 }
 
+.viewer-text-column .row.selectable.not-selected:hover {
+  background: #c3c3c3;
+}
+
+.viewer-text-column .row.selected:hover {
+  background: #d8eaeb;
+}
+
+.viewer-text-column .match-count {
+  width: 10px;
+  height: 1.5em;
+  background: #222;
+}
+
+.viewer-text-column .row.selected .match-count {
+  background: #037272 !important;
+}
+
 .viewer-text-column .result-footer-container {
   opacity: 1;
 }
 
-.viewer-text-column  .match-row {
+.viewer-text-column .match-row {
   margin-bottom: 20px;
 }
 
