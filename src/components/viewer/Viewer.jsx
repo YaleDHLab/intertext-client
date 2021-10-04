@@ -112,7 +112,7 @@ const TextRow = props => {
   const hasWindows = r.filter(i => i.windows && i.windows.length).length > 0;
 
   // get the color for the color block
-  var colorScale = d3.scaleLinear().domain([0, 10]).range(['#eee', '#222']);
+  var colorScale = d3.scaleLinear().domain([0, 10]).range(['#eee', '#444']);
 
   return (
     <div className={getClassName(hasWindows)}

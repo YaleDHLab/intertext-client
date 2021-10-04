@@ -183,6 +183,14 @@
   font-weight: 600;
 }
 
+.result-year-container.header-left .result-year {
+  transform: skew(-38deg);
+}
+
+.result-year-container.header-right .result-year {
+  transform: skew(38deg);
+}
+
 .result.source .result-year {
   transform: skew(-38deg);
 }
