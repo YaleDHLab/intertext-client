@@ -1,5 +1,11 @@
+#page-viewer {
+  height: 100%;
+  position: relative;
+}
+
 .viewer-text-column {
   width: 530px;
+  flex: 0 0 530px;
   font-size: 13px;
   line-height: 1.6em;
   font-weight: 600;
@@ -21,4 +27,29 @@
 
 .viewer-text-column  .match-row {
   margin-bottom: 20px;
+}
+
+#viewer-text-columns {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+#viewer-left {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow: auto;
+}
+
+#viewer-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
 }

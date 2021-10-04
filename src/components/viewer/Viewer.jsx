@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import * as viewerActions from '../../actions/viewer';
 import Card from '../cards/Card';
+import Loader from '../partials/Loader';
 
 const Viewer = props => {
 
@@ -23,32 +24,33 @@ const Viewer = props => {
   return (
     <div id='page-viewer' className='row justify-center'>
       <div id='offscreen' ref={offscreenRef} />
-      <div className='row'>
-        <div id='page-viewer-left'>
-          {
-            loaded
-              ? <div className='viewer-text-column'>
-                  {rows.map((r, ridx) => (
-                    <TextRow
-                      key={ridx}
-                      r={r}
-                      ridx={ridx}
-                      matchMap={matchMap}
-                      setSelectedRow={setSelectedRow} />
-                  ))}
-                </div>
-              : <div>LOADING</div>
-          }
-        </div>
-        <div id='matches' className='viewer-text-column'>
-          {selectedRow.matches.length
-            ? selectedRow.matches.map((m, midx) => (
-                <MatchRow key={midx} m={m} otherId={props.fileId.toString()} />
-              ))
-            : null
-          }
-        </div>
-      </div>
+      {loaded
+        ? (
+            <div id='viewer-text-columns'>
+              <div id='viewer-left' className='viewer-text-column'>
+                {rows.map((r, ridx) => (
+                  <TextRow
+                    key={ridx}
+                    r={r}
+                    ridx={ridx}
+                    matchMap={matchMap}
+                    setSelectedRow={setSelectedRow} />
+                ))}
+              </div>
+              <div id='viewer-right' className='viewer-text-column'>
+                {selectedRow.matches.length
+                  ? selectedRow.matches.map((m, midx) => (
+                      <MatchRow key={midx} m={m} otherId={props.fileId.toString()} />
+                    ))
+                  : null
+                }
+              </div>
+            </div>
+          )
+        : <div className='col align-center justify-center'>
+            <Loader />
+          </div>
+      }
     </div>
   )
 }
