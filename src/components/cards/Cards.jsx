@@ -50,7 +50,7 @@ const CardPairs = props => {
   return (
     <div>
       {props.results.map((result, idx) => (
-        <div className='result-pair row'>
+        <div className='result-pair row' key={idx}>
           <Card result={result} type='source' />
           <div className='similarity-circle row justify-center align-center'>
             <div className='similarity row justify-center align-center'>

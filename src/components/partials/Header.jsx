@@ -16,10 +16,6 @@ const routes = [
     route: '/works',
     label: 'Works',
   },
-  {
-    route: '/viewer/1',
-    label: 'Viewer',
-  }
 ];
 
 const Header = props => {
