@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Chart, { WaffleDataProps } from './Chart';
 import Legend from './Legend';
 import Loader from '../partials/Loader';
-import Result, { ResultProps } from '../results/Result';
+import Card, { CardProps } from '../cards/Card';
 import headshot from '../../assets/images/authors/default-headshot.jpg';
 import { Link } from 'react-router-dom';
 import { colorScale } from './lib/color-lib';
@@ -53,7 +53,7 @@ class Waffle extends React.Component {
               <WafflePlot />
             </div>
           </div>
-          {this.props.active ? <WaffleResults {...this.props} /> : <span />}
+          {this.props.active ? <WaffleCards {...this.props} /> : <span />}
         </div>
       </div>
     );
@@ -71,12 +71,12 @@ const Button = props => {
   );
 };
 
-const WaffleResults = props => {
+const WaffleCards = props => {
   return (
     <div className='waffle-card-result-container results-container'>
       <div className='result-pair row'>
-        <Result key='key-source' type={props.type} result={props.active} />
-        <Result
+        <Card key='key-source' type={props.type} result={props.active} />
+        <Card
           key='key-target'
           type={props.type === 'source' ? 'target' : 'source'}
           result={props.active}
@@ -167,7 +167,7 @@ StatelessWafflePlot.propTypes = {
  **/
 
 Waffle.propTypes = {
-  active: ResultProps,
+  active: CardProps,
   author: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(WaffleDataProps).isRequired,
   feature: PropTypes.string.isRequired,

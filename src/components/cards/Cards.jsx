@@ -2,12 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Filters from '../filters/Filters';
-import Result, { ResultProps } from './Result';
+import Card, { CardProps } from './Card';
 import Loader from '../partials/Loader';
 import { displayMoreResults } from '../../actions/search';
 import { throttle } from 'lodash';
 
-const Results = props => {
+const Cards = props => {
   const { results, loading, displayMoreResults } = {
     ...props,
   };
@@ -37,7 +37,7 @@ const Results = props => {
         {loading ? (
           <Loader />
         ) : results && results.length ? (
-          <ResultPairs results={results} />
+          <CardPairs results={results} />
         ) : (
           <span className='no-results'>Sorry, no results could be found</span>
         )}
@@ -46,39 +46,31 @@ const Results = props => {
   );
 };
 
-const ResultPairs = props => {
+const CardPairs = props => {
   return (
     <div>
       {props.results.map((result, idx) => (
-        <div
-          className={`result-pair row
-            ${
-              result.source_author === 'Unknown' && result.target_author === 'Unknown'
-                ? 'hide-authors'
-                : ''
-            }`}
-          key={result._id}
-        >
-          <Result result={result} type='source' />
+        <div className='result-pair row' key={idx}>
+          <Card result={result} type='source' />
           <div className='similarity-circle row justify-center align-center'>
             <div className='similarity row justify-center align-center'>
               <span>{Math.round(result.similarity) + '%'}</span>
             </div>
           </div>
-          <Result result={result} type='target' />
+          <Card result={result} type='target' />
         </div>
       ))}
     </div>
   );
 };
 
-Results.propTypes = {
+Cards.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }),
   location: PropTypes.object,
   match: PropTypes.object,
-  results: PropTypes.arrayOf(ResultProps),
+  results: PropTypes.arrayOf(CardProps),
 };
 
 const mapStateToProps = state => ({
@@ -90,4 +82,4 @@ const mapDispatchToProps = dispatch => ({
   displayMoreResults: () => dispatch(displayMoreResults()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Results);
+export default connect(mapStateToProps, mapDispatchToProps)(Cards);

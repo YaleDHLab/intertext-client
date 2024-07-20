@@ -16,6 +16,9 @@ export const initialState = {
   sortField: 'length',
   sortIndex: null,
 
+  // config
+  config: {},
+
   // advanced filters
   advanced: {
     similarity: [1, 100],
@@ -171,6 +174,15 @@ const searchReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         results: action.results,
       });
+
+    case 'SET_CONFIG':
+      return Object.assign({}, state, {
+        config: Object.assign({}, {
+          'infiles': action.config.infiles,
+          'window_size': action.config.window_size,
+          'window_slide': action.config.window_slide,
+        })
+      })
 
     default:
       return state;

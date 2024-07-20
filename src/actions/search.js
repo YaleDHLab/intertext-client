@@ -6,8 +6,29 @@ import {
   setTypeaheadQuery,
   setTypeaheadIndex,
   setTypeaheadField,
-  fetchTypeaheadMetadata,
+  setTypeaheadMetadata,
 } from './typeahead';
+
+/**
+ * Config
+ **/
+
+const fetchConfig = () => {
+  return (dispatch) => {
+    const url = `/api/config.json`;
+    return fetchJSONFile(url)
+      .then(json => {
+        dispatch({
+          type: 'SET_CONFIG',
+          config: json,
+        });
+        dispatch(setTypeaheadMetadata(json.metadata));
+      })
+      .catch(e => {
+        console.warn('Could not fetch config: ' + e);
+      });
+  }
+}
 
 /**
  * Sort
@@ -117,7 +138,7 @@ export const saveSearchInUrl = () => {
 export const loadSearchFromUrl = () => {
   return (dispatch, getState) => {
     const url = window.location.hash;
-    if (url.includes('sankey') || url.includes('works')) return;
+    if (url.includes('sankey') || url.includes('works') || url.includes('viewer')) return;
     let search = url.split('#/')[1];
     search = search.replace('cards', '');
     if (search.includes('?')) search = search.split('?')[1];
@@ -160,7 +181,6 @@ export const fetchSearchResults = () => {
     const runSearch = () => {
       dispatch(resetMaxDisplayedSearchResults());
       dispatch(setTypeaheadIndex(0));
-      dispatch(loadSearchFromUrl());
       dispatch(scrollToCardsTop());
       dispatch(fetchMoreSearchResults());
     };
@@ -170,7 +190,7 @@ export const fetchSearchResults = () => {
     } else {
       Promise.all([
         dispatch(fetchSortIndex()), //
-        dispatch(fetchTypeaheadMetadata()),
+        dispatch(fetchConfig()),
       ]).then(v => {
         runSearch();
       });
@@ -250,7 +270,7 @@ const scrollToCardsTop = () => {
  */
 
 const getFilteredSortIndex = state => {
-  const { sortIndex, advanced, similarity } = { ...state.search };
+  const { sortIndex, advanced } = { ...state.search };
   const { fileIds, field, query } = { ...state.typeahead };
 
   // handle case where Results.jsx runs first search instead of '../store.js'
@@ -299,7 +319,6 @@ const getFilteredSortIndex = state => {
     earlier: getEarlierOrLaterFileIds('earlier', fileIds), // from filters
     later: getEarlierOrLaterFileIds('later', fileIds), // from filters
   };
-
   // return the filtered sort index
   return sortIndex.filter(item => {
     // destructure a single row from the sorted match index
@@ -337,21 +356,39 @@ const getMatchFiles = matchFileIDs => {
 };
 
 // Helper to fetch match file from memory or network
-const getMatchFile = matchFileID => {
+export const getWordsFile = matchFileID => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const cacheKey = `words/${matchFileID}.json`;
+    return cacheKey in state.cache
+      ? new Promise((resolve, reject) => resolve(state.cache[cacheKey]))
+      : fetchWordsFile(matchFileID.toString()).then(words => {
+          dispatch(addCacheRecord(cacheKey, words));
+          return words;
+        });
+  };
+};
+
+// Helper to fetch match file from memory or network
+export const getMatchFile = matchFileID => {
   return (dispatch, getState) => {
     const state = getState();
     const cacheKey = `matches/${matchFileID}.json`;
     return cacheKey in state.cache
       ? new Promise((resolve, reject) => resolve(state.cache[cacheKey]))
-      : fetchMatchFile(matchFileID.toString()).then(match => {
+      : fetchMatchFile(matchFileID).then(match => {
           dispatch(addCacheRecord(cacheKey, match));
           return match;
         });
   };
 };
 
+const fetchWordsFile = textID => {
+  return fetchJSONFile('/api/texts/' + textID.toString() + '.json');
+}
+
 export const fetchMatchFile = textID => {
-  return fetchJSONFile('/api/matches/' + String(textID) + '.json');
+  return fetchJSONFile('/api/matches/' + textID.toString() + '.json');
 };
 
 /**

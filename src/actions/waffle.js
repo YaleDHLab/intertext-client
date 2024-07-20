@@ -49,7 +49,7 @@ export const visualize = obj => {
 export const saveWaffleInUrl = () => {
   // TODO: Store waffle state in url params
   return dispatch => {
-    history.push('waffle');
+    history.push('/waffle');
   };
 };
 

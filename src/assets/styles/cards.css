@@ -39,10 +39,6 @@
   transform: translateX(2000px);
 }
 
-.result-pair.hide-authors .result-author {
-  display: none;
-}
-
 .no-results {
   display: block;
   margin-top: 30px;
@@ -136,7 +132,7 @@
 }
 
 .result-title {
-  font-size: 0.9em;
+  font-size: 14.25px;
   color: #666666;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -145,6 +141,7 @@
   font-family: 'Open Sans';
   font-style: italic;
   max-width: 395px;
+  font-weight: 400;
 }
 
 .result.waffle-chart-card {
@@ -171,14 +168,12 @@
   height: 100%;
 }
 
-.result.source .result-year-container {
-  float: right;
+.result-year-container.header-left {
   transform: skew(38deg);
   margin-right: -15px;
 }
 
-.result.target .result-year-container {
-  float: left;
+.result-year-container.header-right {
   transform: skew(-38deg);
   margin-left: -15px;
 }
@@ -186,6 +181,14 @@
 .result-year {
   font-size: 0.9em;
   font-weight: 600;
+}
+
+.result-year-container.header-left .result-year {
+  transform: skew(-38deg);
+}
+
+.result-year-container.header-right .result-year {
+  transform: skew(38deg);
 }
 
 .result.source .result-year {
@@ -219,8 +222,8 @@
 }
 
 .result-match {
-  font-size: 0.85em;
-  line-height: 1.6em;
+  font-size: 13.5px;
+  line-height: 20px;
   font-weight: 600;
 }
 
