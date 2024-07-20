@@ -39,7 +39,7 @@
     "prettify": "prettier --write src",
     "fetch-sample-data": "node scripts/fetch-sample-data.js",
     "build:demo": "npm run build && npm run fetch-sample-data",
-    "upload": "npm run build && rm -rf build/api && zip client.zip -r build && aws s3 cp client.zip s3://lab-apps/intertext-builds/intertext-client-${INTERTEXT_CLIENT_VERSION:=0.0.1a}.zip --acl public-read --profile yale-admin && rm client.zip",
+    "upload": "npm run build && rm -rf build/api && zip client.zip -r build && aws s3 cp client.zip s3://duhaime/yale-dh-lab/intertext/client.zip --acl public-read --profile duhaime && rm client.zip",
     "redesign": "npm run build && aws s3 cp build/ s3://lab-apps/intertext/redesign/ --recursive --acl public-read --profile yale-admin"
   },
   "eslintConfig": {
